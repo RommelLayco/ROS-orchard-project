@@ -8,7 +8,7 @@ class Picker
         Picker();
 
         double getXspeed();
-        double getYSpeed();
+        double getYspeed();
         double getAngularSpeed();
 
 
