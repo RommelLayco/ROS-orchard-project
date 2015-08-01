@@ -7,7 +7,11 @@ class RobotSuperClass
     public:
         RobotSuperClass();
         void transmit();
-        void changeSpeed(double linear_velocity_x, double linear_velocity_y, double angular_velocity);
+
+        void changeSpeed(double linear_v_x, double linear_v_y,double angular_v);
+
+        void testChangeSpeed();
+
     protected:
     private:
 
