@@ -27,7 +27,7 @@ class RobotSuperClass
         // the state lets us know what speed to give to the robot
         double current_state;
 
-        void changeSpeed(linear_velocity_x, linear_velocity_y, angular_velocity);
+        void changeSpeed(double linear_velocity_x, double linear_velocity_y, double angular_velocity);
 
 };
 
