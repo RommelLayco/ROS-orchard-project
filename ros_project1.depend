@@ -1,0 +1,11 @@
+# depslib dependency file v1.0
+1438391815 source:/home/anmol/Desktop/sem2_2015/306/ros_project1/main.cpp
+	<iostream>
+	"RobotSuperClass.h"
+
+1438391773 /home/anmol/Desktop/sem2_2015/306/ros_project1/RobotSuperClass.h
+
+1438391806 source:/home/anmol/Desktop/sem2_2015/306/ros_project1/RobotSuperClass.cpp
+	"RobotSuperClass.h"
+	<iostream>
+
