@@ -5,7 +5,7 @@ using namespace std;
 
 RobotSuperClass::RobotSuperClass()
 {
-    cout << "superclass" << endl;
+    cout << "superclass1" << endl;
 }
 
 void RobotSuperClass::changeSpeed(double linear_v_x, double linear_v_y,double angular_v){
