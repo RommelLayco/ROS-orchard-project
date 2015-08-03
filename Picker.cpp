@@ -2,7 +2,7 @@
 
 Picker::Picker()
 {
-    //ctor
+    //ctor##########
 }
 
 //Obtain x (horizontal) pickerSpeed
