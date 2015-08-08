@@ -45,7 +45,7 @@ floorplan
   pose [ 0 0 0 90.000 ]
 )
 # throw in a robot
-picker( pose [ 0 0 0 90 ] name "r0" color "blue")
+picker( pose [ 0 0 0 0 ] name "r0" color "blue")
 picker( pose [ 0 20 0 0 ] name "r1" color "green")
 picker( pose [ 0 30 0 0 ] name "r2" color "black")
 

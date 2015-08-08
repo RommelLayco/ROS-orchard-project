@@ -5,12 +5,12 @@
 int main (int argc, char **argv) 
 { 
 	// command line ROS arguments/ name remapping 
-	ros::init(argc, argv, "name_of_mypub_node"); 
+	ros::init(argc, argv, "AlphaRobotNode"); 
 
 	// ROS comms access point 
 	ros::NodeHandle my_handle; 
 
-	// master registry pub/sub 
+	// master registry pub 
 	ros::Publisher mypub_object = my_handle.advertise<geometry_msgs::Twist>("robot_0/cmd_vel",100);
 
 	// loop 10 Hz 
