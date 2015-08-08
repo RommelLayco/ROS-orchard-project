@@ -1,4 +1,5 @@
 #include "ros/ros.h"
+#include <stdlib.h>
 #include "std_msgs/Empty.h"
 #include <geometry_msgs/Twist.h>
 #include <nav_msgs/Odometry.h>
@@ -23,10 +24,10 @@ double currentAngle;
 double normalizeAngle(double angle)
 {
     while (angle < 0) {
-        angle += 2 * M_PI;
+        angle += M_PI;
     }
-    while (angle > 2 * M_PI) {
-        angle -= 2 * M_PI;
+    while (angle > M_PI) {
+        angle -= M_PI;
     }
     return angle;
 }
@@ -51,8 +52,8 @@ void updateCurrentVelocity(){
     geometry_msgs::Point directionVector; // Vector from currentLocation to desiredLocation
 
     geometry_msgs::Point desiredLocation;
-    desiredLocation.x = 1;
-    desiredLocation.y = 1;	
+    desiredLocation.x = -10;
+    desiredLocation.y = -21;	
     desiredLocation.z = 0;
 
     directionVector.x = desiredLocation.x - currentLocation.position.x;
@@ -61,26 +62,30 @@ void updateCurrentVelocity(){
     
     // Thank god we're only doing 2D stuff
     double desiredAngle = atan2(directionVector.y, directionVector.x);
-
-        if (currentAngle != desiredAngle) {
+if(desiredAngle == 0)
+{
+} else
+{       
+    if (currentAngle-desiredAngle>0.05)
+    {
         // Turn towards angle
         currentVelocity.linear.x = 0;
         
-        if (turnAnticlockwise(currentAngle, desiredAngle)) {
+        //if (turnAnticlockwise(currentAngle, desiredAngle)) {
             // Turn anti clockwise
-            currentVelocity.angular.z = 1;
-        } else {
+            currentVelocity.angular.z = 0.05;
+        //} else {
             // Turn clockwise
-            currentVelocity.angular.z = -1;
-        }
+       
+        //}
     } else {
         // Go forward
         currentVelocity.linear.x = 1;
         currentVelocity.angular.z = 0;
     }
-
-
 }
+}
+
 
 
 void stageOdometryCallback(const nav_msgs::Odometry msg) 
@@ -97,6 +102,7 @@ void stageOdometryCallback(const nav_msgs::Odometry msg)
     double roll, pitch, yaw;
     tf::Matrix3x3(tf::Quaternion(x, y, z, w)).getRPY(roll, pitch, yaw);
     currentAngle = yaw;
+    ROS_INFO("Yaw is : %f",yaw); 
 	
 }
 
@@ -110,12 +116,12 @@ int main (int argc, char **argv)
 	ros::NodeHandle sub_handle;  
 
 	// master registry pub 
-	ros::Publisher mypub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_0/cmd_vel",1000);
+	ros::Publisher mypub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_0/cmd_vel",100);
 	ros::Subscriber mysub_object;
 	// loop 10 Hz 
-	ros::Rate loop_rate(1000);
+	ros::Rate loop_rate(25);
 
-	mysub_object = sub_handle.subscribe<nav_msgs::Odometry>("robot_0/base_pose_ground_truth",1000, stageOdometryCallback); 
+	mysub_object = sub_handle.subscribe<nav_msgs::Odometry>("robot_0/base_pose_ground_truth",100, stageOdometryCallback); 
 
 
 
@@ -134,6 +140,9 @@ int main (int argc, char **argv)
 
 		mypub_object.publish(currentVelocity); 
 		updateCurrentVelocity(); 
+
+		ros::spinOnce();
+		loop_rate.sleep();
 	} 
 
 	return 0; 
