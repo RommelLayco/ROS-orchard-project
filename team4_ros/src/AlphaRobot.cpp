@@ -85,6 +85,8 @@ void updateCurrentVelocity(){
 
 void stageOdometryCallback(const nav_msgs::Odometry msg) 
 {     
+
+
     //Update Current Position
     currentLocation = msg.pose.pose;
     double x = currentLocation.orientation.x;
@@ -108,10 +110,10 @@ int main (int argc, char **argv)
 	ros::NodeHandle sub_handle;  
 
 	// master registry pub 
-	ros::Publisher mypub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_0/cmd_vel",100);
+	ros::Publisher mypub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_0/cmd_vel",1000);
 	ros::Subscriber mysub_object;
 	// loop 10 Hz 
-	ros::Rate loop_rate(100);
+	ros::Rate loop_rate(1000);
 
 	mysub_object = sub_handle.subscribe<nav_msgs::Odometry>("robot_0/base_pose_ground_truth",1000, stageOdometryCallback); 
 
