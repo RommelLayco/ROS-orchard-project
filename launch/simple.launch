@@ -1,0 +1,3 @@
+<launch>
+  <node name="sensor_node pkg="team4_ros" type="sensor_node"/>
+</launch>
