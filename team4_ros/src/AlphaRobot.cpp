@@ -63,17 +63,20 @@ void updateCurrentVelocity(){
     // Thank god we're only doing 2D stuff
     double desiredAngle = atan2(directionVector.y, directionVector.x);
 if(desiredAngle == 0)
-{
-} else
+{} else
 {       
-    if (currentAngle-desiredAngle>0.05)
+    ROS_INFO("currentAngle is : %f",currentAngle); 
+    ROS_INFO("desiredAngle is : %f",desiredAngle); 
+
+
+    if (currentAngle-desiredAngle>0.1 || desiredAngle-currentAngle>0.1)
     {
         // Turn towards angle
         currentVelocity.linear.x = 0;
         
         //if (turnAnticlockwise(currentAngle, desiredAngle)) {
             // Turn anti clockwise
-            currentVelocity.angular.z = 0.05;
+            currentVelocity.angular.z = 0.5;
         //} else {
             // Turn clockwise
        
@@ -116,18 +119,13 @@ int main (int argc, char **argv)
 	ros::NodeHandle sub_handle;  
 
 	// master registry pub 
-	ros::Publisher mypub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_0/cmd_vel",100);
+	ros::Publisher mypub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_0/cmd_vel",1000);
 	ros::Subscriber mysub_object;
 	// loop 10 Hz 
 	ros::Rate loop_rate(25);
 
-	mysub_object = sub_handle.subscribe<nav_msgs::Odometry>("robot_0/base_pose_ground_truth",100, stageOdometryCallback); 
+	mysub_object = sub_handle.subscribe<nav_msgs::Odometry>("robot_0/base_pose_ground_truth",1000, stageOdometryCallback); 
 
-
-
-	        currentVelocity.linear.x = 1; 
-		currentVelocity.linear.y = 0; 
-                currentVelocity.angular.z = 0.00;
 	
 
 
@@ -135,11 +133,11 @@ int main (int argc, char **argv)
 	{ 
 		loop_rate.sleep();
 
-
+		updateCurrentVelocity(); 
 		// refer to advertise msg type 
 
 		mypub_object.publish(currentVelocity); 
-		updateCurrentVelocity(); 
+
 
 		ros::spinOnce();
 		loop_rate.sleep();
