@@ -1,0 +1,39 @@
+include "myinstances.inc" 
+
+# milliseconds per update step 
+interval_sim 100 
+
+define myLaser ranger 
+( 
+  sensor( range [ 0 20 ] fov 20.0 samples 20 ) 
+    size [0.1 0.1 0.1] 
+      color "black" 
+        block( 
+            points 4 
+                point[0] [0 0] 
+                    point[1] [0.1 0] 
+                        point[2] [0.1 0.1] 
+                            point[3] [0 0.1] 
+                                z [0 0.1] 
+                                    ) 
+        ) 
+
+define myRobot position 
+( 
+  size [1 1.1 0.5] 
+    drive "diff" 
+      block( 
+        points 4 
+            point[0] [0 0] 
+                point[1] [1 0] 
+                    point[2] [1 1] 
+                        point[3] [0 1] 
+                            z [0 .5] 
+                                ) 
+        myLaser(pose [ 0 0.6 -0.2 90 ]) 
+#  bitmap "robot.png" 
+        ) 
+
+# throw in a robot 
+myRobot( pose [ 10 10 0 0 ] name "bob" color "random") 
+myRobot( pose [ 1 1 0 0 ] name "lucy" color "random") 

@@ -4,7 +4,8 @@
 void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
 {
     ROS_INFO("I heard: [%f]", msg->ranges[0]);
-    int size = 180;//sizeof(msg->ranges)/sizeof(msg->ranges[0]);
+    int size = sizeof(msg->ranges)/sizeof(float);
+    ROS_INFO("There are [%i] sensors", size);
     int i = 0;
     ROS_INFO("Sensor:");
     for (i; i < size; i++) {
