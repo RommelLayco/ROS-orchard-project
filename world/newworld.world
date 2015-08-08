@@ -1,5 +1,5 @@
 include "myinstances.inc"
-include "person1.inc" 
+include "person.inc" 
 
 
 # milliseconds per update step 
@@ -49,4 +49,4 @@ define actor position
 # throw in a robot 
 myRobot( pose [ 1 -8 0 90 ] name "anmol" color "black") 
 myRobot( pose [ 1 1 0 0 ] name "lucy" color "random") 
-person1( pose [1 5 0 0] name "person1" )
+person( pose [1 5 0 0] name "person1" )
