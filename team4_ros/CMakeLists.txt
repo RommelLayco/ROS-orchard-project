@@ -7,6 +7,7 @@ project(team4_ros)
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   std_msgs
+  genmsg
 )
 
 ## System dependencies are found with CMake's conventions
@@ -108,15 +109,16 @@ add_dependencies(AlphaRobotNode ${catkin_EXPORTED_TARGETS})
 
 ## Declare a cpp executable
 # add_executable(team4_ros_node src/team4_ros_node.cpp)
+add_executable(team4_ros_node src/mypub.cpp)
 
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
 # add_dependencies(team4_ros_node team4_ros_generate_messages_cpp)
 
 ## Specify libraries to link a library or executable target against
-# target_link_libraries(team4_ros_node
-#   ${catkin_LIBRARIES}
-# )
+ target_link_libraries(team4_ros_node
+   ${catkin_LIBRARIES}
+ )
 
 #############
 ## Install ##

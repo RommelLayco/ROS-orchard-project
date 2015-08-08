@@ -36,3 +36,6 @@
 # CodeBlocks project directories
 bin/
 obj/
+
+# AUtomatically generated backup files
+*~
