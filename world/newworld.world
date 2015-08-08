@@ -5,7 +5,7 @@ interval_sim 100
 
 define myLaser ranger 
 ( 
-  sensor( range [ 0 20 ] fov 20.0 samples 20 ) 
+  sensor( range [ 0 3 ] fov 180.0 samples 180 ) 
     size [0.1 0.1 0.1] 
       color "black" 
         block( 
@@ -30,10 +30,10 @@ define myRobot position
                         point[3] [0 1] 
                             z [0 .5] 
                                 ) 
-        myLaser(pose [ 0 0.6 -0.2 90 ]) 
+        myLaser(pose [ 0.6 0 -0.2 0 ]) 
 #  bitmap "robot.png" 
         ) 
 
 # throw in a robot 
-myRobot( pose [ 10 10 0 0 ] name "bob" color "random") 
+myRobot( pose [ 1 -8 0 90 ] name "anmol" color "black") 
 myRobot( pose [ 1 1 0 0 ] name "lucy" color "random") 
