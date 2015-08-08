@@ -1,7 +1,7 @@
 
 include "myinstances.inc" 
 include "picker.inc"
-include "person.inc"
+
 
 
 
@@ -44,17 +44,6 @@ floorplan
   size [54.0 58.7 0.5]
   pose [ 0 0 0 90.000 ]
 )
-
-define actor position
-(
-  name "actor"
-  size [0.0 0.0 0.0]
-  drive "diff"
-  stack_children 0
-  gui_nose 0
-  obstacle_return 0
-)
-
 # throw in a robot
 picker( pose [ 0 0 0 0 ] name "r0" color "blue")
 picker( pose [ 0 20 0 0 ] name "r1" color "green")
