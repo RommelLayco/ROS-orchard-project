@@ -107,6 +107,10 @@ add_executable(AlphaRobotNode src/AlphaRobot.cpp)
 target_link_libraries(AlphaRobotNode ${catkin_LIBRARIES})
 add_dependencies(AlphaRobotNode ${catkin_EXPORTED_TARGETS})
 
+add_executable(SwingRobotNode src/SwingRobot.cpp)
+target_link_libraries(SwingRobotNode ${catkin_LIBRARIES})
+add_dependencies(SwingRobotNode ${catkin_EXPORTED_TARGETS})
+
 ## Declare a cpp executable
 # add_executable(team4_ros_node src/team4_ros_node.cpp)
 add_executable(sensor_node src/mypub.cpp)
