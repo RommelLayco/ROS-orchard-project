@@ -41,7 +41,7 @@ void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
     bool isNear = false;
     ROS_INFO("Sensor:");
     for (i; i < 180; i++) {
-        if (msg->ranges[i] < 1)
+        if (msg->ranges[i] < 1.5)
         {
             isNear = true;
             nearCollision = true;
@@ -149,7 +149,14 @@ void updateCurrentVelocity() {
         {
             // Spin
             currentVelocity.linear.x = 0;
-            currentVelocity.angular.z = 0.5;
+            if (currentAngle < desiredAngle)
+            {
+                currentVelocity.angular.z = 0.5;
+            }
+            else
+            {
+                currentVelocity.angular.z = -0.5;
+            }
             
         } else
         {
