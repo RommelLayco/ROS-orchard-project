@@ -39,7 +39,7 @@ void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
                 z = 90.0;
             } else if (i >= 45 && i < 90)
             {
-                z = 180;
+                z = 90;
             } else
             {
                 z = -90;
@@ -71,7 +71,7 @@ void updateCurrentVelocity(){
     double desiredAngle = atan2(directionVector.y, directionVector.x);
 
    if (z != 0){
-	currentVelocity.linear.x = 1;
+	currentVelocity.linear.x = 2;
         currentVelocity.angular.z = z;
 	return;
 
@@ -120,6 +120,10 @@ void groundTruthCallback(const nav_msgs::Odometry msg)
 	
 }
 
+
+
+
+
 int main (int argc, char **argv) 
 { 
 	// command line ROS arguments/ name remapping 
@@ -138,7 +142,7 @@ int main (int argc, char **argv)
 	// loop 25 
 	ros::Rate loop_rate(10);
 
-	//mysub_object = sub_handle.subscribe<nav_msgs::Odometry>("robot_0/base_pose_ground_truth",1000, groundTruthCallback); 
+	mysub_object = sub_handle.subscribe<nav_msgs::Odometry>("robot_0/base_pose_ground_truth",1000, groundTruthCallback); 
 	
 	// ROS comms access point 
 	ros::NodeHandle n;
@@ -154,7 +158,7 @@ int main (int argc, char **argv)
 		updateCurrentVelocity(); 
 		// refer to advertise msg type 
 		
-		
+
 		mypub_object.publish(currentVelocity); 
 		z=0;
 
