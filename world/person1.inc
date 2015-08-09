@@ -124,6 +124,8 @@ define person1 actor
 		pose [0.0 0.0 1.348 0.0] 
 		color "ivory2"
 	)
+
+    myLaser(pose [ 0.0 0.0 1.4 0.0 ])
 	
 	model
 	(
