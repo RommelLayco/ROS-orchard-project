@@ -108,9 +108,10 @@ int main (int argc, char **argv)
 	ros::Rate loop_rate(25);
 
 	mysub_object = sub_handle.subscribe<nav_msgs::Odometry>("robot_0/base_pose_ground_truth",1000, groundTruthCallback); 
-    
+
 
     sound_play::SoundClient sc;
+
 
 	while (ros::ok()) 
 	{ 
