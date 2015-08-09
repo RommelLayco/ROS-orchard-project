@@ -1,6 +1,7 @@
-include "myinstances.inc"
-include "person1.inc" 
-
+#include "myinstances.inc"
+include "person1.inc"
+include "dog.inc"
+include "picker.inc"
 
 # milliseconds per update step 
 interval_sim 100 
@@ -8,7 +9,7 @@ interval_sim 100
 define myLaser ranger 
 ( 
   sensor( range [ 0 3 ] fov 180.0 samples 180 ) 
-    size [0.1 0.1 0.1] 
+    size [0.100 0.100 0.100] 
       color "black" 
         block( 
             points 4 
@@ -22,7 +23,7 @@ define myLaser ranger
 
 define myRobot position 
 ( 
-  size [1 1.1 0.5] 
+  size [1.000 1.100 0.500] 
     drive "diff" 
       block( 
         points 4 
@@ -32,21 +33,21 @@ define myRobot position
                         point[3] [0 1] 
                             z [0 .5] 
                                 ) 
-        myLaser(pose [ 0.6 0 -0.2 0 ]) 
+        myLaser(pose [ 0.600 0.000 -0.200 0.000 ]) 
 #  bitmap "robot.png" 
         ) 
 
 define actor position
 (
   name "actor"
-  size [0.0 0.0 0.0]
+  size [0.000 0.000 0.000]
   drive "diff"
   stack_children 0
   gui_nose 0
   obstacle_return 0
 )
 
-# throw in a robot 
-myRobot( pose [ 1 -8 0 90 ] name "anmol" color "black") 
-myRobot( pose [ 1 1 0 0 ] name "lucy" color "random") 
-person1( pose [1 5 0 0] name "person1" )
+# throw in a robot  
+person1( pose [1.000 5.000 0.000 0.000] name "person1" )
+dog( pose [8.743 13.106 0.000 0.000] name "dog" )
+picker( pose [ -2.187 -0.492 0.000 0.000] name "picker" 0
