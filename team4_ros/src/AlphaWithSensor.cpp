@@ -22,6 +22,35 @@ geometry_msgs::Pose currentLocation;
 // The current angle of the robot
 double currentAngle;
 
+// Speed and angular velocity whensensor detect something
+int x;
+float z;
+
+void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
+{
+    int i = 0;
+    ROS_INFO("Sensor:");
+    for (i; i < 180; i++) {
+         if (msg->ranges[i] < 1.5)
+         {
+            ROS_INFO("I'm near something! [%f]", msg->ranges[i]);
+            if (i < 45)
+            {
+                z = 90.0;
+            } else if (i >= 45 && i < 90)
+            {
+                z = 180;
+            } else
+            {
+                z = -90;
+            }
+            
+            
+         }
+    }
+}
+
+
 
 void updateCurrentVelocity(){
 
@@ -40,6 +69,13 @@ void updateCurrentVelocity(){
     
     // Calculate the desired angle
     double desiredAngle = atan2(directionVector.y, directionVector.x);
+
+   if (z != 0){
+	currentVelocity.linear.x = 1;
+        currentVelocity.angular.z = z;
+	return;
+
+}
 
 // If the desired angle is 0
 if(desiredAngle == 0 || desiredAngle == M_PI)
@@ -87,21 +123,28 @@ void groundTruthCallback(const nav_msgs::Odometry msg)
 int main (int argc, char **argv) 
 { 
 	// command line ROS arguments/ name remapping 
-	ros::init(argc, argv, "AlphaRobotNode"); 
+	ros::init(argc, argv, "AlphaWithSensorRobotNode"); 
 
 	// ROS node hander
 	ros::NodeHandle velPub_handle;
-	ros::NodeHandle sub_handle;  
+	ros::NodeHandle sub_handle; 
+	
 
 	// master registry pub and sub
 	ros::Publisher mypub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_0/cmd_vel",1000);
 	ros::Subscriber mysub_object;
-	// loop 25 
-	ros::Rate loop_rate(25);
-
-	mysub_object = sub_handle.subscribe<nav_msgs::Odometry>("robot_0/base_pose_ground_truth",1000, groundTruthCallback); 
 
 	
+	// loop 25 
+	ros::Rate loop_rate(10);
+
+	//mysub_object = sub_handle.subscribe<nav_msgs::Odometry>("robot_0/base_pose_ground_truth",1000, groundTruthCallback); 
+	
+	// ROS comms access point 
+	ros::NodeHandle n;
+
+    ros::Subscriber sub = n.subscribe("robot_0/base_scan", 1000, sensorCallback);
+
 
 
 	while (ros::ok()) 
@@ -110,9 +153,10 @@ int main (int argc, char **argv)
 
 		updateCurrentVelocity(); 
 		// refer to advertise msg type 
-
+		
+		
 		mypub_object.publish(currentVelocity); 
-
+		z=0;
 
 		ros::spinOnce();
 		loop_rate.sleep();
