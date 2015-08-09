@@ -2,6 +2,7 @@ include "myinstances.inc"
 include "person1.inc"
 include "dog.inc"
 include "picker.inc"
+include "measure.inc"
 
 # milliseconds per update step 
 interval_sim 100 
@@ -50,4 +51,7 @@ define actor position
 # throw in a robot  
 person1( pose [1.000 5.000 0.000 0.000] name "person1" )
 dog( pose [8.743 13.106 0.000 0.000] name "dog" )
-picker( pose [ -2.187 -0.492 0.000 0.000] name "picker" 0
+picker( pose [ -0.656 -0.237 0.000 90.000] name "picker" )
+picker( pose [ -1.755 -0.270 0.000 90.000] name "picker1" )
+picker( pose [ -4.627 -1.727 0.000 -53.239] name "picker2" )
+measure( pose [-8.157 2.675 0.000 0.000] name "measure")
