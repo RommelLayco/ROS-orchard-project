@@ -30,6 +30,10 @@ float z;
 // Set by sensorCallback when robot is near an obstacle
 bool nearCollision;
 
+// Index that points to current position in path index
+int pathIndex;
+
+geometry_msgs::Point desiredLocations[2];
 
 void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
 {
@@ -87,10 +91,7 @@ void updateCurrentVelocity() {
 
     // Find the correct angle
 
-    geometry_msgs::Point desiredLocation;
-    desiredLocation.x = -10;
-    desiredLocation.y = -21;	
-    desiredLocation.z = 0;
+    geometry_msgs::Point desiredLocation = desiredLocations[pathIndex];
     // This is the maximum distance a robot can be from it's
     // desired poisition and still be considered to have reached it
     float distanceThreshold = 0.5;
@@ -112,6 +113,17 @@ void updateCurrentVelocity() {
         ROS_INFO("I have reached my destination!");
         currentVelocity.linear.x = 0;
         currentVelocity.angular.z = 0.0;
+        if (pathIndex < sizeof(desiredLocations) / sizeof(*desiredLocations) - 1)
+        {
+            pathIndex++;
+        }
+        else
+        {
+            // Reset index
+            ROS_INFO("Reached final destination, going back to the start");
+            pathIndex = 0;
+        }
+        
         return;
     }
     
@@ -169,6 +181,27 @@ void groundTruthCallback(const nav_msgs::Odometry msg)
 
 int main (int argc, char **argv) 
 {
+
+    // Setup points on robot's path
+    geometry_msgs::Point desiredLocation1;
+    //desiredLocation1.x = -10;
+    desiredLocation1.x = 1.6;
+    //desiredLocation1.y = -21;
+    desiredLocation1.y = -20;
+    desiredLocation1.z = 0;
+
+    geometry_msgs::Point desiredLocation2;
+    //desiredLocation2.x = 10;
+    desiredLocation2.x = 1.6;
+    //desiredLocation2.y = 21;
+    desiredLocation2.y = -2;
+    desiredLocation2.z = 0;
+
+    desiredLocations[0] = desiredLocation1;
+    desiredLocations[1] = desiredLocation2;
+
+    pathIndex = 0;
+
 
     nearCollision = false;    
 
