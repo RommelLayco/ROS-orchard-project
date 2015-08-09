@@ -16,7 +16,7 @@
 
 
 
-#include <sound_play/sound_play.h>
+//#include <sound_play/sound_play.h>
 
 // Current velocity of the Robot
 geometry_msgs::Twist currentVelocity;
@@ -29,9 +29,8 @@ double currentAngle;
 
 //sound_play::SoundClient& sc   sc.say("I'm doing shit");
 
-void updateCurrentVelocity(sound_play::SoundClient& sc){
+void updateCurrentVelocity(){
 
-    sc.say("jsn");
 
     // Find the correct angle
     
@@ -110,15 +109,12 @@ int main (int argc, char **argv)
 	mysub_object = sub_handle.subscribe<nav_msgs::Odometry>("robot_0/base_pose_ground_truth",1000, groundTruthCallback); 
 
 
-    sound_play::SoundClient sc;
-
-
 	while (ros::ok()) 
 	{ 
         //sc.say("hey");
 		loop_rate.sleep();
 
-		updateCurrentVelocity(sc); 
+		updateCurrentVelocity(); 
 		// refer to advertise msg type 
 
 		mypub_object.publish(currentVelocity); 
