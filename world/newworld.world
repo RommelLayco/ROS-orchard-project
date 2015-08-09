@@ -46,7 +46,9 @@ define actor position
   obstacle_return 0
 )
 
+
 # throw in a robot 
 myRobot( pose [ 1 -8 0 90 ] name "anmol" color "black") 
 myRobot( pose [ 1 1 0 0 ] name "lucy" color "random") 
 person( pose [1 5 0 0] name "person1" )
+tree( pose [ -3.5 5 0 0 ] ) 
