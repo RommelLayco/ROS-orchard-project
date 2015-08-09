@@ -1,4 +1,5 @@
 //The swing robot is supposed to do swing action when it reaches at a certain point
+//todo set a path for the robots
 #include "ros/ros.h"
 #include <stdlib.h>
 #include "std_msgs/Empty.h"
@@ -22,6 +23,12 @@ geometry_msgs::Twist currentVelocity;
 geometry_msgs::Pose currentLocation;
 
 double currentAngle;
+geometry_msgs::Point desiredLocation1;
+
+
+geometry_msgs::Point desiredLocation2;
+
+
 
 double normalizeAngle(double angle)
 {
@@ -48,15 +55,29 @@ bool turnAnticlockwise(double currentAngle, double desiredAngle)
     
 }
 
+void swing(){
+    //bool
+}
+
 void updateCurrentVelocity(){
 
 // Find the correct angle
     geometry_msgs::Point directionVector; // Vector from currentLocation to desiredLocation
-
     geometry_msgs::Point desiredLocation;
-    desiredLocation.x = 0;
-    desiredLocation.y = 10;	
-    desiredLocation.z = 0;
+    desiredLocation1.x = 0;
+desiredLocation1.y = 10; 
+desiredLocation1.z = 0;
+desiredLocation2.x = 0;
+desiredLocation2.y = 10; 
+desiredLocation2.z = 0;
+
+    bool where=true;
+    if (where){
+        desiredLocation=desiredLocation1;
+    }else{
+        desiredLocation=desiredLocation2;
+    }
+    
 
     directionVector.x = desiredLocation.x - currentLocation.position.x;
     directionVector.y = desiredLocation.y - currentLocation.position.y;
@@ -74,6 +95,7 @@ void updateCurrentVelocity(){
         currentVelocity.linear.x = 0;
 currentVelocity.angular.z = -0.5;
 currentVelocity.angular.z = 0.5;
+   where=!where;
         
   }
 
