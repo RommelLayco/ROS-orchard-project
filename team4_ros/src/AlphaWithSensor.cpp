@@ -46,6 +46,7 @@ void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
             isNear = true;
             nearCollision = true;
             ROS_INFO("I'm near something! [%f]", msg->ranges[i]);
+
             if (i < 60)
             {
                 // Spin to the left
