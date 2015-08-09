@@ -12,7 +12,7 @@ void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
     int i = 0;
     ROS_INFO("Sensor:");
     for (i; i < 180; i++) {
-         if (msg->ranges[i] < 1.5)
+         if (msg->ranges[i] < 5)
          {
             ROS_INFO("I'm near something! [%f]", msg->ranges[i]);
             if (i < 45)

@@ -1,4 +1,5 @@
 include "tree.inc"
+include "canopy.inc"
 
 tree( pose [ -3.5 5 0 0 ] ) 
 tree( pose [ -3.5 10 0 0 ] ) 
@@ -44,3 +45,37 @@ tree( pose [ 3.5 -20 0 0 ] )
 tree( pose [ 3.5 -25 0 0 ] ) 
 tree( pose [ 3.5 -30 0 0 ] )
 tree( pose [ 3.5 -35 0 0 ] )
+
+canopy( pose [ -1.75 5.4 0 0])
+canopy( pose [ -1.75 10.4 0 0])
+canopy( pose [ -1.75 15.4 0 0])
+canopy( pose [ -1.75 20.4 0 0])
+canopy( pose [ -1.75 25.4 0 0])
+canopy( pose [ -1.75 30.4 0 0])
+canopy( pose [ -1.75 0.4 0 0])
+canopy( pose [ -1.75 -4.6 0 0])
+canopy( pose [ -1.75 -9.6 0 0])
+canopy( pose [ -1.75 -14.6 0 0])
+canopy( pose [ -1.75 -19.6 0 0])
+canopy( pose [ -1.75 -24.6 0 0])
+canopy( pose [ -1.75 -29.6 0 0])
+canopy( pose [ -1.75 -34.6 0 0])
+
+canopy( pose [ 1.75 5.4 0 0])
+canopy( pose [ 1.75 10.4 0 0])
+canopy( pose [ 1.75 15.4 0 0])
+canopy( pose [ 1.75 20.4 0 0])
+canopy( pose [ 1.75 25.4 0 0])
+canopy( pose [ 1.75 30.4 0 0])
+canopy( pose [ 1.75 0.4 0 0])
+canopy( pose [ 1.75 -4.6 0 0])
+canopy( pose [ 1.75 -9.6 0 0])
+canopy( pose [ 1.75 -14.6 0 0])
+canopy( pose [ 1.75 -19.6 0 0])
+canopy( pose [ 1.75 -24.6 0 0])
+canopy( pose [ 1.75 -29.6 0 0])
+canopy( pose [ 1.75 -34.6 0 0])
+
+
+
+
