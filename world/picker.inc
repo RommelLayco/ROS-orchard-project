@@ -51,35 +51,35 @@ define picker actor
          model
         (
             size [0.42 0.02 0.4 ]
-            pose [1 0.2 0.0 0.0]
+            pose [1 0.23 0.4 0.0]
             color "burlywood"
         )
 
         model
         (
             size [0.42 0.02 0.4 ]
-            pose [1 -0.2 0.0 0.0]
+            pose [1 -0.25 0.4 0.0]
             color "burlywood"
         )
 
         model
         (
-            size [0.02 0.36 0.4 ]
-            pose [0.2 -0.3 0.0 0.0]
+            size [0.02 0.46 0.4 ]
+            pose [1.23 0 0.4 0.0]
             color "burlywood"
         )
 
         model
         (
-            size [0.02 0.36 0.4 ]
-            pose [-0.2 -0.3 0.0 0.0]
+            size [0.02 0.46 0.4 ]
+            pose [0.77 0 0.4 0.0]
             color "burlywood"
         )
 
         model
         (
-            size [0.4 0.4 0.02 ]
-            pose [1.0 -0.3 0.0 0.0]
+            size [0.4 0.46 0.02 ]
+            pose [1.0 0 0.4 0.0]
             color "burlywood"
         )
 
