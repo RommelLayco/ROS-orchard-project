@@ -218,7 +218,7 @@ int main (int argc, char **argv)
     mypub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_0/cmd_vel",1000);
 	ros::Subscriber mysub_object;
 	
-	// loop 25 
+	// loop 10 
 	ros::Rate loop_rate(10);
 
 	mysub_object = sub_handle.subscribe<nav_msgs::Odometry>("robot_0/base_pose_ground_truth",1000, groundTruthCallback); 
