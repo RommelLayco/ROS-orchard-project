@@ -259,15 +259,7 @@ int main (int argc, char **argv)
 
 		mypub_object.publish(currentVelocity); 
 		z=0;
-                if(checkLocation()){
-                std_msgs::String mypub_msg;
-		mypub_msg.data = "I AM BARKING!!Woof Woof!!";
-
-                mypub_bark.publish(mypub_msg);
-                mypub_bark.publish(mypub_msg);
-                mypub_bark.publish(mypub_msg);
-                mypub_bark.publish(mypub_msg);
-                mypub_bark.publish(mypub_msg);           
+                if(checkLocation()){          
 		       break;
 		}
 
@@ -277,8 +269,10 @@ int main (int argc, char **argv)
 
         while (ros::ok()) 
 	{ 
-        loop_rate.sleep();
-        navigation();
+                loop_rate.sleep();
+                navigation();
+                std_msgs::String mypub_msg;
+		mypub_msg.data = "I AM BARKING!!Woof Woof!!";        
 		ros::spinOnce();
 		loop_rate.sleep();
 

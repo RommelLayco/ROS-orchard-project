@@ -2,6 +2,7 @@ include "myinstances.inc"
 include "person1.inc"
 include "dog.inc"
 include "picker.inc"
+#include "bin.inc"
 
 # milliseconds per update step 
 interval_sim 100 
@@ -41,6 +42,7 @@ define actor position
 
 picker( pose [ -0.656 -0.237 0.000 90.000] name "picker" )
 dog( pose [8.743 13.106 0.000 0.000] name "dog" )
+#bin(pose [ -0.656 -0.437 0.000 0.000] name "bin1")
 person1( pose [2.070 -13.000 0.000 0.000] name "person1" )
 
 

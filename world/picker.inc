@@ -47,6 +47,42 @@ define picker actor
 		color "red"
 	)
 
+        #bin
+         model
+        (
+            size [0.42 0.02 0.4 ]
+            pose [1 0.2 0.0 0.0]
+            color "burlywood"
+        )
+
+        model
+        (
+            size [0.42 0.02 0.4 ]
+            pose [1 -0.2 0.0 0.0]
+            color "burlywood"
+        )
+
+        model
+        (
+            size [0.02 0.36 0.4 ]
+            pose [0.2 -0.3 0.0 0.0]
+            color "burlywood"
+        )
+
+        model
+        (
+            size [0.02 0.36 0.4 ]
+            pose [-0.2 -0.3 0.0 0.0]
+            color "burlywood"
+        )
+
+        model
+        (
+            size [0.4 0.4 0.02 ]
+            pose [1.0 -0.3 0.0 0.0]
+            color "burlywood"
+        )
+
 	#right hand
 	model
 	(
