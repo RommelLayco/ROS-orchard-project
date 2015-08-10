@@ -28,6 +28,8 @@ xterm -hold -e roscore&
 cd ~/ros_WS/src/se306-1/team4_ros
 xterm -hold -e rosrun team4_ros AlphaWithSensorRobotNode&
 
+xterm -hold -e rosrun team4_ros DogNode&
+
 #open world file
 cd ~/ros_WS/src/se306-1/world
 xterm -hold -e rosrun stage_ros stageros newworld.world
