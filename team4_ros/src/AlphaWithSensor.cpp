@@ -39,32 +39,32 @@ void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
 {
     int i = 0;
     bool isNear = false;
-    ROS_INFO("Sensor:");
+    //ROS_INFO("Sensor:");
     for (i; i < 180; i++) {
         if (msg->ranges[i] < 1.5)
         {
             isNear = true;
             nearCollision = true;
-            ROS_INFO("I'm near something! [%f]", msg->ranges[i]);
+            //ROS_INFO("I'm near something! [%f]", msg->ranges[i]);
 
             if (i < 60)
             {
                 // Spin to the left
-                ROS_INFO("Spinning left");
+                //ROS_INFO("Spinning left");
                 currentVelocity.linear.x = 1;
                 currentVelocity.angular.z = 0.5;
                 break;
             } else if (i >= 60 && i < 120)
             {
                 // Move backwards and spin right
-                ROS_INFO("Moving backwards and spinning right");
+                //ROS_INFO("Moving backwards and spinning right");
                 currentVelocity.linear.x = 0;
                 currentVelocity.angular.z = -1.0;
                 break;
             } else
             {
                 // Spin to the right
-                ROS_INFO("Spinning right");
+                //ROS_INFO("Spinning right");
                 currentVelocity.linear.x = 1;
                 currentVelocity.angular.z = -0.5;
                 break;
@@ -87,6 +87,8 @@ void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
 
 void updateCurrentVelocity() {
 
+    //ROS_INFO("Z=[%f]", z);
+
     if (nearCollision == true)
     {
         // Let collision resolution take place before we attempt to move towards the goal
@@ -105,8 +107,8 @@ void updateCurrentVelocity() {
     directionVector.y = desiredLocation.y - currentLocation.position.y;
     directionVector.z = desiredLocation.z - currentLocation.position.z;
 
-    ROS_INFO("X distance: [%f]", directionVector.x);
-    ROS_INFO("Y distance: [%f]", directionVector.y);
+    //ROS_INFO("X distance: [%f]", directionVector.x);
+    //ROS_INFO("Y distance: [%f]", directionVector.y);
 
     // Check if we are at the desired location
     if (abs(directionVector.x) <= distanceThreshold && abs(directionVector.y) <= distanceThreshold)
@@ -136,6 +138,7 @@ void updateCurrentVelocity() {
 
     if (z != 0)
     {
+        ROS_INFO("WEIRD CODE EXECUTING!");
         currentVelocity.linear.x = 2;
         currentVelocity.angular.z = z;
         return;
