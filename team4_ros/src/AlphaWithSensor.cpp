@@ -41,7 +41,7 @@ void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
     bool isNear = false;
     ROS_INFO("Sensor:");
     for (i; i < 180; i++) {
-        if (msg->ranges[i] < 1)
+        if (msg->ranges[i] < 1.5)
         {
             isNear = true;
             nearCollision = true;
@@ -53,18 +53,21 @@ void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
                 ROS_INFO("Spinning left");
                 currentVelocity.linear.x = 1;
                 currentVelocity.angular.z = 0.5;
+                break;
             } else if (i >= 60 && i < 120)
             {
                 // Move backwards and spin right
                 ROS_INFO("Moving backwards and spinning right");
                 currentVelocity.linear.x = 0;
                 currentVelocity.angular.z = -1.0;
+                break;
             } else
             {
                 // Spin to the right
                 ROS_INFO("Spinning right");
                 currentVelocity.linear.x = 1;
                 currentVelocity.angular.z = -0.5;
+                break;
             }
 
         }
@@ -144,12 +147,19 @@ void updateCurrentVelocity() {
         //ROS_INFO("currentAngle is : %f",currentAngle); 
         //ROS_INFO("desiredAngle is : %f",desiredAngle); 
 
-        // If the deifference between current angle and desired angle is less than 0.1 stop spining
-        if (currentAngle - desiredAngle > 0.1 || desiredAngle - currentAngle > 0.1)
+        // If the difference between current angle and desired angle is less than 0.1 stop spining
+        if (abs(currentAngle - desiredAngle) > 0.1)
         {
             // Spin
             currentVelocity.linear.x = 0;
-            currentVelocity.angular.z = 0.5;
+            if (currentAngle <= desiredAngle)
+            {
+                currentVelocity.angular.z = 0.5;
+            }
+            else
+            {
+                currentVelocity.angular.z = -0.5;
+            }
             
         } else
         {

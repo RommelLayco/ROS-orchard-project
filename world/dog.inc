@@ -112,6 +112,9 @@ define dog actor
 		pose [0.25 0 0.7 0.0]
 		color "black"
 	)
+	
+	myLaser(pose [ 0.25 0.0 0.7 0.0 ])
+	
 	#eyes
 	# Left eye
 	model
