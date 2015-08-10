@@ -1,0 +1,4 @@
+<launch>
+  <node name="AlphaWithSensorRobotNode" pkg="team4_ros" type="AlphaWithSensorRobotNode"/>
+  
+</launch>
