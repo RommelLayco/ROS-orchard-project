@@ -207,7 +207,7 @@ int main (int argc, char **argv)
     //desiredLocation1.x = -10;
     desiredLocation1.x = 3.5;
     //desiredLocation1.y = -21;
-    desiredLocation1.y = 15;
+    desiredLocation1.y = 15.5;
     desiredLocation1.z = 0;
 
     geometry_msgs::Point desiredLocation2;
@@ -262,6 +262,7 @@ int main (int argc, char **argv)
                 if(checkLocation()){
                 std_msgs::String mypub_msg;
 		mypub_msg.data = "I AM BARKING!!Woof Woof!!";
+
                 mypub_bark.publish(mypub_msg);
                 mypub_bark.publish(mypub_msg);
                 mypub_bark.publish(mypub_msg);
@@ -276,8 +277,11 @@ int main (int argc, char **argv)
 
         while (ros::ok()) 
 	{ 
-        
+        loop_rate.sleep();
         navigation();
+		ros::spinOnce();
+		loop_rate.sleep();
+
         }
 
 	return 0; 
