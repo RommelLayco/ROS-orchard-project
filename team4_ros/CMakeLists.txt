@@ -133,6 +133,7 @@ add_executable(sensor_node src/mypub.cpp)
    ${catkin_LIBRARIES}
  )
 
+
 #############
 ## Install ##
 #############
@@ -177,6 +178,13 @@ add_executable(sensor_node src/mypub.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()
+
+find_package(rostest REQUIRED)
+find_package(gtest)
+
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
+
+add_rostest_gtest(AlphaRobotTest test/alpharobot.test test/AlphaRobotTest.cpp)
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
