@@ -40,6 +40,8 @@ define person1 actor
 		color "white"
 	)
 
+	myLaser(pose [ 0.0 0.0 0.65 0.0 ])
+
 	# Team 4 symbol
 	# Horizontal
 	model
@@ -140,7 +142,7 @@ define person1 actor
 		color "ivory2"
 	)
 
-    myLaser(pose [ 0.0 0.0 1.4 0.0 ])
+	#laser here
 	
 	model
 	(
