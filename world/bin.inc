@@ -1,4 +1,4 @@
-define bin model 
+define bin actor 
 (         
         model
         (

@@ -4,35 +4,35 @@ define canopy model
         model
         (
             size [3.58 0.08 0.04 ]
-            pose [0.0 0.0 1.8 0.0]
+            pose [0.0 0.0 1.9 0.0]
             color "burlywood"
         )
 
         model
         (
             size [3.58 0.03 0.04 ]
-            pose [0.0 -0.02 1.8 0.0]
+            pose [0.0 -0.02 1.9 0.0]
             color "green"         
         )
 
         model
         (
             size [0.08 0.08 0.08 ]
-            pose [1.0 0.0 1.72 0.0]
+            pose [1.0 0.0 1.82 0.0]
             color "yellow"         
         )
 
         model
         (
             size [0.08 0.08 0.08 ]
-            pose [0.1 0.0 1.72 0.0]
+            pose [0.1 0.0 1.82 0.0]
             color "yellow"         
         )
 
         model
         (
             size [0.08 0.08 0.08 ]
-            pose [-0.8 0.0 1.72 0.0]
+            pose [-0.8 0.0 1.82 0.0]
             color "yellow"         
         )
 

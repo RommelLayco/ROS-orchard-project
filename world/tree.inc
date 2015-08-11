@@ -146,7 +146,7 @@ define tree model
         # post
         model
         (
-            size [0.08 0.08 1.8]
+            size [0.08 0.08 1.9]
             pose [0.0 0.4 0.0 0.0]
             color "burlywood"
         )

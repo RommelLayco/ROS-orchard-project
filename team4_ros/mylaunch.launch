@@ -1,0 +1,7 @@
+<launch>
+
+<group ns="robot_0">
+<node pkg="team4_ros" name="AlphaRobotNode" type="AlphaRobotNode"/>
+</group>
+
+</launch>
