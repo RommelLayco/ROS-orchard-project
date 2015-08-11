@@ -1,10 +1,8 @@
 #include <gtest/gtest.h>
-#include "../src/Robot.h"
-#include "../src/Robot.cpp"
-
-// A hack so that I can access private members
 #define private public
 #define protected public
+#include "../src/Robot.h"
+#include "../src/Robot.cpp"
 
 
 //when they fail, ASSERT_* yields a fatal failure and returns from the current function, 
@@ -24,9 +22,9 @@ TEST(initialPositionTest, alphaRobotTestCase2){
     // Create a robot
     Robot *testRobot = new Robot(1, 2, 3);
 
-    ASSERT_EQ(1,testRobot->current_x_);
-    ASSERT_EQ(1,testRobot->current_y_);
-    ASSERT_EQ(1,testRobot->current_theta_);
+    ASSERT_EQ(1,testRobot->current_x);
+    ASSERT_EQ(2,testRobot->current_y);
+    ASSERT_EQ(3,testRobot->current_theta);
 
 }
 
