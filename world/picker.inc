@@ -5,7 +5,7 @@ define picker actor
 	#body
   	model
 	(
-		size [1 0.6 0.6]
+		size [1 0.6 0.4]
 		pose [0 0 0 0.0]
 		color "pink"
 	)
@@ -15,106 +15,67 @@ define picker actor
 	#right arm
 	model
 	(
-		size [0.8 0.1 0.15]
-		pose [0.5 -0.3 0.5 0]
+		size [0.15 0.1 0.7]
+		pose [0 -0.3 0.3 0]
 		color "white"
 	)
 	#left arm
 	model
 	(
-		size [0.8 0.1 0.15]
-		pose [0.5 0.3 0.5 0]
+		size [0.15 0.1 0.7]
+		pose [0 0.3 0.3 0]
 		color "white"
 	)
-	#left hand
-	model
-	(
-		size [0.1 0.1 0.28]
-		pose [0.95 -0.3 0.43 0]
-		color "red"
-	)
 	
-	model
-	(
-		size [0.32 0.1 0.1]
-		pose [1 -0.3 0.43 0]
-		color "red"
-	)
-	model
-	(
-		size [0.32 0.1 0.1]
-		pose [1 -0.3 0.63 0]
-		color "red"
-	)
 
         #bin
          model
         (
-            size [0.42 0.02 0.4 ]
-            pose [1 0.23 0.4 0.0]
+            size [0.42 0.02 0.2 ]
+            pose [0 0.23 0.8 0.0]
             color "burlywood"
         )
 
         model
         (
-            size [0.42 0.02 0.4 ]
-            pose [1 -0.25 0.4 0.0]
+            size [0.42 0.02 0.2 ]
+            pose [0 -0.25 0.8 0.0]
             color "burlywood"
         )
 
         model
         (
-            size [0.02 0.46 0.4 ]
-            pose [1.23 0 0.4 0.0]
+            size [0.02 0.46 0.2 ]
+            pose [0.23 0 0.8 0.0]
             color "burlywood"
         )
 
         model
         (
-            size [0.02 0.46 0.4 ]
-            pose [0.77 0 0.4 0.0]
+            size [0.02 0.46 0.2 ]
+            pose [-0.23 0 0.8 0.0]
             color "burlywood"
         )
 
         model
         (
             size [0.4 0.46 0.02 ]
-            pose [1.0 0 0.4 0.0]
+            pose [0 0 0.8 0.0]
             color "burlywood"
         )
 
-	#right hand
-	model
-	(
-		size [0.1 0.1 0.28]
-		pose [0.95 0.3 0.43 0]
-		color "red"
-	)
-	
-	model
-	(
-		size [0.32 0.1 0.1]
-		pose [1 0.3 0.43 0]
-		color "red"
-	)
-	model
-	(
-		size [0.32 0.1 0.1]
-		pose [1 0.3 0.63 0]
-		color "red"
-	)
 	
 	#head
 	model
 	(
 		size [0.3 0.3 0.3]
-		pose [0 0 0.65 0]
+		pose [0 0 0.45 0]
 		color "white"
 	)
 	model
 	(
 		size [0.3 0.20 0.05]
-		pose [0 0 0.95 0]
+		pose [0 0 0.75 0]
 		color "white"
 	)
 	
@@ -122,7 +83,7 @@ define picker actor
 	model
 	(
 		size [0.3 0.25 0.05]
-		pose [0 0 0.60 0]
+		pose [0 0 0.40 0]
 		color "white"
 	)
 
@@ -130,13 +91,13 @@ define picker actor
 	model
 	(
 		size [0.27 0.05 0.2]
-		pose [0 -0.16 0.75 0]
+		pose [0 -0.16 0.55 0]
 		color "white"
 	)
 	model
 	(
 		size [0.2 0.05 0.15]
-		pose [0 -0.2 0.75 0]
+		pose [0 -0.2 0.55 0]
 		color "white"
 	)
 	
@@ -144,13 +105,13 @@ define picker actor
 	model
 	(
 		size [0.27 0.05 0.2]
-		pose [0 0.16 0.75 0]
+		pose [0 0.16 0.55 0]
 		color "white"
 	)
 	model
 	(
 		size [0.2 0.05 0.15]
-		pose [0 0.2 0.75 0]
+		pose [0 0.2 0.55 0]
 		color "white"
 	)
 
@@ -158,7 +119,7 @@ define picker actor
 	model
 	(
 		size [0.02 0.02 0.02]
-		pose [0.18 -0.035 0.85 0]
+		pose [0.18 -0.035 0.65 0]
 		color "black"
 	)
 	
@@ -166,7 +127,7 @@ define picker actor
 	model
 	(
 		size [0.02 0.02 0.02]
-		pose [0.18 0.035 0.85 0]
+		pose [0.18 0.035 0.65 0]
 		color "black"
 	)
 
@@ -174,20 +135,20 @@ define picker actor
 	model
 	(
 		size [0.02 0.15 0.01]
-		pose [0.18 0 0.73 0]
+		pose [0.18 0 0.53 0]
 		color "black"
 	)
 	
 	model
 	(
 		size [0.01 0.01 0.07]
-		pose [0.18 0.09 0.73 0]
+		pose [0.18 0.09 0.53 0]
 		color "black"
 	)
 	model
 	(
 		size [0.01 0.01 0.07]
-		pose [0.18 -0.09 0.73 0]
+		pose [0.18 -0.09 0.53 0]
 		color "black"
 	)
 
