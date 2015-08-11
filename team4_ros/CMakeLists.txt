@@ -111,6 +111,10 @@ add_executable(AlphaWithSensorRobotNode src/AlphaWithSensor.cpp)
 target_link_libraries(AlphaWithSensorRobotNode ${catkin_LIBRARIES})
 add_dependencies(AlphaWithSensorRobotNode ${catkin_EXPORTED_TARGETS})
 
+add_executable(PickerNode src/Picker.cpp)
+target_link_libraries(PickerNode ${catkin_LIBRARIES})
+add_dependencies(PickerNode ${catkin_EXPORTED_TARGETS})
+
 add_executable(SwingRobotNode src/SwingRobot.cpp)
 target_link_libraries(SwingRobotNode ${catkin_LIBRARIES})
 add_dependencies(SwingRobotNode ${catkin_EXPORTED_TARGETS})
