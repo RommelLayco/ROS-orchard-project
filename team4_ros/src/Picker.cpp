@@ -73,7 +73,7 @@ void Vibrate()
     //Update Current Position
     
     if (VibrateX == false){
-	currentVelocity.linear.x = 0;
+	//currentVelocity.linear.y = 3;
     currentVelocity.angular.z = 0.95;
 	VibrateX = true;
 	}
