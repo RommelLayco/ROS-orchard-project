@@ -64,19 +64,31 @@ void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
             {
                 // Spin to the left
                 ROS_INFO("Spinning left");
+<<<<<<< HEAD
                 currentVelocity.linear.x = 0.2;
+=======
+                currentVelocity.linear.x = -0.2;
+>>>>>>> cab1fc2219dbc2b23f04175e3a3193a26b680522
                 currentVelocity.angular.z = 0.5;
             } else if (i >= 60 && i < 120)
             {
                 // Move backwards and spin right
                 ROS_INFO("Moving backwards and spinning right");
+<<<<<<< HEAD
                 currentVelocity.linear.x = -0.2;
+=======
+                currentVelocity.linear.x = -0.5;
+>>>>>>> cab1fc2219dbc2b23f04175e3a3193a26b680522
                 currentVelocity.angular.z = -1.0;
             } else
             {
                 // Spin to the right
                 ROS_INFO("Spinning right");
+<<<<<<< HEAD
                 currentVelocity.linear.x = 0.2;
+=======
+                currentVelocity.linear.x = -0.2;
+>>>>>>> cab1fc2219dbc2b23f04175e3a3193a26b680522
                 currentVelocity.angular.z = -0.5;
             }
 
