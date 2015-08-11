@@ -38,7 +38,7 @@ define actor position
 
 picker( pose [ -0.656 -0.237 0.000 90.000] name "picker" )
 dog( pose [6.863 -0.999 0.000 -27.000] name "dog" )
-person1( pose [3.508 -0.012 0.000 -50.628] name "person1" )
+person1( pose [0 3 0.000 -50.628] name "person1" )
 
 
 picker( pose [ -1.755 -0.270 0.000 90.000] name "picker1" )

@@ -192,10 +192,9 @@ void groundTruthCallback(const nav_msgs::Odometry msg)
 }
 
 void navigation(){
-        ROS_INFO("I'm trying to run around the tree.");
+        ROS_INFO("To be Constructed");
         
-        currentVelocity.angular.z = 2; 
-        currentVelocity.linear.x = 1;   
+        
 
 }
 
@@ -204,17 +203,13 @@ int main (int argc, char **argv)
 
     // Setup points on robot's path
     geometry_msgs::Point desiredLocation1;
-    //desiredLocation1.x = -10;
-    desiredLocation1.x = 3.5;
-    //desiredLocation1.y = -21;
-    desiredLocation1.y = 15.5;
+    desiredLocation1.x = 4;
+    desiredLocation1.y = 26;
     desiredLocation1.z = 0;
 
     geometry_msgs::Point desiredLocation2;
-    //desiredLocation2.x = 10;
-    desiredLocation2.x = 1.6;
-    //desiredLocation2.y = 21;
-    desiredLocation2.y = -2;
+    desiredLocation2.x = 1;
+    desiredLocation2.y = 26;
     desiredLocation2.z = 0;
 
     desiredLocations[0] = desiredLocation1;
@@ -247,7 +242,7 @@ int main (int argc, char **argv)
         // ROS comms access point 
     ros::NodeHandle n;
 
-        ros::Subscriber sub = n.subscribe("robot_1/base_scan", 1000, sensorCallback);
+        ros::Subscriber sub = n.subscribe("robot_2/base_scan", 1000, sensorCallback);
 
 
     while (ros::ok()) 
@@ -272,7 +267,7 @@ int main (int argc, char **argv)
                 loop_rate.sleep();
                 navigation();
                 std_msgs::String mypub_msg;
-        mypub_msg.data = "I AM BARKING!!Woof Woof!!";        
+        mypub_msg.data = "I AM PERSON";        
         ros::spinOnce();
         loop_rate.sleep();
 
