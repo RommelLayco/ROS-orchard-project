@@ -101,12 +101,12 @@ int main (int argc, char **argv)
 	ros::NodeHandle sub_handle;  
 
 	// master registry pub and sub
-	ros::Publisher mypub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_0/cmd_vel",1000);
+	ros::Publisher mypub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_1/cmd_vel",1000);
 	ros::Subscriber mysub_object;
 	// loop 25 
 	ros::Rate loop_rate(25);
 
-	mysub_object = sub_handle.subscribe<nav_msgs::Odometry>("robot_0/base_pose_ground_truth",1000, groundTruthCallback); 
+	mysub_object = sub_handle.subscribe<nav_msgs::Odometry>("robot_1/base_pose_ground_truth",1000, groundTruthCallback); 
 
 
 	while (ros::ok()) 
