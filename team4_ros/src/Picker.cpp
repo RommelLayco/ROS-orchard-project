@@ -33,6 +33,9 @@ bool nearCollision;
 // Index that points to current position in path index
 int pathIndex;
 
+// Boolean for the direction of the vibrate
+bool VibrateX=false;
+
 geometry_msgs::Point desiredLocations[2];
 
 void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
@@ -62,6 +65,21 @@ void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
         mypub_object.publish(currentVelocity);
 
     }
+}
+
+
+void Vibrate() 
+{     
+    //Update Current Position
+    if (VibrateX == false){
+	currentVelocity.linear.x = 0;
+    currentVelocity.angular.z = 0.5;
+	VibrateX == true;
+	}
+	else {
+	currentVelocity.linear.x = 0;
+    currentVelocity.angular.z = -0.5;
+	}
 }
 
 
@@ -106,7 +124,8 @@ void updateCurrentVelocity() {
         {
             // Reset index
             ROS_INFO("Reached final destination");
-            //pathIndex = 0;
+			Vibrate();
+            
         }
         
         return;
@@ -172,14 +191,14 @@ int main (int argc, char **argv)
     //desiredLocation1.x = -10;
     desiredLocation1.x = -1.75;
     //desiredLocation1.y = -21;
-    desiredLocation1.y = 15;
+    desiredLocation1.y = 5;
     desiredLocation1.z = 0;
 
     geometry_msgs::Point desiredLocation2;
     //desiredLocation2.x = 10;
     desiredLocation2.x = -1.75;
     //desiredLocation2.y = 21;
-    desiredLocation2.y = 30;
+    desiredLocation2.y = 20;
     desiredLocation2.z = 0;
 
     desiredLocations[0] = desiredLocation1;
