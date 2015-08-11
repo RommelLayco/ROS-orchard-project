@@ -144,12 +144,7 @@ define person1 actor
 		color "ivory2"
 	)
 
-<<<<<<< HEAD
-   
-=======
-	#laser here
->>>>>>> cab1fc2219dbc2b23f04175e3a3193a26b680522
-	
+
 	model
 	(
 		size [0.25 0.25 0.3] 
