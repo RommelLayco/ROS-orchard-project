@@ -131,12 +131,12 @@ void updateCurrentVelocity() {
     // Calculate the desired angle
     double desiredAngle = atan2(directionVector.y, directionVector.x);
 
-    if (z != 0)
-    {
-        currentVelocity.linear.x = 2;
-        currentVelocity.angular.z = z;
-        return;
-    }
+  //  if (z != 0)
+    //{
+      //  currentVelocity.linear.x = 2;
+        //currentVelocity.angular.z = z;
+        //return;
+    //}
 
     // If the desired angle is 0
     if(desiredAngle != 0 && desiredAngle != M_PI)
