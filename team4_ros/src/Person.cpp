@@ -10,7 +10,7 @@
 #include <sstream>
 #include "math.h"
 #include <unistd.h>
-
+#include <time.h> 
 
 // Current velocity of the Robot
 geometry_msgs::Twist currentVelocity;
@@ -95,7 +95,34 @@ void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
 }
 
 
+void generateRandomDesiredLocations(){
+    // set up for random number generation
+    srand (time(NULL));
+
+    // Setup points on robot's path
+    geometry_msgs::Point desiredLocation1;
+    //desiredLocation1.x = -10;
+    desiredLocation1.x = rand() % 10 + 1;
+    //desiredLocation1.y = -21;
+    desiredLocation1.y = rand() % 10 + 1;
+    desiredLocation1.z = 0;
+
+    geometry_msgs::Point desiredLocation2;
+    //desiredLocation2.x = 10;
+    desiredLocation2.x = rand() % 10 + 1;
+    //desiredLocation2.y = 21;
+    desiredLocation2.y = -1 * (rand() % 10 + 1);
+    desiredLocation2.z = 0;
+
+    desiredLocations[0] = desiredLocation1;
+    desiredLocations[1] = desiredLocation2;
+
+
+}
+
+
 void updateCurrentVelocity() {
+
 
     if (nearCollision == true)
     {
@@ -127,7 +154,7 @@ void updateCurrentVelocity() {
         ROS_INFO("I have reached my destination!");
         currentVelocity.linear.x = 0;
         currentVelocity.angular.z = 0.0;
-        /*if (pathIndex < sizeof(desiredLocations) / sizeof(*desiredLocations) - 1)
+        if (pathIndex < sizeof(desiredLocations) / sizeof(*desiredLocations) - 1)
         {
             pathIndex++;
         }
@@ -135,8 +162,12 @@ void updateCurrentVelocity() {
         {
             // Reset index
             ROS_INFO("Reached final destination, going back to the start");
+            
+            // call to generate random values for destination
+            generateRandomDesiredLocations();
+
             pathIndex = 0;
-        }*/
+        }
         
         return;
     }
@@ -198,23 +229,15 @@ void navigation(){
 
 }
 
+
+
+
 int main (int argc, char **argv) 
 {
 
-    // Setup points on robot's path
-    geometry_msgs::Point desiredLocation1;
-    desiredLocation1.x = 4;
-    desiredLocation1.y = 26;
-    desiredLocation1.z = 0;
+    generateRandomDesiredLocations();
 
-    geometry_msgs::Point desiredLocation2;
-    desiredLocation2.x = 1;
-    desiredLocation2.y = 26;
-    desiredLocation2.z = 0;
-
-    desiredLocations[0] = desiredLocation1;
-    desiredLocations[1] = desiredLocation2;
-
+    
     pathIndex = 0;
 
 
@@ -254,24 +277,23 @@ int main (int argc, char **argv)
 
         mypub_object.publish(currentVelocity); 
         z=0;
-                if(checkLocation()){          
-               break;
-        }
 
         ros::spinOnce();
         loop_rate.sleep();
     } 
 
+    /**
+
         while (ros::ok()) 
     { 
                 loop_rate.sleep();
-                navigation();
                 std_msgs::String mypub_msg;
         mypub_msg.data = "I AM PERSON";        
         ros::spinOnce();
         loop_rate.sleep();
 
         }
+    **/
 
     return 0; 
 }
