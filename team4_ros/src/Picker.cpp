@@ -74,7 +74,7 @@ void Vibrate()
     
     if (VibrateX == false){
 	currentVelocity.linear.x = 0;
-    currentVelocity.angular.z = 0.99;
+    currentVelocity.angular.z = 0.95;
 	VibrateX = true;
 	}
 	else {
@@ -187,14 +187,14 @@ int main (int argc, char **argv)
     //desiredLocation1.x = -10;
     desiredLocation1.x = -1.75;
     //desiredLocation1.y = -21;
-    desiredLocation1.y = 31;
+    desiredLocation1.y = 30;
     desiredLocation1.z = 0;
 
     geometry_msgs::Point desiredLocation2;
     //desiredLocation2.x = 10;
     desiredLocation2.x = -1.75;
     //desiredLocation2.y = 21;
-    desiredLocation2.y = 35;
+    desiredLocation2.y = 32;
     desiredLocation2.z = 0;
 
     desiredLocations[0] = desiredLocation1;
