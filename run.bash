@@ -14,6 +14,7 @@ cd team4_ros
 xterm -hold -e rosrun team4_ros PersonNode&
 xterm -hold -e rosrun team4_ros DogNode&
 xterm -hold -e rosrun team4_ros PickerNode&
+xterm -hold -e rosrun team4_ros bin_node&
 
 cd $DIR/world
 xterm -hold -e rosrun stage_ros stageros newworld.world
