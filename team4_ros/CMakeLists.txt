@@ -102,9 +102,9 @@ include_directories(
 #   src/${PROJECT_NAME}/team4_ros.cpp
 # )
 
-add_executable(Robot src/Robot.cpp)
-target_link_libraries(Robot ${catkin_LIBRARIES})
-add_dependencies(Robot ${catkin_EXPORTED_TARGETS})
+add_executable(MainNode src/MainNode.cpp)
+target_link_libraries(MainNode ${catkin_LIBRARIES})
+add_dependencies(MainNode ${catkin_EXPORTED_TARGETS})
 
 add_executable(AlphaRobotNode src/AlphaRobot.cpp)
 target_link_libraries(AlphaRobotNode ${catkin_LIBRARIES})
