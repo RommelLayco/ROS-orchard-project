@@ -35,12 +35,12 @@ define actor position
 
 # throw in a robot  
 
-
-picker( pose [ -0.656 -0.237 0.000 90.000] name "picker" )
-dog( pose [6.863 -0.999 0.000 -27.000] name "dog" )
+picker( pose [ -1.75 -0.270 0.000 90.000] name "picker1" )
+#picker( pose [ -0.656 -0.237 0.000 90.000] name "picker" )
+dog( pose [8.743 13.106 0.000 0.000] name "dog")
 person1( pose [0 3 0.000 -50.628] name "person1" )
 
 
-picker( pose [ -1.755 -0.270 0.000 90.000] name "picker1" )
+#picker( pose [ -1.755 -0.270 0.000 90.000] name "picker1" )
 picker( pose [ -6.379 -2.979 0.000 -53.239] name "picker2" )
 

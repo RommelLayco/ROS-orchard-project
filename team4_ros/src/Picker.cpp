@@ -170,16 +170,16 @@ int main (int argc, char **argv)
     // Setup points on robot's path
     geometry_msgs::Point desiredLocation1;
     //desiredLocation1.x = -10;
-    desiredLocation1.x = 0;
+    desiredLocation1.x = -1.75;
     //desiredLocation1.y = -21;
-    desiredLocation1.y = 0;
+    desiredLocation1.y = 15;
     desiredLocation1.z = 0;
 
     geometry_msgs::Point desiredLocation2;
     //desiredLocation2.x = 10;
-    desiredLocation2.x = -10;
+    desiredLocation2.x = -1.75;
     //desiredLocation2.y = 21;
-    desiredLocation2.y = -10;
+    desiredLocation2.y = 30;
     desiredLocation2.z = 0;
 
     desiredLocations[0] = desiredLocation1;
