@@ -1,3 +1,18 @@
+define myLaser ranger 
+( 
+  sensor( range [ 0 3 ] fov 180 samples 180 ) 
+    size [0.100 0.100 0.100] 
+      color "black" 
+        block( 
+            points 4 
+                point[0] [0 0] 
+                    point[1] [0.1 0] 
+                        point[2] [0.1 0.1] 
+                            point[3] [0 0.1] 
+                                z [0 0.1] 
+                                    ) 
+        ) 
+
 define person1 actor
 (
 
