@@ -35,10 +35,12 @@ define person1 actor
 	# Torso
 	model
 	(
-		size [0.25 0.5 0.7]
+		size [0.25 0.5 0.55]
 		pose [0.0 0.0 0.648 0.0] 
 		color "white"
 	)
+	#laser position under Torso
+	myLaser(pose [ 0.0 0.0 0.65 0.0 ])
 
 	# Team 4 symbol
 	# Horizontal
@@ -132,20 +134,20 @@ define person1 actor
 	)
 
 
-# Head
+	# Head
 	model
 	(
 		size [0.25 0.18 0.03] 
-		pose [0.0 0.0 1.348 0.0] 
+		pose [0.0 0.0 1.198 0.0] 
 		color "ivory2"
 	)
 
-    myLaser(pose [ 0.0 0.0 1.4 0.0 ])
+   
 	
 	model
 	(
 		size [0.25 0.25 0.3] 
-		pose [0.0 0.0 1.4 0.0] 
+		pose [0.0 0.0 1.25 0.0] 
 		color "PeachPuff1"
 	)
 
@@ -153,13 +155,13 @@ define person1 actor
 	model
 	(
 		size [0.01 0.05 0.05]
-		pose [0.125 0.0625 1.528 0.0]
+		pose [0.125 0.0625 1.378 0.0]
 		color "ivory2"
 	)
 	model
 	(
 		size [0.01 0.025 0.025]
-		pose [0.1265 0.0625 1.528 0.0]
+		pose [0.1265 0.0625 1.378 0.0]
 		color "DodgerBlue"
 	)
 
@@ -167,13 +169,13 @@ define person1 actor
 	model
 	(
 		size [0.01 0.05 0.05]
-		pose [0.125 -0.0625 1.528 0.0]
+		pose [0.125 -0.0625 1.378 0.0]
 		color "ivory2"
 	)
 	model
 	(
 		size [0.01 0.025 0.025]
-		pose [0.1265 -0.0625 1.528 0.0]
+		pose [0.1265 -0.0625 1.378 0.0]
 		color "DodgerBlue"
 	)
 
@@ -181,7 +183,7 @@ define person1 actor
 	model
 	(
 		size [0.12 0.12 0.6]
-		pose [0.0 0.31 0.748 0.0]
+		pose [0.0 0.31 0.598 0.0]
 		color "white"
 	)
 
@@ -189,7 +191,7 @@ define person1 actor
 	model
 	(
 		size [0.12 0.12 0.6]
-		pose [0.0 -0.31 0.748 0.0]
+		pose [0.0 -0.31 0.598 0.0]
 		color "white"
 	)
 
@@ -197,7 +199,7 @@ define person1 actor
 	model
 	(
 		size [0.1 0.1 0.05]
-		pose [0.0 0.31 0.698 0.0]
+		pose [0.0 0.31 0.548 0.0]
 		color "PeachPuff1"
 	)
 
@@ -205,7 +207,7 @@ define person1 actor
 	model
 	(
 		size [0.1 0.1 0.05]
-		pose [0.0 -0.31 0.698 0.0]
+		pose [0.0 -0.31 0.548 0.0]
 		color "PeachPuff1"
 	)
 
