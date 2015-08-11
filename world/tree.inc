@@ -3,18 +3,12 @@ define tree model
         # trank
 	model
 	(
-		size [0.16 0.16 1.0]  
+		size [0.16 0.16 1.04]  
                 pose [0.0 0.0 0.0 0.0]
 		color "brown"
 	)
-        # leaf
-        model
-        (
-            size [0.8 0.8 0.04 ]
-            pose [0.0 0.0 1.0 0.0]
-            color "green"
-        )
 
+        # leaf
         model
         (
             size [0.72 0.72 0.04 ]
