@@ -1,3 +1,6 @@
+#ifndef ROBOT_H
+#define ROBOT_H
+
 #include "ros/ros.h"
 #include <stdlib.h>
 #include <geometry_msgs/Twist.h>
@@ -22,6 +25,7 @@ class Robot
         void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& sensorMsg);
         void positionCallback(const nav_msgs::Odometry PositionMsg);
         void addGoal(geometry_msgs::Point goal);
+        robotState getState();
 
 
     private:
@@ -61,3 +65,5 @@ class Robot
         
 
 };
+
+#endif

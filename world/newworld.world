@@ -32,10 +32,14 @@ define actor position
   obstacle_return 0
 )
 
-# throw in a robot  
-#person1( pose [1.000 5.000 0.000 0.000] name "person1" )
-dog( pose [8.743 13.106 0.000 0.000] name "dog" )
+# throw in a robot
+
+picker( pose [ -0.656 -0.237 0.000 90.000] name "picker" )
 person1( pose [1.600 -20.000 0.000 0.000] name "person1" )
+
+#person1( pose [1.000 5.000 0.000 0.000] name "person1" )
+#dog( pose [8.743 13.106 0.000 0.000] name "dog" )
+#person1( pose [1.600 -20.000 0.000 0.000] name "person1" )
 #dog( pose [4.500 15.00 0.000 0.000] name "dog" )
 #dog( pose [10.500 20.00 0.000 0.000] name "dog" )
 

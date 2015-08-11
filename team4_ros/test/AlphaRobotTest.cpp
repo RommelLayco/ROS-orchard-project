@@ -1,8 +1,7 @@
-
-
 #include <gtest/gtest.h>
+#include "../src/Robot.h"
+#include "../src/Robot.cpp"
 
-//#include "../src/AlphaRobot.cpp"
 
 //when they fail, ASSERT_* yields a fatal failure and returns from the current function, 
 //while EXPECT_* yields a nonfatal failure, allowing the function to continue running
@@ -10,10 +9,10 @@
 //However, ASSERT_* is better if the test shouldn't continue.
 //=================Resident test cases==========================================
 TEST(initialPositionTest, alphaRobotTestCase1){
-	//ASSERT_EQ(1.600,currentLocation.orientation.x);
-	//ASSERT_EQ(-21.000, currentLocation.orientation.y);
+    // Create a robot
+    Robot testRobot = Robot(1, 2, 3);
+    ASSERT_EQ(Orienting, testRobot.getState());
 
-	EXPECT_TRUE(true);
 }
 
 

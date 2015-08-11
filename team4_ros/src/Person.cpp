@@ -1,6 +1,16 @@
-#include "../include/team4_ros/Person.h"
+#include "Robot.h"
 
-Person::Person()
+
+class Person: public Robot
 {
-    //ctor
+    public:
+        Person(double x, double y, double z) : Robot(x, y, z) {}
+    protected:
+        virtual void leftCollisionDetected();
+};
+
+
+void Person::leftCollisionDetected()
+{
+    ROS_INFO("SUBCLASS!");
 }

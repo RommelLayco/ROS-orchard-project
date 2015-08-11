@@ -25,6 +25,10 @@ void Robot::addSpeedListener(SpeedListener* listener)
     speedListeners.push_back(listener);
 }
 
+robotState Robot::getState()
+{
+    return this->current_state;
+}
 
 void Robot::sensorCallback(const sensor_msgs::LaserScan::ConstPtr& sensorMsg)
 {// Handle sensor data
@@ -91,8 +95,9 @@ void Robot::centerCollisionDetected()
 }
 
 
-void Robot::updateVelocity() {
-
+void Robot::updateVelocity()
+{
+    ROS_INFO("CALLING1!");
     if (current_state == CollisionResolution)
     {
         // Let collision resolution take place before we attempt to move towards the goal
@@ -193,7 +198,7 @@ void Robot::notifySpeedListeners()
     velocityMsg.angular.z = angular_veloctiy;
 
     // Loop through speedListeners and send them this speed message
-    for (int i=0; i < speedListeners.size(); i++)
+    for (int i = 0; i < speedListeners.size(); i++)
     {
         speedListeners[i]->speedUpdate(velocityMsg);
     }
