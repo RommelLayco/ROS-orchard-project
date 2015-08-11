@@ -64,6 +64,24 @@ void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
             {
                 // Spin to the left
                 ROS_INFO("Spinning left");
+<<<<<<< HEAD
+
+                currentVelocity.linear.x = 0.2;
+
+                currentVelocity.linear.x = -0.2;
+
+                currentVelocity.angular.z = 0.5;
+            } else if (i >= 60 && i < 120)
+            {
+                // Move backwards and spin right
+                ROS_INFO("Moving backwards and spinning right");
+
+                currentVelocity.linear.x = -0.2;
+
+                currentVelocity.linear.x = -0.5;
+
+                currentVelocity.angular.z = -1.0;
+=======
                 currentVelocity.linear.x = 0.5;
                 currentVelocity.angular.z = 1.0;
             }
@@ -73,12 +91,22 @@ void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
                 ROS_INFO("Moving backwards and spinning right");
                 currentVelocity.linear.x = -0.5;
                 currentVelocity.angular.z = -0.5;
+>>>>>>> 6d618cd565df85fb50c3b632e067e13e336293b2
             } else
             {
                 // Spin to the right
                 ROS_INFO("Spinning right");
+<<<<<<< HEAD
+
+                currentVelocity.linear.x = 0.2;
+
+                currentVelocity.linear.x = -0.2;
+
+                currentVelocity.angular.z = -0.5;
+=======
                 currentVelocity.linear.x = 0.5;
                 currentVelocity.angular.z = -1.0;
+>>>>>>> 6d618cd565df85fb50c3b632e067e13e336293b2
             }
 
         }
@@ -230,7 +258,42 @@ void navigation(){
 
 }
 
+void rotateAngle(double desiredAngle)
+{
+   //Calculate the angle to rotate
+	double difference = currentAngle - desiredAngle;
+	//Do not rotate if already at desired angle
+	if (difference == 0.0){
+		return;
+	}
 
+	//Check for angle greater than pi
+	if(difference>M_PI){ 
+		difference = (difference-(M_PI*2));
+	}else if(difference<(M_PI*-1)){
+		difference = difference + (M_PI*2);
+	}
+
+	while(true){
+        if (difference > 0.1 || -1*difference > 0.1)
+        {
+            if(difference>0){
+		        currentVelocity.linear.x = 0;
+                currentVelocity.angular.z = 0.5;
+		
+	        }else{
+		        currentVelocity.angular.z = -0.5;
+		        currentVelocity.linear.x = 0;           
+	        }                         
+            
+        } else
+        {
+            // Go forward
+            currentVelocity.linear.x = 2;
+            currentVelocity.angular.z = 0;
+        }
+	}
+}
 
 
 int main (int argc, char **argv) 
