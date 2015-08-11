@@ -34,16 +34,11 @@ define actor position
 )
 
 # throw in a robot  
-#person1( pose [1.000 5.000 0.000 0.000] name "person1" )
 
-#person1( pose [1.600 -21.000 0.000 0.000] name "person1" )
-#dog( pose [4.500 15.00 0.000 0.000] name "dog" )
-#dog( pose [10.500 20.00 0.000 0.000] name "dog" )
 
 picker( pose [ -0.656 -0.237 0.000 90.000] name "picker" )
-dog( pose [8.743 13.106 0.000 0.000] name "dog" )
-#bin(pose [ -0.656 -0.437 0.000 0.000] name "bin1")
-person1( pose [2.070 -13.000 0.000 0.000] name "person1" )
+dog( pose [6.863 -0.999 0.000 -27.000] name "dog" )
+person1( pose [3.508 -0.012 0.000 -50.628] name "person1" )
 
 
 picker( pose [ -1.755 -0.270 0.000 90.000] name "picker1" )
