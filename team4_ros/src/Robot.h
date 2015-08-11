@@ -28,8 +28,7 @@ class Robot
         robotState getState();
 
 
-    private:
-
+   protected:
         void notifySpeedListeners(); // Send position message to all listeners
 
         std::vector<SpeedListener*> speedListeners; // Must be a pointer because SpeedListener is an abstract type
@@ -56,12 +55,13 @@ class Robot
 
         // The state lets us know what speed to give to the robot
         robotState current_state;
-        
-    protected:
+    
         // These methods should be overridden in subclasses to provide more specific behavior
         virtual void leftCollisionDetected();
         virtual void rightCollisionDetected();
         virtual void centerCollisionDetected();
+        // Subclass should overide this to define behavior when last goal is reached
+        virtual void reachedLastGoal();
         
 
 };

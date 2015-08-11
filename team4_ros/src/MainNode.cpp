@@ -25,11 +25,11 @@ void myClass::speedUpdate(geometry_msgs::Twist speedMsg)
 int main(int argc, char **argv)
 {
 
-    std::vector<Robot> entityList;
+    std::vector<Robot*> entityList;
 
     // Create robot object
     Robot myRobot = Robot(0, 0, 0);
-    entityList.push_back(myRobot);
+    entityList.push_back(&myRobot);
 
     ros::init(argc, argv, "MainNode");
 
@@ -70,7 +70,7 @@ int main(int argc, char **argv)
     
     // Instantiate a person
     Person myPerson = Person(1, 2, 3);
-    entityList.push_back(myPerson);
+    entityList.push_back(&myPerson);
 
     // Create person position publisher
     ros::Publisher mypub_object1 = publisherHandle.advertise<geometry_msgs::Twist>("robot_1/cmd_vel",1000);
@@ -78,21 +78,20 @@ int main(int argc, char **argv)
     // Attach publisher to robot object
     myClass temp1 = myClass(mypub_object1);
     myPerson.addSpeedListener(&temp1);
-    
-    //ros::Subscriber groundtruthSub1 = subscriberHandle.subscribe<nav_msgs::Odometry>("robot_1/base_pose_ground_truth",1000, &Person::positionCallback, &myPerson);
-    //ros::Subscriber SensorSub1 = subscriberHandle.subscribe("robot_1/base_scan", 1000, &Person::sensorCallback, &myPerson);
 
+    ros::Subscriber groundtruthSub1 = subscriberHandle.subscribe<nav_msgs::Odometry>("robot_1/base_pose_ground_truth",1000, &Person::positionCallback, dynamic_cast<Robot*>(&myPerson));
+    ros::Subscriber SensorSub1 = subscriberHandle.subscribe("robot_1/base_scan", 1000, &Person::sensorCallback, dynamic_cast<Robot*>(&myPerson));
+
+    myPerson.addGoal(desiredLocation1);
 
 
     while (ros::ok()) 
 	{ 
         // In future, will loop through all robot objects calling this method on each of them
-        /*for (int i = 0; i < entityList.size(); i++)
+        for (int i = 0; i < entityList.size(); i++)
         {
-            ROS_INFO("CALLING!");
-            entityList[i].updateVelocity();
-        }*/
-		myRobot.updateVelocity();
+            entityList[i]->updateVelocity();
+        }
 
 		ros::spinOnce();
 		loop_rate.sleep();

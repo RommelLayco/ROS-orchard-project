@@ -97,20 +97,25 @@ void Robot::centerCollisionDetected()
 
 void Robot::updateVelocity()
 {
-    ROS_INFO("CALLING1!");
     if (current_state == CollisionResolution)
     {
         // Let collision resolution take place before we attempt to move towards the goal
         return;
     }
-
     // Find the correct angle
+
+    // Check if robot has any goals defined. If not, do nothing.
+    if (goals.empty())
+    {
+        ROS_INFO("No Goal, doing nothing");
+        return;
+    }
+
 
     geometry_msgs::Point desiredLocation = goals[goalIndex];
     // This is the maximum distance a robot can be from it's
     // desired poisition and still be considered to have reached it
     float distanceThreshold = 0.5;
-
     geometry_msgs::Point directionVector; // Vector from currentLocation to desiredLocation
     directionVector.x = desiredLocation.x - current_x;
     directionVector.y = desiredLocation.y - current_y;
@@ -130,9 +135,7 @@ void Robot::updateVelocity()
         }
         else
         {
-            // Reset index
-            ROS_INFO("Reached final destination, going back to the start");
-            goalIndex = 0;
+            reachedLastGoal();
         }
         
         notifySpeedListeners();
@@ -202,7 +205,14 @@ void Robot::notifySpeedListeners()
     {
         speedListeners[i]->speedUpdate(velocityMsg);
     }
-
     
 }
+
+void Robot::reachedLastGoal()
+{
+    // Reset index
+    ROS_INFO("Reached final destination, going back to the start");
+    goalIndex++;
+}
+
 
