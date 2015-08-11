@@ -42,8 +42,6 @@ define person1 actor
 	#laser position under Torso
 	myLaser(pose [ 0.0 0.0 0.65 0.0 ])
 
-	myLaser(pose [ 0.0 0.0 0.65 0.0 ])
-
 	# Team 4 symbol
 	# Horizontal
 	model
@@ -143,12 +141,6 @@ define person1 actor
 		pose [0.0 0.0 1.198 0.0] 
 		color "ivory2"
 	)
-
-<<<<<<< HEAD
-   
-=======
-	#laser here
->>>>>>> cab1fc2219dbc2b23f04175e3a3193a26b680522
 	
 	model
 	(
