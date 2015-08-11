@@ -10,7 +10,7 @@
 #include <sstream>
 #include "math.h"
 #include <unistd.h>
-
+#include <time.h> 
 
 // Current velocity of the Robot
 geometry_msgs::Twist currentVelocity;
@@ -95,7 +95,16 @@ void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
 }
 
 
+void generateRandomSpeed(){
+    // set up for random number generation
+    srand (time(NULL));
+    currentVelocity.linear.x = rand() % 4 + 2;;
+
+}
+
 void updateCurrentVelocity() {
+
+    //generateRandomSpeed();
 
     if (nearCollision == true)
     {
