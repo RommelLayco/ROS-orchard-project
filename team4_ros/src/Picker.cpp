@@ -71,14 +71,17 @@ void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
 void Vibrate() 
 {     
     //Update Current Position
+    
     if (VibrateX == false){
 	currentVelocity.linear.x = 0;
-    currentVelocity.angular.z = 0.5;
-	VibrateX == true;
+    currentVelocity.angular.z = 0.99;
+	VibrateX = true;
 	}
 	else {
 	currentVelocity.linear.x = 0;
-    currentVelocity.angular.z = -0.5;
+        currentVelocity.angular.z = -1.0;
+
+        VibrateX = false;
 	}
 }
 
@@ -148,18 +151,11 @@ void updateCurrentVelocity() {
         //ROS_INFO("desiredAngle is : %f",desiredAngle); 
 
         // If the deifference between current angle and desired angle is less than 0.1 stop spining
-        if (currentAngle - desiredAngle > 0.1 || desiredAngle - currentAngle > 0.1)
-        {
-            // Spin
-            currentVelocity.linear.x = 0;
-            currentVelocity.angular.z = 0.5;
-            
-        } else
-        {
+
             // Go forward
             currentVelocity.linear.x = 1;
             currentVelocity.angular.z = 0;
-        }
+        
     }
 }
 
@@ -191,14 +187,14 @@ int main (int argc, char **argv)
     //desiredLocation1.x = -10;
     desiredLocation1.x = -1.75;
     //desiredLocation1.y = -21;
-    desiredLocation1.y = 5;
+    desiredLocation1.y = 31;
     desiredLocation1.z = 0;
 
     geometry_msgs::Point desiredLocation2;
     //desiredLocation2.x = 10;
     desiredLocation2.x = -1.75;
     //desiredLocation2.y = 21;
-    desiredLocation2.y = 20;
+    desiredLocation2.y = 35;
     desiredLocation2.z = 0;
 
     desiredLocations[0] = desiredLocation1;
