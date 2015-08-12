@@ -13,6 +13,12 @@ using namespace std;
 //Normally, EXPECT_* is the better option since the rest of the test can continue to run and can give useful output.
 //However, ASSERT_* is better if the test shouldn't continue.
 //=================Resident test cases==========================================
+
+
+/**
+This test gets the state at the initialisation of the robot and ensures
+that the state is set to "Orienting"
+**/
 TEST(testBasicRobot, testInitialState)
 {
     // Create a robot
@@ -20,7 +26,10 @@ TEST(testBasicRobot, testInitialState)
     ASSERT_EQ(Orienting, testRobot.getState());
 }
 
-
+/**
+This test checks that the variables assigned when the robot is initialised
+are the same as what is expected.
+**/
 TEST(testBasicRobot, testInitialPosition)
 {
     // Create a robot
@@ -31,6 +40,9 @@ TEST(testBasicRobot, testInitialPosition)
     ASSERT_EQ(3, testRobot->current_theta);
 }
 
+/**
+This test checks the initial velocity of the robot at its initialisation
+**/
 TEST(testBasicRobot, testInitalVelocity)
 {
     Robot *testRobot = new Robot(1, 2, 3);
@@ -40,6 +52,10 @@ TEST(testBasicRobot, testInitalVelocity)
     ASSERT_EQ(0, testRobot->angular_velocity);
 }
 
+/**
+This test makes a odometry type message and sets the position of the robot.
+Then it tests that the class correctly receives messages on a topic from stage/other nodes.
+**/
 TEST(testBasicRobot, testPositionCallback){
     Robot *testRobot = new Robot(1, 2, 3);
 
@@ -65,6 +81,11 @@ TEST(testBasicRobot, testPositionCallback){
 
 }
 
+
+/**
+This test checks that the angular velocity and linear velocity
+are as expected when the left side collision is detected.
+**/
 TEST(testBasicRobot, testLeftCollison)
 {
 	Robot *testRobot = new Robot(1, 2, 3);
@@ -74,7 +95,10 @@ TEST(testBasicRobot, testLeftCollison)
 	ASSERT_EQ(-0.5, testRobot->angular_velocity);
 }
 
-
+/**
+This test checks that the angular velocity and linear velocity
+are as expected when the right side collision is detected.
+**/
 TEST(testBasicRobot, testRightCollision)
 {
 	Robot *testRobot = new Robot(1, 2, 3);
@@ -84,7 +108,10 @@ TEST(testBasicRobot, testRightCollision)
 	ASSERT_EQ(0.5, testRobot->angular_velocity);
 }
 
-
+/**
+This test checks that the angular velocity and linear velocity
+are as expected when the center side collision is detected.
+**/
 TEST(testBasicRobot, testCenterCollision)
 {
 	Robot *testRobot = new Robot(1, 2, 3);
@@ -94,7 +121,11 @@ TEST(testBasicRobot, testCenterCollision)
 	ASSERT_EQ(-1.0, testRobot->angular_velocity);
 }
 
-
+/**
+This test checks that when the robot reaches
+its final goal, the goalIndex is set to 0. So it knows
+it need to stop
+**/
 TEST(testBasicRobot, testReachedLastGoal)
 {
 	Robot *testRobot = new Robot(1, 2, 3);
@@ -104,7 +135,10 @@ TEST(testBasicRobot, testReachedLastGoal)
 	ASSERT_EQ(1, testRobot->goalIndex);
 }
 
-
+/**
+Test that if there is no goal, then the velocity should not
+change
+**/
 TEST(testBasicRobot, testNoGoals)
 {
     Robot *testRobot = new Robot(0, 0, 0);
