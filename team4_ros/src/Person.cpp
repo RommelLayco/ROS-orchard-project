@@ -44,7 +44,6 @@ bool nearCollision;
 int pathIndex;
 
 geometry_msgs::Point desiredLocations[2];
-
 void generateRandomDesiredLocations(){
     // set up for random number generation
     srand (time(NULL));
@@ -52,16 +51,16 @@ void generateRandomDesiredLocations(){
     // Setup points on robot's path
     geometry_msgs::Point desiredLocation1;
     //desiredLocation1.x = -10;
-    desiredLocation1.x = -8 + rand() % (8 - -8) + 1;
+    desiredLocation1.x = -5 + rand() % (5 - -5) + 1;
     //desiredLocation1.y = -21;
-    desiredLocation1.y = -36 + rand() % (30 - -36) + 1;
+    desiredLocation1.y = -15 + rand() % (15 - -15) + 1;
     desiredLocation1.z = 0;
 
     geometry_msgs::Point desiredLocation2;
     //desiredLocation2.x = 10;
-    desiredLocation2.x = -8 + rand() % (8 - -8) + 1;
+    desiredLocation2.x = -5 + rand() % (5 - -5) + 1;
     //desiredLocation2.y = 21;
-    desiredLocation2.y = -36 + rand() % (30 - -36) + 1;
+    desiredLocation2.y = -15 + rand() % (15 - -15) + 1;
     desiredLocation2.z = 0;
 
     desiredLocations[0] = desiredLocation1;
@@ -86,7 +85,7 @@ void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
         }
         return;
     }
-    for (i; i < 80; i++) {
+    for (i; i < 110; i++) {
         if (msg->ranges[i] < 1.1)
         {
             isNear = true;
@@ -99,10 +98,10 @@ void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
 
             double obstacleAngle = 0;
             if(currentAngle < 3.14){
-                obstacleAngle = double(i)/80 * 3.14;
+                obstacleAngle = double(i)/110 * 3.14;
             }
             else{
-                obstacleAngle = double(i)/80 * 3.14 + 3.14;
+                obstacleAngle = double(i)/110 * 3.14 + 3.14;
             }
 
 
@@ -138,33 +137,7 @@ void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
 }
 
 
-<<<<<<< HEAD
-=======
-void generateRandomDesiredLocations(){
-    // set up for random number generation
-    srand (time(NULL));
 
-    // Setup points on robot's path
-    geometry_msgs::Point desiredLocation1;
-    //desiredLocation1.x = -10;
-    desiredLocation1.x = -5 + rand() % (5 - -5) + 1;
-    //desiredLocation1.y = -21;
-    desiredLocation1.y = -15 + rand() % (15 - -15) + 1;
-    desiredLocation1.z = 0;
-
-    geometry_msgs::Point desiredLocation2;
-    //desiredLocation2.x = 10;
-    desiredLocation2.x = -5 + rand() % (5 - -5) + 1;
-    //desiredLocation2.y = 21;
-    desiredLocation2.y = -15 + rand() % (15 - -15) + 1;
-    desiredLocation2.z = 0;
-
-    desiredLocations[0] = desiredLocation1;
-    desiredLocations[1] = desiredLocation2;
-
-
-}
->>>>>>> db4cde793650e43f8fa92b06e440d1f868ef551d
 
 void Vibrate() 
 {     
