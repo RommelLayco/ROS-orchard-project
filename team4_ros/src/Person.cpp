@@ -26,6 +26,9 @@ double desiredAngle = 0;
 bool spinAntiClockwise = true;
 int counter = 0;
 
+// Boolean for the direction of the 
+bool VibrateX=false;
+
 // Pub object
 ros::Publisher mypub_object;
 
@@ -147,6 +150,23 @@ void generateRandomDesiredLocations(){
 
 }
 
+void Vibrate() 
+{     
+    //Update Current Position
+    
+    if (VibrateX == false){
+	//currentVelocity.linear.y = 3;
+    currentVelocity.angular.z = 0.95;
+	VibrateX = true;
+	}
+	else {
+	currentVelocity.linear.x = 0;
+        currentVelocity.angular.z = -1.0;
+
+        VibrateX = false;
+	}
+}
+
 void rotateAngle(double desiredAngle)
 {
    //Calculate the angle to rotate
@@ -176,12 +196,12 @@ void rotateAngle(double desiredAngle)
 }
 
 
-
 void updateCurrentVelocity() {
 
 
     if (nearCollision == true)
     {
+Vibrate();
         // Let collision resolution take place before we attempt to move towards the goal
         return;
     }
@@ -286,15 +306,15 @@ int main (int argc, char **argv)
         // ROS comms access point 
     ros::NodeHandle n;
 
-        ros::Subscriber sub = n.subscribe("robot_2/base_scan", 1000, sensorCallback);
+    ros::Subscriber sub = n.subscribe("robot_2/base_scan", 1000, sensorCallback);
 
-
+            
     while (ros::ok()) 
     { 
-        loop_rate.sleep();
 
         updateCurrentVelocity(); 
         // refer to advertise msg type 
+        loop_rate.sleep();
 
         mypub_object.publish(currentVelocity); 
         z=0;
