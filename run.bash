@@ -13,7 +13,7 @@ xterm -hold -e roscore&
 cd team4_ros
 xterm -hold -e rosrun team4_ros PersonNode&
 xterm -hold -e rosrun team4_ros DogNode&
-xterm -hold -e rosrun team4_ros BinNode&
+xterm -hold -e rosrun team4_ros bin_node&
 xterm -hold -e rosrun team4_ros PickerNode&
 
 
