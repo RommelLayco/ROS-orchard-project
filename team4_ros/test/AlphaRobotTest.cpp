@@ -36,7 +36,26 @@ TEST(initialPositionTest,alphaRobotTestCase3){
 	ASSERT_EQ(1,testRobot->linear_velocity_x);
 	ASSERT_EQ(-0.5,testRobot->angular_veloctiy);
 
+}
 
+
+TEST(initialPositionTest,alphaRobotTestCase4){
+
+	Robot *testRobot = new Robot(1, 2, 3);
+	testRobot->rightCollisionDetected();
+
+	ASSERT_EQ(1,testRobot->linear_velocity_x);
+	ASSERT_EQ(0.5,testRobot->angular_veloctiy);
+
+}
+
+TEST(initialPositionTest,alphaRobotTestCase5){
+
+	Robot *testRobot = new Robot(1, 2, 3);
+	testRobot->centerCollisionDetected();
+
+	ASSERT_EQ(0,testRobot->linear_velocity_x);
+	ASSERT_EQ(-1.0,testRobot->angular_veloctiy);
 
 }
 
