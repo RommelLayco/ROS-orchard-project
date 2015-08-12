@@ -16,22 +16,35 @@ cd $DIR
 cp -r team4_ros ~/ros_WS/src/se306-1
 cp -r world ~/ros_WS/src/se306-1
 
-#make
+make
 cd ~/ros_WS
 catkin_make
 
 #go to dir and run ros core
 cd ~/ros_WS
-xterm -title "Roscore" -hold -e roscore&
+xterm -geometry -0+0 -title "Roscore" -hold -e roscore&
+xdotool search --sync --name "^Roscore$" windowsize --usehints 25% 50%
+
+# Wait for roscore to initialise
+sleep 2 
 
 #open robot nodes
 cd ~/ros_WS/src/se306-1/team4_ros
-xterm -title "Picker Node" -hold -e rosrun team4_ros AlphaWithSensorRobotNode&
+xterm -geometry +0+0 -title "Picker Node" -hold -e rosrun team4_ros AlphaWithSensorRobotNode&
+xdotool search --sync --name "^Picker Node$" windowsize --usehints 25% 30%
 
-xterm -title "Dog Node" -hold -e rosrun team4_ros DogNode&
+xterm -geometry +0+350 -title "Dog Node" -hold -e rosrun team4_ros DogNode&
+xdotool search --sync --name "^Dog Node$" windowsize --usehints 25% 30%
 
-xterm -title "Person Node" -hold -e rosrun team4_ros PersonNode&
+xterm -geometry +0-0 -title "Person Node" -hold -e rosrun team4_ros PersonNode&
+xdotool search --sync --name "^Person Node$" windowsize --usehints 25% 30%
 
 #open world file
 cd ~/ros_WS/src/se306-1/world
-xterm -title "Stage Output" -hold -e rosrun stage_ros stageros newworld.world
+xterm -geometry -0-0 -title "Stage Output" -hold -e rosrun stage_ros stageros newworld.world &
+xdotool search --sync --name "^Stage Output$" windowsize 25% 50%
+
+# Resize stage window
+xdotool search --sync --name "^Stage$" windowsize --usehints 50% 100%
+
+wait
