@@ -1,0 +1,6 @@
+<launch>
+	<arg name="world_file"     default="$(env STAGE_FILE)"/>
+	
+	<node pkg="stage_ros" type="stageros" name="stageros" arg="$(arg world_file)">
+	</node>
+</launch>
