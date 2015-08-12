@@ -9,7 +9,6 @@
 #include <sstream>
 #include "math.h"
 #include <unistd.h>
-#include "team4_ros/binIsFull.h"
 
 
 // Current velocity of the Robot

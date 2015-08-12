@@ -8,6 +8,7 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   std_msgs
   genmsg
+  message_generation
 )
 
 ## System dependencies are found with CMake's conventions
@@ -44,7 +45,10 @@ find_package(catkin REQUIRED COMPONENTS
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
 ## Generate messages in the 'msg' folder
-# add_message_files(
+ add_message_files(
+ FILES 
+ binIsFull.msg
+)
 #   FILES
 #   Message1.msg
 #   Message2.msg
@@ -65,10 +69,10 @@ find_package(catkin REQUIRED COMPONENTS
 # )
 
 ## Generate added messages and services with any dependencies listed here
-# generate_messages(
-#   DEPENDENCIES
-#   std_msgs
-# )
+ generate_messages(
+   DEPENDENCIES
+   std_msgs
+ )
 
 ###################################
 ## catkin specific configuration ##
@@ -80,6 +84,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
+CATKIN_DEPENDS message_runtime
 #  INCLUDE_DIRS include
 #  LIBRARIES team4_ros
 #  CATKIN_DEPENDS roscpp std_msgs
@@ -124,9 +129,9 @@ add_executable(DogNode src/Dog.cpp)
 target_link_libraries(DogNode ${catkin_LIBRARIES})
 add_dependencies(DogNode ${catkin_EXPORTED_TARGETS})
 
-add_executable(PersonNode src/Person.cpp)
-target_link_libraries(PersonNode ${catkin_LIBRARIES})
-add_dependencies(PersonNode ${catkin_EXPORTED_TARGETS})
+#add_executable(PersonNode src/Person.cpp)
+#target_link_libraries(PersonNode ${catkin_LIBRARIES})
+#add_dependencies(PersonNode ${catkin_EXPORTED_TARGETS})
 
 add_executable(bin_node src/Bin.cpp)
 target_link_libraries(bin_node ${catkin_LIBRARIES})
