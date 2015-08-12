@@ -39,10 +39,10 @@ geometry_msgs::Point desiredLocations[2];
 bool checkLocation(){
 if (        currentVelocity.linear.x == 0 && currentVelocity.angular.z == 0.0){
 
-	return true;
+    return true;
 }else{
 
-	return false;
+    return false;
 }
 }
 
@@ -54,7 +54,7 @@ void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
     bool isNear = false;
     ROS_INFO("Sensor:");
     for (i; i < 180; i++) {
-        if (msg->ranges[i] < 1)
+        if (msg->ranges[i] < 1.0)
         {
             isNear = true;
             nearCollision = true;
@@ -64,20 +64,37 @@ void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
             {
                 // Spin to the left
                 ROS_INFO("Spinning left");
-                currentVelocity.linear.x = 1;
+
+
+                currentVelocity.linear.x = -0.2;
+
                 currentVelocity.angular.z = 0.5;
             } else if (i >= 60 && i < 120)
             {
                 // Move backwards and spin right
                 ROS_INFO("Moving backwards and spinning right");
-                currentVelocity.linear.x = 0;
+
+                currentVelocity.linear.x = -0.2;
+
                 currentVelocity.angular.z = -1.0;
+
+            }
+             else if (i >= 60 && i < 120)
+            {
+                // Move backwards and spin right
+                ROS_INFO("Moving backwards and spinning right");
+                currentVelocity.linear.x = -0.5;
+                currentVelocity.angular.z = -0.5;
             } else
             {
                 // Spin to the right
                 ROS_INFO("Spinning right");
-                currentVelocity.linear.x = 1;
+
+
+                currentVelocity.linear.x = -0.2;
+
                 currentVelocity.angular.z = -0.5;
+
             }
 
         }
@@ -95,16 +112,34 @@ void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
 }
 
 
-void generateRandomSpeed(){
+void generateRandomDesiredLocations(){
     // set up for random number generation
     srand (time(NULL));
-    currentVelocity.linear.x = rand() % 4 + 2;;
+
+    // Setup points on robot's path
+    geometry_msgs::Point desiredLocation1;
+    //desiredLocation1.x = -10;
+    desiredLocation1.x = rand() % 10 + 1;
+    //desiredLocation1.y = -21;
+    desiredLocation1.y = rand() % 10 + 1;
+    desiredLocation1.z = 0;
+
+    geometry_msgs::Point desiredLocation2;
+    //desiredLocation2.x = 10;
+    desiredLocation2.x = rand() % 10 + 1;
+    //desiredLocation2.y = 21;
+    desiredLocation2.y = -1 * (rand() % 10 + 1);
+    desiredLocation2.z = 0;
+
+    desiredLocations[0] = desiredLocation1;
+    desiredLocations[1] = desiredLocation2;
+
 
 }
 
+
 void updateCurrentVelocity() {
 
-    //generateRandomSpeed();
 
     if (nearCollision == true)
     {
@@ -136,7 +171,7 @@ void updateCurrentVelocity() {
         ROS_INFO("I have reached my destination!");
         currentVelocity.linear.x = 0;
         currentVelocity.angular.z = 0.0;
-        /*if (pathIndex < sizeof(desiredLocations) / sizeof(*desiredLocations) - 1)
+        if (pathIndex < sizeof(desiredLocations) / sizeof(*desiredLocations) - 1)
         {
             pathIndex++;
         }
@@ -144,8 +179,11 @@ void updateCurrentVelocity() {
         {
             // Reset index
             ROS_INFO("Reached final destination, going back to the start");
+            
+            // call to generate random values for destination
+            generateRandomDesiredLocations();
             pathIndex = 0;
-        }*/
+        }
         
         return;
     }
@@ -197,95 +235,116 @@ void groundTruthCallback(const nav_msgs::Odometry msg)
     tf::Matrix3x3(tf::Quaternion(x, y, z, w)).getRPY(roll, pitch, yaw);
     currentAngle = yaw;
     //ROS_INFO("Yaw is : %f",yaw); 
-	
+    
 }
 
 void navigation(){
-        ROS_INFO("I'm trying to run around the tree.");
+        ROS_INFO("To be Constructed");
         
-        currentVelocity.angular.z =2; 
-        currentVelocity.linear.x = 1;   
+        
 
 }
+
+void rotateAngle(double desiredAngle)
+{
+   //Calculate the angle to rotate
+	double difference = currentAngle - desiredAngle;
+	//Do not rotate if already at desired angle
+	if (difference == 0.0){
+		return;
+	}
+
+	//Check for angle greater than pi
+	if(difference>M_PI){ 
+		difference = (difference-(M_PI*2));
+	}else if(difference<(M_PI*-1)){
+		difference = difference + (M_PI*2);
+	}
+
+	while(true){
+        if (difference > 0.1 || -1*difference > 0.1)
+        {
+            if(difference>0){
+		        currentVelocity.linear.x = 0;
+                currentVelocity.angular.z = 0.5;
+		
+	        }else{
+		        currentVelocity.angular.z = -0.5;
+		        currentVelocity.linear.x = 0;           
+	        }                         
+            
+        } else
+        {
+            // Go forward
+            currentVelocity.linear.x = 2;
+            currentVelocity.angular.z = 0;
+        }
+	}
+}
+
 
 int main (int argc, char **argv) 
 {
 
-    // Setup points on robot's path
-    geometry_msgs::Point desiredLocation1;
-    //desiredLocation1.x = -10;
-    desiredLocation1.x = 3.5;
-    //desiredLocation1.y = -21;
-    desiredLocation1.y = 15.5;
-    desiredLocation1.z = 0;
+    generateRandomDesiredLocations();
 
-    geometry_msgs::Point desiredLocation2;
-    //desiredLocation2.x = 10;
-    desiredLocation2.x = 1.6;
-    //desiredLocation2.y = 21;
-    desiredLocation2.y = -2;
-    desiredLocation2.z = 0;
-
-    desiredLocations[0] = desiredLocation1;
-    desiredLocations[1] = desiredLocation2;
-
+    
     pathIndex = 0;
 
 
     nearCollision = false;    
 
-	// command line ROS arguments/ name remapping 
-	ros::init(argc, argv, "DogNode"); 
+    // command line ROS arguments/ name remapping 
+    ros::init(argc, argv, "DogNode2"); 
 
-	// ROS node hander
-	ros::NodeHandle velPub_handle;
-	ros::NodeHandle sub_handle; 
+    // ROS node hander
+    ros::NodeHandle velPub_handle;
+    ros::NodeHandle sub_handle; 
         ros::NodeHandle bark_handle;
 
-	// master registry pub and sub
-	//ros::Publisher mypub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_0/cmd_vel",1000);
+    // master registry pub and sub
+    //ros::Publisher mypub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_0/cmd_vel",1000);
         mypub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_1/cmd_vel",1000);
-        ros::Publisher mypub_bark = bark_handle.advertise<std_msgs::String>("dog_topic",1000);
-	ros::Subscriber mysub_object;
-	
-	// loop 10 
-	ros::Rate loop_rate(10);
+        ros::Publisher mypub_bark = bark_handle.advertise<std_msgs::String>("person_topic",1000);
+    ros::Subscriber mysub_object;
+    
+    // loop 10 
+    ros::Rate loop_rate(10);
 
-	mysub_object = sub_handle.subscribe<nav_msgs::Odometry>("robot_1/base_pose_ground_truth",1000, groundTruthCallback);
+    mysub_object = sub_handle.subscribe<nav_msgs::Odometry>("robot_1/base_pose_ground_truth",1000, groundTruthCallback);
 
         // ROS comms access point 
-	ros::NodeHandle n;
+    ros::NodeHandle n;
 
         ros::Subscriber sub = n.subscribe("robot_1/base_scan", 1000, sensorCallback);
 
 
-	while (ros::ok()) 
-	{ 
-		loop_rate.sleep();
+    while (ros::ok()) 
+    { 
+        loop_rate.sleep();
 
-		updateCurrentVelocity(); 
-		// refer to advertise msg type 
+        updateCurrentVelocity(); 
+        // refer to advertise msg type 
 
-		mypub_object.publish(currentVelocity); 
-		z=0;
-                if(checkLocation()){          
-		       break;
-		}
+        mypub_object.publish(currentVelocity); 
+        z=0;
 
-		ros::spinOnce();
-		loop_rate.sleep();
-	} 
+        ros::spinOnce();
+        loop_rate.sleep();
+    } 
+
+    /**
 
         while (ros::ok()) 
-	{ 
+    { 
                 loop_rate.sleep();
-                navigation();
                 std_msgs::String mypub_msg;
-		mypub_msg.data = "I AM BARKING!!Woof Woof!!";        
-		ros::spinOnce();
-		loop_rate.sleep();
+        mypub_msg.data = "I AM PERSON";        
+        ros::spinOnce();
+        loop_rate.sleep();
 
         }
+    **/
 
-	return 0; 
+    return 0; 
 }
