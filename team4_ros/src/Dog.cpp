@@ -53,20 +53,20 @@ void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
     int i = 0;
     bool isNear = false;
     ROS_INFO("Sensor:");
-    for (i; i < 180; i++) {
+    for (i; i < 60; i++) {
         if (msg->ranges[i] < 1)
         {
             isNear = true;
             nearCollision = true;
             ROS_INFO("I'm near something! [%f]", msg->ranges[i]);
 
-            if (i < 60)
+            if (i < 20)
             {
                 // Spin to the left
                 ROS_INFO("Spinning left");
                 currentVelocity.linear.x = 1;
                 currentVelocity.angular.z = 0.5;
-            } else if (i >= 60 && i < 120)
+            } else if (i >= 20 && i < 40)
             {
                 // Move backwards and spin right
                 ROS_INFO("Moving backwards and spinning right");

@@ -129,9 +129,9 @@ add_executable(DogNode src/Dog.cpp)
 target_link_libraries(DogNode ${catkin_LIBRARIES})
 add_dependencies(DogNode ${catkin_EXPORTED_TARGETS})
 
-#add_executable(PersonNode src/Person.cpp)
-#target_link_libraries(PersonNode ${catkin_LIBRARIES})
-#add_dependencies(PersonNode ${catkin_EXPORTED_TARGETS})
+add_executable(PersonNode src/Person.cpp)
+target_link_libraries(PersonNode ${catkin_LIBRARIES})
+add_dependencies(PersonNode ${catkin_EXPORTED_TARGETS})
 
 add_executable(bin_node src/Bin.cpp)
 target_link_libraries(bin_node ${catkin_LIBRARIES})
