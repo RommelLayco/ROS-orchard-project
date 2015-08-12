@@ -10,6 +10,7 @@
 #include "math.h"
 #include <unistd.h>
 #include "team4_ros/binIsFull.h"
+#include "std_msgs/String.h"
 
 
 
@@ -212,11 +213,17 @@ int main (int argc, char **argv)
 
 	// ROS node hander
 	ros::NodeHandle velPub_handle;
+	ros::Publisher mypub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_0/cmd_vel",1000);
+
+	//ros::Publisher binVelPub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_3/cmd_vel",1000);
+
 	ros::NodeHandle sub_handle; 
 
-	// master registry pub and sub
-	//ros::Publisher mypub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_0/cmd_vel",1000);
-    mypub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_0/cmd_vel",1000);
+	
+	
+	
+
+    //mypub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_0/cmd_vel",1000);
 	ros::Subscriber mysub_object;
 	
 	// loop 25 
@@ -238,6 +245,7 @@ int main (int argc, char **argv)
 		// refer to advertise msg type 
 
 		mypub_object.publish(currentVelocity); 
+		//binVelPub_object.publish(currentVelocity);
 		z=0;
 
 		ros::spinOnce();
