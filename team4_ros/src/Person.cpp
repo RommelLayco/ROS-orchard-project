@@ -20,6 +20,11 @@ geometry_msgs::Pose currentLocation;
 
 // The current angle of the robot
 double currentAngle;
+double desiredAngle = 0;
+
+//Direction variable
+bool spinAntiClockwise = true;
+int counter = 0;
 
 // Pub object
 ros::Publisher mypub_object;
@@ -36,88 +41,81 @@ int pathIndex;
 
 geometry_msgs::Point desiredLocations[2];
 
-bool checkLocation(){
-if (        currentVelocity.linear.x == 0 && currentVelocity.angular.z == 0.0){
-
-    return true;
-}else{
-
-    return false;
-}
-}
-
-
 
 void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
 {
     int i = 0;
     bool isNear = false;
     ROS_INFO("Sensor:");
-    for (i; i < 180; i++) {
-        if (msg->ranges[i] < 1.0)
+    //counter to 15 to give time to move back
+    if(nearCollision){
+        counter++;
+
+        //after 15, reinvoke the sensor function
+        if (counter > 15){
+            counter = 0;
+            nearCollision = false;
+        }
+        return;
+    }
+    for (i; i < 80; i++) {
+        if (msg->ranges[i] < 1.1)
         {
             isNear = true;
             nearCollision = true;
             ROS_INFO("I'm near something! [%f]", msg->ranges[i]);
+            
 
-            if (i < 60)
-            {
-                // Spin to the left
-                ROS_INFO("Spinning left");
-<<<<<<< HEAD
+            //Find the angle of the obstacle to the person
 
-                currentVelocity.linear.x = 0.2;
-
-                currentVelocity.linear.x = -0.2;
-
-                currentVelocity.angular.z = 0.5;
-            } else if (i >= 60 && i < 120)
-            {
-                // Move backwards and spin right
-                ROS_INFO("Moving backwards and spinning right");
-
-                currentVelocity.linear.x = -0.2;
-
-                currentVelocity.linear.x = -0.5;
-
-                currentVelocity.angular.z = -1.0;
-=======
-                currentVelocity.linear.x = 0.5;
-                currentVelocity.angular.z = 1.0;
+            double obstacleAngle = 0;
+            if(currentAngle < 3.14){
+                obstacleAngle = double(i)/80 * 3.14;
             }
-             else if (i >= 60 && i < 120)
-            {
-                // Move backwards and spin right
-                ROS_INFO("Moving backwards and spinning right");
-                currentVelocity.linear.x = -0.5;
-                currentVelocity.angular.z = -0.5;
->>>>>>> 6d618cd565df85fb50c3b632e067e13e336293b2
-            } else
-            {
-                // Spin to the right
-                ROS_INFO("Spinning right");
-<<<<<<< HEAD
+            else{
+                obstacleAngle = double(i)/80 * 3.14 + 3.14;
+            }
 
-                currentVelocity.linear.x = 0.2;
 
+            if (desiredAngle - obstacleAngle > 0.5)
+            {
+                //move back and spin anticlockwise
                 currentVelocity.linear.x = -0.2;
+                currentVelocity.angular.z = 2;
+                ROS_INFO("i is : %i",i); 
 
-                currentVelocity.angular.z = -0.5;
-=======
-                currentVelocity.linear.x = 0.5;
-                currentVelocity.angular.z = -1.0;
->>>>>>> 6d618cd565df85fb50c3b632e067e13e336293b2
+                ROS_INFO("currentAngle is : %f",currentAngle); 
+                ROS_INFO("desiredAngle is : %f",desiredAngle); 
+                ROS_INFO("obstacleAngle is : %f",obstacleAngle); 
+                ROS_INFO("spinning AntiClockwise"); 
+            }
+            else if(desiredAngle - obstacleAngle < 0.5 && desiredAngle - obstacleAngle >-0.5){
+                //move back faster, obstacle at middle.
+                 currentVelocity.linear.x = -0.5;
+                currentVelocity.angular.z = 0.8;
+                 ROS_INFO("i is : %i",i); 
+
+                ROS_INFO("currentAngle is : %f",currentAngle); 
+                ROS_INFO("desiredAngle is : %f",desiredAngle); 
+                ROS_INFO("obstacleAngle is : %f",obstacleAngle); 
+                ROS_INFO("i am stuck! help!"); 
+
+            }
+            else{
+                //move back and spin clockwise
+                currentVelocity.linear.x = -0.2;
+                currentVelocity.angular.z = -2;
+                ROS_INFO("i is : %i",i); 
+
+                ROS_INFO("currentAngle is : %f",currentAngle); 
+                ROS_INFO("desiredAngle is : %f",desiredAngle); 
+                ROS_INFO("obstacleAngle is : %f",obstacleAngle); 
+                ROS_INFO("spinning Clockwise"); 
             }
 
         }
 
-        if (isNear == false)
-        {
-            nearCollision = false;
-            //currentVelocity.linear.x = 0;
-            //currentVelocity.angular.z = 0.0;
-        }
-        
+
         mypub_object.publish(currentVelocity);
 
     }
@@ -148,6 +146,35 @@ void generateRandomDesiredLocations(){
 
 
 }
+
+void rotateAngle(double desiredAngle)
+{
+   //Calculate the angle to rotate
+    double difference = currentAngle - desiredAngle;
+    //Do not rotate if already at desired angle
+    if (difference == 0.0){
+        return;
+    }
+
+     // If the difference between current angle and desired angle is less than 0.1 stop spining
+        if (abs(difference) > 0.1)
+        {
+            ROS_INFO("currentAngle is : %f",currentAngle); 
+            ROS_INFO("desiredAngle is : %f",desiredAngle); 
+            // Spin
+            currentVelocity.linear.x = 0;
+            currentVelocity.angular.z = 0.5;
+            spinAntiClockwise = true;
+            
+        } else
+        {
+            // Go forward
+            currentVelocity.linear.x = 1;
+            currentVelocity.angular.z = 0;
+        }
+
+}
+
 
 
 void updateCurrentVelocity() {
@@ -202,35 +229,10 @@ void updateCurrentVelocity() {
     }
     
     // Calculate the desired angle
-    double desiredAngle = atan2(directionVector.y, directionVector.x);
+    desiredAngle = atan2(directionVector.y, directionVector.x) + 3.14;
 
-    if (z != 0)
-    {
-        currentVelocity.linear.x = 4;
-        currentVelocity.angular.z = z;
-        return;
-    }
-
-    // If the desired angle is 0
-    if(desiredAngle != 0 && desiredAngle != M_PI)
-    {    
-        //ROS_INFO("currentAngle is : %f",currentAngle); 
-        //ROS_INFO("desiredAngle is : %f",desiredAngle); 
-
-        // If the deifference between current angle and desired angle is less than 0.1 stop spining
-        if (currentAngle - desiredAngle > 0.1 || desiredAngle - currentAngle > 0.1)
-        {
-            // Spin
-            currentVelocity.linear.x = 0;
-            currentVelocity.angular.z = 0.5;
-            
-        } else
-        {
-            // Go forward
-            currentVelocity.linear.x = 2;
-            currentVelocity.angular.z = 0;
-        }
-    }
+    rotateAngle(desiredAngle);
+ 
 }
 
 
@@ -246,53 +248,9 @@ void groundTruthCallback(const nav_msgs::Odometry msg)
     
     double roll, pitch, yaw;
     tf::Matrix3x3(tf::Quaternion(x, y, z, w)).getRPY(roll, pitch, yaw);
-    currentAngle = yaw;
+    currentAngle = yaw + 3.14;
     //ROS_INFO("Yaw is : %f",yaw); 
     
-}
-
-void navigation(){
-        ROS_INFO("To be Constructed");
-        
-        
-
-}
-
-void rotateAngle(double desiredAngle)
-{
-   //Calculate the angle to rotate
-	double difference = currentAngle - desiredAngle;
-	//Do not rotate if already at desired angle
-	if (difference == 0.0){
-		return;
-	}
-
-	//Check for angle greater than pi
-	if(difference>M_PI){ 
-		difference = (difference-(M_PI*2));
-	}else if(difference<(M_PI*-1)){
-		difference = difference + (M_PI*2);
-	}
-
-	while(true){
-        if (difference > 0.1 || -1*difference > 0.1)
-        {
-            if(difference>0){
-		        currentVelocity.linear.x = 0;
-                currentVelocity.angular.z = 0.5;
-		
-	        }else{
-		        currentVelocity.angular.z = -0.5;
-		        currentVelocity.linear.x = 0;           
-	        }                         
-            
-        } else
-        {
-            // Go forward
-            currentVelocity.linear.x = 2;
-            currentVelocity.angular.z = 0;
-        }
-	}
 }
 
 
@@ -300,8 +258,7 @@ int main (int argc, char **argv)
 {
 
     generateRandomDesiredLocations();
-
-    
+  
     pathIndex = 0;
 
 
@@ -346,18 +303,6 @@ int main (int argc, char **argv)
         loop_rate.sleep();
     } 
 
-    /**
-
-        while (ros::ok()) 
-    { 
-                loop_rate.sleep();
-                std_msgs::String mypub_msg;
-        mypub_msg.data = "I AM PERSON";        
-        ros::spinOnce();
-        loop_rate.sleep();
-
-        }
-    **/
-
+ 
     return 0; 
 }
