@@ -105,6 +105,18 @@ TEST(testBasicRobot, testReachedLastGoal)
 }
 
 
+TEST(testBasicRobot, testNoGoals)
+{
+    Robot *testRobot = new Robot(0, 0, 0);
+    double x_vel = testRobot->linear_velocity_x;
+    double ang_vel = testRobot->angular_velocity;
+
+    testRobot->updateVelocity();
+    // Since the robot has no goals defined, it's velocity should not have changed
+    ASSERT_EQ(x_vel, testRobot->linear_velocity_x);
+    ASSERT_EQ(ang_vel, testRobot->angular_velocity);
+}
+
 
 // Run all the tests that were declared with TEST()
 int main(int argc, char **argv)
