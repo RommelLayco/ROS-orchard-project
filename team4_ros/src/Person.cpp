@@ -22,12 +22,9 @@ geometry_msgs::Pose currentLocation;
 double currentAngle;
 double desiredAngle = 0;
 
-<<<<<<< HEAD
+
 // counter
-=======
-//counter variable in sensorCallback
-bool spinAntiClockwise;
->>>>>>> b388d6b60f64dbcec1dd5617d0b7b4a52f4397ce
+
 int counter = 0;
 
 // Boolean for the direction of the 
