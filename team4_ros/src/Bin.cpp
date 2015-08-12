@@ -2,7 +2,7 @@
 #include "sensor_msgs/LaserScan.h"
 #include "std_msgs/String.h" 
 #include "geometry_msgs/Twist.h"
-//#include "team4_ros/binIsFull.h"
+#include "team4_ros/binIsFull.h"
 
 ros::Publisher move_pub;
 int x;
