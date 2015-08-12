@@ -23,6 +23,7 @@ double currentAngle;
 double desiredAngle = 0;
 
 //counter variable in sensorCallback
+bool spinAntiClockwise;
 int counter = 0;
 
 // Boolean for the direction of the 
