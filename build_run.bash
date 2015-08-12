@@ -52,6 +52,11 @@ then
        esac
 fi
 
+if [ ! -d $dir ]
+then
+    mkdir -p $dir/src/se306-1
+fi
+
 if [ $remove ]
 then
     rm -r $dir
