@@ -39,7 +39,7 @@ class Robot
         // The attributes of the robot
         double linear_velocity_x;
         double linear_velocity_y;
-        double angular_veloctiy;
+        double angular_velocity;
         double current_x;
         double current_y;
         double current_theta;

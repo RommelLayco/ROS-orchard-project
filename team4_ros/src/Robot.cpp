@@ -9,7 +9,7 @@ Robot::Robot(double x_position, double y_position, double theta_orientation)
     current_theta = theta_orientation;
     linear_velocity_x = 0;
     linear_velocity_y = 0;
-    angular_veloctiy = 0;
+    angular_velocity = 0;
     current_state = Orienting;
     goalIndex = 0;
 
@@ -75,7 +75,7 @@ void Robot::leftCollisionDetected()
     // Spin to the right
     //ROS_INFO("Spinning right");
     linear_velocity_x = 1;
-    angular_veloctiy = -0.5;
+    angular_velocity = -0.5;
 }
 
 void Robot::rightCollisionDetected()
@@ -83,7 +83,7 @@ void Robot::rightCollisionDetected()
     // Spin to the left
     //ROS_INFO("Spinning left");
     linear_velocity_x = 1;
-    angular_veloctiy = 0.5;
+    angular_velocity = 0.5;
 }
 
 void Robot::centerCollisionDetected()
@@ -91,7 +91,7 @@ void Robot::centerCollisionDetected()
     // Move backwards and spin right
     //ROS_INFO("Moving backwards and spinning right");
     linear_velocity_x = 0;
-    angular_veloctiy = -1.0;
+    angular_velocity = -1.0;
 }
 
 
@@ -127,7 +127,7 @@ void Robot::updateVelocity()
         // For now, make robot stop. In future, robot should now try to move
         // to the next location on it's path.
         linear_velocity_x = 0;
-        angular_veloctiy = 0.0;
+        angular_velocity = 0.0;
         if (goalIndex < goals.size() - 1)
         {
             goalIndex++;
@@ -153,11 +153,11 @@ void Robot::updateVelocity()
         linear_velocity_x = 0;
         if (current_theta <= desiredAngle)
         {
-            angular_veloctiy = 0.5;
+            angular_velocity = 0.5;
         }
         else
         {
-            angular_veloctiy = -0.5;
+            angular_velocity = -0.5;
         }
 
     }
@@ -167,7 +167,7 @@ void Robot::updateVelocity()
         current_state = Moving;
         //ROS_INFO("Moving!");
         linear_velocity_x = 1;
-        angular_veloctiy = 0;
+        angular_velocity = 0;
     }
 
     notifySpeedListeners();
@@ -198,7 +198,7 @@ void Robot::notifySpeedListeners()
     // Construct new message
     geometry_msgs::Twist velocityMsg;
     velocityMsg.linear.x = linear_velocity_x;
-    velocityMsg.angular.z = angular_veloctiy;
+    velocityMsg.angular.z = angular_velocity;
 
     // Loop through speedListeners and send them this speed message
     for (int i = 0; i < speedListeners.size(); i++)

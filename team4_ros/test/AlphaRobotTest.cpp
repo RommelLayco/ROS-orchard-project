@@ -37,7 +37,7 @@ TEST(testBasicRobot, testInitalVelocity)
 
     ASSERT_EQ(0, testRobot->linear_velocity_x);
     ASSERT_EQ(0, testRobot->linear_velocity_y);
-    ASSERT_EQ(0, testRobot->angular_veloctiy);
+    ASSERT_EQ(0, testRobot->angular_velocity);
 }
 
 TEST(testBasicRobot, testPositionCallback){
@@ -71,7 +71,7 @@ TEST(testBasicRobot, testLeftCollison)
 	testRobot->leftCollisionDetected();
 
 	ASSERT_EQ(1, testRobot->linear_velocity_x);
-	ASSERT_EQ(-0.5, testRobot->angular_veloctiy);
+	ASSERT_EQ(-0.5, testRobot->angular_velocity);
 }
 
 
@@ -81,7 +81,7 @@ TEST(testBasicRobot, testRightCollision)
 	testRobot->rightCollisionDetected();
 
 	ASSERT_EQ(1, testRobot->linear_velocity_x);
-	ASSERT_EQ(0.5, testRobot->angular_veloctiy);
+	ASSERT_EQ(0.5, testRobot->angular_velocity);
 }
 
 
@@ -91,7 +91,7 @@ TEST(testBasicRobot, testCenterCollision)
 	testRobot->centerCollisionDetected();
 
 	ASSERT_EQ(0, testRobot->linear_velocity_x);
-	ASSERT_EQ(-1.0, testRobot->angular_veloctiy);
+	ASSERT_EQ(-1.0, testRobot->angular_velocity);
 }
 
 
