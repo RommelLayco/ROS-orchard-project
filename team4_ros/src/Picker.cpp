@@ -9,7 +9,6 @@
 #include <sstream>
 #include "math.h"
 #include <unistd.h>
-#include "team4_ros/binIsFull.h"
 #include "std_msgs/String.h"
 
 
@@ -156,7 +155,7 @@ void updateCurrentVelocity() {
         // If the deifference between current angle and desired angle is less than 0.1 stop spining
 
             // Go forward
-            currentVelocity.linear.x = 1;
+            currentVelocity.linear.x = 0.1;
             currentVelocity.angular.z = 0;
         
     }
