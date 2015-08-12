@@ -52,16 +52,13 @@ int main (int argc, char **argv)
 	bin_pub = n.advertise<std_msgs::String>("bin_topic",100);
 
 
-<<<<<<< HEAD
     // master registry pub/sub 
 	ros::Publisher bin_pub = n.advertise<std_msgs::String>("bin_topic",100);
         
-=======
 	ros::NodeHandle sub_handle; 
 	ros::Subscriber mysub_object;
 	mysub_object = sub_handle.subscribe<nav_msgs::Odometry>("robot_3/base_pose_ground_truth",1000, groundTruthCallback); 
 
->>>>>>> 57ffbafecf795f85fd021be09895cabaa1485ef9
 	// loop 10 Hz 
 	ros::Rate loop_rate(10);
 	
