@@ -5,6 +5,11 @@
 #include "../src/Robot.cpp"
 
 
+#include <iostream>
+
+
+using namespace std;
+
 //when they fail, ASSERT_* yields a fatal failure and returns from the current function, 
 //while EXPECT_* yields a nonfatal failure, allowing the function to continue running
 //Normally, EXPECT_* is the better option since the rest of the test can continue to run and can give useful output.
@@ -56,6 +61,19 @@ TEST(initialPositionTest,alphaRobotTestCase5){
 
 	ASSERT_EQ(0,testRobot->linear_velocity_x);
 	ASSERT_EQ(-1.0,testRobot->angular_veloctiy);
+
+}
+
+
+TEST(reachedLastGoalTest,alphaRobotTestCase6){
+
+	Robot *testRobot = new Robot(1, 2, 3);
+
+	testRobot->goalIndex = 0;
+
+	testRobot->reachedLastGoal();
+
+	ASSERT_EQ(1,testRobot->goalIndex);
 
 }
 
