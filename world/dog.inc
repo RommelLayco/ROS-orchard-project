@@ -1,6 +1,6 @@
-define myLaser ranger 
+define dogLaser ranger 
 ( 
-  sensor( range [ 0 3 ] fov 60 samples 60 )
+  sensor( range [ 0 3 ] fov 180 samples 180 )
     size [0.100 0.100 0.100] 
       color "black" 
         block( 
@@ -128,7 +128,7 @@ define dog actor
 		color "black"
 	)
 	
-	myLaser(pose [ 0.25 0.0 0.7 0.0 ])
+	dogLaser(pose [ 0.25 0.0 0.7 0.0 ])
 	
 	#eyes
 	# Left eye

@@ -23,7 +23,7 @@ int main (int argc, char **argv)
 
     // master registry pub/sub 
 	ros::Publisher bin_pub = n.advertise<std_msgs::String>("bin_topic",100);
-
+        
 	// loop 10 Hz 
 	ros::Rate loop_rate(10);
 	
