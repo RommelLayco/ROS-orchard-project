@@ -2,22 +2,13 @@
 #include "sensor_msgs/LaserScan.h"
 #include "std_msgs/String.h" 
 #include "geometry_msgs/Twist.h"
-//#include "team4_ros/binIsFull.h"
+#include "team4_ros/binIsFull.h"
 
 ros::Publisher move_pub;
 int x;
 float z;
 
 
-
-void move()
-{
-    geometry_msgs::Twist move_msg;
-    move_msg.linear.x = 1; 
-    move_msg.linear.y = 0; 
-    move_msg.angular.z = z;
-    move_pub.publish(move_msg);
-}
 
 
 int main (int argc, char **argv) 
@@ -30,7 +21,7 @@ int main (int argc, char **argv)
 
 
     // master registry pub/sub 
-	move_pub = n.advertise<geometry_msgs::Twist>("robot_3/cmd_vel",100);
+	move_pub = n.advertise<team4_ros::binIsFull>("binIsFull_topic",100);
 
 	// loop 10 Hz 
 	ros::Rate loop_rate(10);
@@ -41,7 +32,9 @@ int main (int argc, char **argv)
     int counter=0;
 	while (ros::ok()) 
 	{
-	    move();
+        team4_ros::binIsFull bin_msg;
+        bin_msg.isBinFull=false;
+	    move_pub.publish(bin_msg);
 	    z = 0;
 		ros::spinOnce();
 		loop_rate.sleep();
