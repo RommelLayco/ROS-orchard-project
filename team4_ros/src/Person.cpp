@@ -1,4 +1,4 @@
-#include "ros/ros.h"
+//counter variable in sensorCallback#include "ros/ros.h"
 #include <stdlib.h>
 #include "std_msgs/Empty.h"
 #include "std_msgs/String.h"
@@ -22,8 +22,7 @@ geometry_msgs::Pose currentLocation;
 double currentAngle;
 double desiredAngle = 0;
 
-//Direction variable
-bool spinAntiClockwise = true;
+//counter variable in sensorCallback
 int counter = 0;
 
 // Boolean for the direction of the 
@@ -49,7 +48,6 @@ void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
 {
     int i = 0;
     bool isNear = false;
-    ROS_INFO("Sensor:");
     //counter to 15 to give time to move back
     if(nearCollision){
         counter++;
@@ -66,8 +64,9 @@ void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
         {
             isNear = true;
             nearCollision = true;
-            ROS_INFO("I'm near something! [%f]", msg->ranges[i]);
-            
+          
+            ROS_INFO("This thing is cool!"); 
+
 
             //Find the angle of the obstacle to the person
 
@@ -85,35 +84,21 @@ void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
                 //move back and spin anticlockwise
                 currentVelocity.linear.x = -0.2;
                 currentVelocity.angular.z = 2;
-                ROS_INFO("i is : %i",i); 
 
-                ROS_INFO("currentAngle is : %f",currentAngle); 
-                ROS_INFO("desiredAngle is : %f",desiredAngle); 
-                ROS_INFO("obstacleAngle is : %f",obstacleAngle); 
-                ROS_INFO("spinning AntiClockwise"); 
+
             }
             else if(desiredAngle - obstacleAngle < 0.5 && desiredAngle - obstacleAngle >-0.5){
                 //move back faster, obstacle at middle.
                  currentVelocity.linear.x = -0.5;
                 currentVelocity.angular.z = 0.8;
-                 ROS_INFO("i is : %i",i); 
-
-                ROS_INFO("currentAngle is : %f",currentAngle); 
-                ROS_INFO("desiredAngle is : %f",desiredAngle); 
-                ROS_INFO("obstacleAngle is : %f",obstacleAngle); 
-                ROS_INFO("i am stuck! help!"); 
+             
 
             }
             else{
                 //move back and spin clockwise
                 currentVelocity.linear.x = -0.2;
                 currentVelocity.angular.z = -2;
-                ROS_INFO("i is : %i",i); 
 
-                ROS_INFO("currentAngle is : %f",currentAngle); 
-                ROS_INFO("desiredAngle is : %f",desiredAngle); 
-                ROS_INFO("obstacleAngle is : %f",obstacleAngle); 
-                ROS_INFO("spinning Clockwise"); 
             }
 
         }
@@ -201,7 +186,7 @@ void updateCurrentVelocity() {
 
     if (nearCollision == true)
     {
-Vibrate();
+	Vibrate();
         // Let collision resolution take place before we attempt to move towards the goal
         return;
     }
