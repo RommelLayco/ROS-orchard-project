@@ -22,8 +22,7 @@ geometry_msgs::Pose currentLocation;
 double currentAngle;
 double desiredAngle = 0;
 
-//Direction variable
-bool spinAntiClockwise = true;
+// counter
 int counter = 0;
 
 // Pub object
@@ -40,6 +39,31 @@ bool nearCollision;
 int pathIndex;
 
 geometry_msgs::Point desiredLocations[2];
+
+void generateRandomDesiredLocations(){
+    // set up for random number generation
+    srand (time(NULL));
+
+    // Setup points on robot's path
+    geometry_msgs::Point desiredLocation1;
+    //desiredLocation1.x = -10;
+    desiredLocation1.x = -8 + rand() % (8 - -8) + 1;
+    //desiredLocation1.y = -21;
+    desiredLocation1.y = -36 + rand() % (30 - -36) + 1;
+    desiredLocation1.z = 0;
+
+    geometry_msgs::Point desiredLocation2;
+    //desiredLocation2.x = 10;
+    desiredLocation2.x = -8 + rand() % (8 - -8) + 1;
+    //desiredLocation2.y = 21;
+    desiredLocation2.y = -36 + rand() % (30 - -36) + 1;
+    desiredLocation2.z = 0;
+
+    desiredLocations[0] = desiredLocation1;
+    desiredLocations[1] = desiredLocation2;
+
+
+}
 
 
 void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
@@ -90,6 +114,7 @@ void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
                 ROS_INFO("spinning AntiClockwise"); 
             }
             else if(desiredAngle - obstacleAngle < 0.5 && desiredAngle - obstacleAngle >-0.5){
+
                 //move back faster, obstacle at middle.
                  currentVelocity.linear.x = -0.5;
                 currentVelocity.angular.z = 0.8;
@@ -98,7 +123,7 @@ void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
                 ROS_INFO("currentAngle is : %f",currentAngle); 
                 ROS_INFO("desiredAngle is : %f",desiredAngle); 
                 ROS_INFO("obstacleAngle is : %f",obstacleAngle); 
-                ROS_INFO("i am stuck! help!"); 
+                ROS_INFO("i am stuck! help!");  
 
             }
             else{
@@ -122,30 +147,6 @@ void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
 }
 
 
-void generateRandomDesiredLocations(){
-    // set up for random number generation
-    srand (time(NULL));
-
-    // Setup points on robot's path
-    geometry_msgs::Point desiredLocation1;
-    //desiredLocation1.x = -10;
-    desiredLocation1.x = rand() % 10 + 1;
-    //desiredLocation1.y = -21;
-    desiredLocation1.y = rand() % 10 + 1;
-    desiredLocation1.z = 0;
-
-    geometry_msgs::Point desiredLocation2;
-    //desiredLocation2.x = 10;
-    desiredLocation2.x = rand() % 10 + 1;
-    //desiredLocation2.y = 21;
-    desiredLocation2.y = -1 * (rand() % 10 + 1);
-    desiredLocation2.z = 0;
-
-    desiredLocations[0] = desiredLocation1;
-    desiredLocations[1] = desiredLocation2;
-
-
-}
 
 void rotateAngle(double desiredAngle)
 {
@@ -156,15 +157,14 @@ void rotateAngle(double desiredAngle)
         return;
     }
 
-     // If the difference between current angle and desired angle is less than 0.1 stop spining
-        if (abs(difference) > 0.1)
+     // If the difference between current angle and desired angle is less than 0.5 stop spining
+        if (abs(difference) > 0.5)
         {
             ROS_INFO("currentAngle is : %f",currentAngle); 
             ROS_INFO("desiredAngle is : %f",desiredAngle); 
             // Spin
             currentVelocity.linear.x = 0;
-            currentVelocity.angular.z = 0.5;
-            spinAntiClockwise = true;
+            currentVelocity.angular.z = 1;
             
         } else
         {
@@ -172,6 +172,7 @@ void rotateAngle(double desiredAngle)
             currentVelocity.linear.x = 1;
             currentVelocity.angular.z = 0;
         }
+        
 
 }
 
