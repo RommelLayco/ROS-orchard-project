@@ -118,16 +118,16 @@ void generateRandomDesiredLocations(){
     // Setup points on robot's path
     geometry_msgs::Point desiredLocation1;
     //desiredLocation1.x = -10;
-    desiredLocation1.x = rand() % 10 + 1;
+    desiredLocation1.x = -5 + rand() % (5 - -5) + 1;
     //desiredLocation1.y = -21;
-    desiredLocation1.y = rand() % 10 + 1;
+    desiredLocation1.y = -15 + rand() % (15 - -15) + 1;
     desiredLocation1.z = 0;
 
     geometry_msgs::Point desiredLocation2;
     //desiredLocation2.x = 10;
-    desiredLocation2.x = rand() % 10 + 1;
+    desiredLocation2.x = -5 + rand() % (5 - -5) + 1;
     //desiredLocation2.y = 21;
-    desiredLocation2.y = -1 * (rand() % 10 + 1);
+    desiredLocation2.y = -15 + rand() % (15 - -15) + 1;
     desiredLocation2.z = 0;
 
     desiredLocations[0] = desiredLocation1;
