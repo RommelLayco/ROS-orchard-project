@@ -1,5 +1,5 @@
 include "tree.inc"
-include "canopy.inc"
+include "wood.inc"
 
 tree( pose [ 0 0 0 0 ] )
 tree( pose [ 0 5.0 0 0 ] )
