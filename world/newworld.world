@@ -3,6 +3,7 @@ include "picker.inc"
 include "person1.inc"
 include "dog.inc"
 include "bin.inc"
+include "carrier.inc"
 
 # milliseconds per update step 
 interval_sim 100 
@@ -19,13 +20,15 @@ define actor position
 
 # throw in a robot  
 
-picker( pose [ -1.75 20.000 0.000 90.000] name "picker1" )
+picker( pose [ -1.750 20.000 0.000 90.000] name "picker1" )
 #picker( pose [ -0.656 -0.237 0.000 90.000] name "picker" )
 dog( pose [8.743 13.106 0.000 0.000] name "dog")
-person1( pose [0 3 0.000 -50.628] name "person1" )
-bin( pose [ -1.75 20.000 1.01 90.000] name "bin")
+person1( pose [0.000 3.000 0.000 -50.628] name "person1" )
+bin( pose [ -1.750 20.000 1.010 90.000] name "bin")
 
 
 #picker( pose [ -1.755 -0.270 0.000 90.000] name "picker1" )
 picker( pose [ -6.379 -2.979 0.000 -53.239] name "picker2" )
+
+carrier( pose [ -5.539 -1.892 0.000 0.000] name "carrier1")
 
