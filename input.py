@@ -5,10 +5,13 @@ import sys
 def getRowSpacing():
 	print("Each row has 14 trees")
 	print("Amount of rows fixed at 7")
+	print("-----------------------------")
+	print("\n")
 	
 	#continue looping till a valid input is entered
 	while True:
 		try:
+			print("Enter a number between 3.5 and 8 inclusive")
 			row_spacing = float(input("Enter size row spacing in meters: "))
 		except ValueError:
 			#loop again invalid type
@@ -23,6 +26,7 @@ def getRowSpacing():
 			else:
 				break
 
+	print("\n")
 	
 	return row_spacing
 
@@ -32,17 +36,19 @@ def getTreeSpacing():
 	#continue looping till a valid input is entered
 	while True:
 		try:
+			print("Enter a number between 5 and 8 inclusive")
 			tree_spacing = float(input("Enter size of tree_spacing in meters: "))
 		except ValueError:
 			print("Input is not a number, please try again")
 			continue
 		else:
 			if (tree_spacing < 5) or (tree_spacing > 8):
-				print("Enter a number between 4 and 8 inclusive")
+				print("Enter a number between 5 and 8 inclusive")
 				continue
 			else:
 				break
 
+	print("\n")
 
 	return tree_spacing
 
@@ -83,6 +89,29 @@ def createTrees(r_spacing, t_spacing):
 		#leave a line space to seperate trees
 		f.write('\n')
 
+	for line in range(0,8):
+
+		#inner loop create tree vertically with a tree spacing
+		for canopy in range(0,14):
+			#create line to write to file
+			line = "canopy( pose [ " 
+			line = line + str(current_x) + " "
+			line = line + str(current_y) + " "
+			line = line + "0 0 ] )\n"
+
+			#append tree to file
+			f.write(line)
+			
+			#increment y position
+			current_y = current_y + t_spacing
+
+		#increment x position 
+		current_x = current_x + r_spacing
+		current_y = 0	
+
+		#leave a line space to seperate trees
+		f.write('\n')
+
 	f.close()
 
 
@@ -92,17 +121,8 @@ def createTrees(r_spacing, t_spacing):
 r_spacing = getRowSpacing()
 t_spacing = getTreeSpacing()
 
-t = str(r_spacing) + " ------sdfkdhf"
-
-line = "tree( pose [ " 
-line = line + str(r_spacing) + " "
-line = line + str(t_spacing) + " "
-line = line + "0 0 ] )"
-			
-print(line)
-
-print (r_spacing)
-print (t_spacing)
 
 writeModels()
 createTrees(r_spacing, t_spacing)
+
+print("Finished making environment")
