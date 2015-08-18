@@ -145,7 +145,7 @@ def needToAppend():
 	f = open('wood.inc', 'r')
 
 	lastline = f.readlines()[-1]
-	print(lastline)
+	#print(lastline)
 	
 	#do not append
 	if(lastline == ")\n") or (lastline == ")"):	
