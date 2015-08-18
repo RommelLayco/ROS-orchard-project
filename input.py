@@ -56,7 +56,7 @@ def getTreeSpacing():
 def writeModels():
 	f = open('orchard.inc','w')
 	f.write('include "tree.inc"\n') #tree model
-	f.write('include "canopy.inc"\n') #canopy model
+	f.write('include "wood.inc"\n') #canopy model
 	f.write('\n')#leave a line space
 	f.close()
 
@@ -94,7 +94,7 @@ def createTrees(r_spacing, t_spacing):
 		#inner loop create tree vertically with a tree spacing
 		for canopy in range(0,14):
 			#create line to write to file
-			line = "canopy( pose [ " 
+			line = "wood( pose [ " 
 			line = line + str(current_x) + " "
 			line = line + str(current_y) + " "
 			line = line + "0 0 ] )\n"
@@ -114,6 +114,43 @@ def createTrees(r_spacing, t_spacing):
 
 	f.close()
 
+def changeCanopyModel(t_spacing):
+	f = open('wood.inc', 'a')
+
+	#length of canopy wood
+	length = t_spacing + 0.08
+
+	model_line = "model\n(\n"
+	model_line = model_line + "size [" + str(length) + " "
+	model_line = model_line + "0.08 0.04 ]\n"
+	model_line = model_line + "pose [0.0 0.0 1.9 0.0]\ncolor \"burlywood\"\n)"
+	
+	#write to file
+	f.write(model_line)
+	f.write('\n')
+
+	#write the base to the file
+	base = "# Base\n size [0 0 0]\ncolor \"green\"\nstack_children 0\ngui_nose 0\nobstacle_return 0\n)\n"
+	f.write(base)
+
+	f.close()
+
+#check if need to append to world file to prevent repeated append
+def needToAppend():
+	f = open('wood.inc', 'r')
+
+
+	lastline = f.readlines()[-1]
+	
+	#do not append
+	if(lastline == ")\n"):	
+		return False
+	else:
+		#append
+		return True
+
+
+
 
 
 
@@ -123,6 +160,12 @@ t_spacing = getTreeSpacing()
 
 
 writeModels()
+#need before create trees as create tree depends on the file created by changeCanopy
+
+#check if you have to append
+if(needToAppend):
+	changeCanopyModel(t_spacing)
+
 createTrees(r_spacing, t_spacing)
 
 print("Finished making environment")
