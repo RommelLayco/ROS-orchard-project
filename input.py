@@ -171,7 +171,7 @@ writeModels()
 #check if you have to append
 if(needToAppend()):
 	changeCanopyModel(t_spacing)
-	pass
+	
 
 createTrees(r_spacing, t_spacing)
 
