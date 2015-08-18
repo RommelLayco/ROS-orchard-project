@@ -3,7 +3,11 @@ include "picker.inc"
 include "person1.inc"
 include "dog.inc"
 include "bin.inc"
+<<<<<<< HEAD
 include "tractor.inc"
+=======
+include "carrier.inc"
+>>>>>>> b3805a1f15031c8d53328706ce2f28c198af9583
 
 # milliseconds per update step 
 interval_sim 100 
@@ -30,4 +34,6 @@ bin( pose [ -1.750 20.000 1.010 90.000] name "bin")
 
 #picker( pose [ -1.755 -0.270 0.000 90.000] name "picker1" )
 picker( pose [ -6.379 -2.979 0.000 -53.239] name "picker2" )
+
+carrier( pose [ -5.539 -1.892 0.000 0.000] name "carrier1")
 
