@@ -34,10 +34,13 @@ bool nearCollision;
 // Index that points to current position in path index
 int pathIndex;
 
-geometry_msgs::Point desiredLocations[2];
+// boolean checks if the destination is at the tree and if it is then call the nav function
+bool atTree = false;
+
+geometry_msgs::Point desiredLocations[5];
 
 bool checkLocation(){
-if (        currentVelocity.linear.x == 0 && currentVelocity.angular.z == 0.0){
+if (currentVelocity.linear.x == 0 && currentVelocity.angular.z == 0.0){
 
     return true;
 }else{
@@ -54,7 +57,7 @@ void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
     bool isNear = false;
     ROS_INFO("Sensor:");
     for (i; i < 180; i++) {
-        if (msg->ranges[i] < 1.0)
+        if (msg->ranges[i] < 1)
         {
             isNear = true;
             nearCollision = true;
@@ -64,37 +67,20 @@ void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
             {
                 // Spin to the left
                 ROS_INFO("Spinning left");
-
-
-                currentVelocity.linear.x = -0.2;
-
+                currentVelocity.linear.x = 1;
                 currentVelocity.angular.z = 0.5;
             } else if (i >= 60 && i < 120)
             {
                 // Move backwards and spin right
                 ROS_INFO("Moving backwards and spinning right");
-
-                currentVelocity.linear.x = -0.2;
-
+                currentVelocity.linear.x = 0;
                 currentVelocity.angular.z = -1.0;
-
-            }
-             else if (i >= 60 && i < 120)
-            {
-                // Move backwards and spin right
-                ROS_INFO("Moving backwards and spinning right");
-                currentVelocity.linear.x = -0.5;
-                currentVelocity.angular.z = -0.5;
             } else
             {
                 // Spin to the right
                 ROS_INFO("Spinning right");
-
-
-                currentVelocity.linear.x = -0.2;
-
+                currentVelocity.linear.x = 1;
                 currentVelocity.angular.z = -0.5;
-
             }
 
         }
@@ -111,6 +97,13 @@ void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
     }
 }
 
+
+void generateRandomSpeed(){
+    // set up for random number generation
+    srand (time(NULL));
+    currentVelocity.linear.x = rand() % 4 + 2;;
+
+}
 
 void generateRandomDesiredLocations(){
     // set up for random number generation
@@ -137,9 +130,9 @@ void generateRandomDesiredLocations(){
 
 }
 
-
 void updateCurrentVelocity() {
 
+    //generateRandomSpeed();
 
     if (nearCollision == true)
     {
@@ -169,19 +162,36 @@ void updateCurrentVelocity() {
         // For now, make robot stop. In future, robot should now try to move
         // to the next location on it's path.
         ROS_INFO("I have reached my destination!");
+        ROS_INFO("pathindex");
+        
         currentVelocity.linear.x = 0;
         currentVelocity.angular.z = 0.0;
         if (pathIndex < sizeof(desiredLocations) / sizeof(*desiredLocations) - 1)
-        {
+        {    
+
+            if(pathIndex == 1){
+                atTree = true;
+                ROS_INFO("at destination 2")
+            }
+
+            if(pathIndex == 2){
+                 ROS_INFO("at destination 3")
+                atTree = true;
+            }
+
+            if(pathIndex == 3){
+
+                 ROS_INFO("at destination 4")
+                atTree = true;
+            }
+
             pathIndex++;
         }
         else
         {
             // Reset index
             ROS_INFO("Reached final destination, going back to the start");
-            
-            // call to generate random values for destination
-            generateRandomDesiredLocations();
+
             pathIndex = 0;
         }
         
@@ -239,56 +249,51 @@ void groundTruthCallback(const nav_msgs::Odometry msg)
 }
 
 void navigation(){
-        ROS_INFO("To be Constructed");
+
+    for(int i = 0;i <10000000;i++){
+        ROS_INFO("I'm trying to run around the tree.");
         
-        
+        currentVelocity.angular.z =2; 
+        currentVelocity.linear.x = 1;
+    }
 
 }
-
-void rotateAngle(double desiredAngle)
-{
-   //Calculate the angle to rotate
-	double difference = currentAngle - desiredAngle;
-	//Do not rotate if already at desired angle
-	if (difference == 0.0){
-		return;
-	}
-
-	//Check for angle greater than pi
-	if(difference>M_PI){ 
-		difference = (difference-(M_PI*2));
-	}else if(difference<(M_PI*-1)){
-		difference = difference + (M_PI*2);
-	}
-
-	while(true){
-        if (difference > 0.1 || -1*difference > 0.1)
-        {
-            if(difference>0){
-		        currentVelocity.linear.x = 0;
-                currentVelocity.angular.z = 0.5;
-		
-	        }else{
-		        currentVelocity.angular.z = -0.5;
-		        currentVelocity.linear.x = 0;           
-	        }                         
-            
-        } else
-        {
-            // Go forward
-            currentVelocity.linear.x = 2;
-            currentVelocity.angular.z = 0;
-        }
-	}
-}
-
 
 int main (int argc, char **argv) 
 {
 
-    generateRandomDesiredLocations();
+    //tree 1
+    geometry_msgs::Point desiredLocation3;
+    //desiredLocation1.x = -10;
+    desiredLocation3.x = 3.5;
+    //desiredLocation1.y = -21;
+    desiredLocation3.y = 15.5;
+    desiredLocation3.z = 0;
 
-    
+    // tree 2
+    geometry_msgs::Point desiredLocation4;
+    //desiredLocation1.x = -10;
+    desiredLocation4.x = 3.5;
+    //desiredLocation1.y = -21;
+    desiredLocation4.y = 20.5;
+    desiredLocation4.z = 0;
+
+    // tree 3
+    geometry_msgs::Point desiredLocation5;
+    //desiredLocation1.x = -10;
+    desiredLocation5.x = 3.5;
+    //desiredLocation1.y = -21;
+    desiredLocation5.y = 25.5;
+    desiredLocation5.z = 0;
+
+
+    desiredLocations[2] = desiredLocation3;
+    desiredLocations[3] = desiredLocation5;
+    desiredLocations[4] = desiredLocation5;
+
+    // generates random locations
+    generateRandomDesiredLocations()
+
     pathIndex = 0;
 
 
@@ -305,7 +310,7 @@ int main (int argc, char **argv)
     // master registry pub and sub
     //ros::Publisher mypub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_0/cmd_vel",1000);
         mypub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_1/cmd_vel",1000);
-        ros::Publisher mypub_bark = bark_handle.advertise<std_msgs::String>("person_topic",1000);
+        ros::Publisher mypub_bark = bark_handle.advertise<std_msgs::String>("dog_topic",1000);
     ros::Subscriber mysub_object;
     
     // loop 10 
@@ -327,24 +332,29 @@ int main (int argc, char **argv)
         // refer to advertise msg type 
 
         mypub_object.publish(currentVelocity); 
+
         z=0;
+
+        if(checkLocation() && atTree){          
+            navigation();
+       }
 
         ros::spinOnce();
         loop_rate.sleep();
     } 
 
-    /**
+    /*
 
         while (ros::ok()) 
     { 
                 loop_rate.sleep();
+                navigation();
                 std_msgs::String mypub_msg;
-        mypub_msg.data = "I AM PERSON";        
+        mypub_msg.data = "I AM BARKING!!Woof Woof!!";        
         ros::spinOnce();
         loop_rate.sleep();
 
         }
-    **/
-
+    */
     return 0; 
 }
