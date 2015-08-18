@@ -99,7 +99,7 @@ def createTrees(r_spacing, t_spacing):
 		#inner loop create tree vertically with a tree spacing
 		for canopy in range(0,14):
 			#create line to write to file
-			line = "wood( pose [ " 
+			line = "canopy( pose [ " 
 			line = line + str(current_x) + " "
 			line = line + str(current_y) + " "
 			line = line + "0 0 ] )\n"
