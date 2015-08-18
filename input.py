@@ -89,6 +89,11 @@ def createTrees(r_spacing, t_spacing):
 		#leave a line space to seperate trees
 		f.write('\n')
 
+
+	current_y = 0
+	current_x = 0
+		
+	#canopy
 	for line in range(0,8):
 
 		#inner loop create tree vertically with a tree spacing
