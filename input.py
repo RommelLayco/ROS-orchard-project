@@ -144,11 +144,11 @@ def changeCanopyModel(t_spacing):
 def needToAppend():
 	f = open('wood.inc', 'r')
 
-
 	lastline = f.readlines()[-1]
+	print(lastline)
 	
 	#do not append
-	if(lastline == ")\n"):	
+	if(lastline == ")\n") or (lastline == ")"):	
 		return False
 	else:
 		#append
@@ -167,9 +167,11 @@ t_spacing = getTreeSpacing()
 writeModels()
 #need before create trees as create tree depends on the file created by changeCanopy
 
+
 #check if you have to append
-if(needToAppend):
+if(needToAppend()):
 	changeCanopyModel(t_spacing)
+	pass
 
 createTrees(r_spacing, t_spacing)
 
