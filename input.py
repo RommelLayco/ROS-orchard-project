@@ -54,9 +54,24 @@ def writeModels():
 	f.write('\n')#leave a line space
 	f.close()
 
-def createTrees(rows):
+def createTrees(r_spacing, t_spacing):
 	f = open('orchard.inc', 'a')
-	f.write("testing if appended properly " + rows)
+	f.write("testing if appended properly ")
+
+	#outer loop creates line of trees with row spacing
+	current_x = 0
+	current_y = 0
+	for line in range(0,8):
+
+		#inner loop create tree vertically with a tree spacing
+		for tree in range(0,14):
+			
+
+
+
+
+
+
 	f.close()
 
 
@@ -66,8 +81,13 @@ def createTrees(rows):
 r_spacing = getRowSpacing()
 t_spacing = getTreeSpacing()
 
+t = str(r_spacing) + " sdfahkdhka"
+a = "-----dsnflad"
+at = t + " " + a
+print(at)
+
 print (r_spacing)
 print (t_spacing)
 
 writeModels()
-#createTrees(rows)
+createTrees(r_spacing, t_spacing)
