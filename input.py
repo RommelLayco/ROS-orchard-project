@@ -78,6 +78,7 @@ def createTrees(r_spacing, t_spacing):
 
 		#increment x position 
 		current_x = current_x + r_spacing
+		current_y = 0
 
 		#leave a line space to seperate trees
 		f.write('\n')
