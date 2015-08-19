@@ -42,22 +42,25 @@ robotState Robot::getState()
 
 void Robot::sensorCallback(const sensor_msgs::LaserScan::ConstPtr& sensorMsg)
 {// Handle sensor data
+    int left_vals = sensor_size / 3;
+    int right_vals = sensor_size - left_vals;
+
 
     int i = 0;
     bool isNear = false;
     //ROS_INFO("Sensor:");
-    for (i; i < 180; i++) {
-        if (sensorMsg->ranges[i] < 1.5)
+    for (i; i < sensor_size; i++) {
+        if (sensorMsg->ranges[i] < sensor_range)
         {
             isNear = true;
             current_state = CollisionResolution;
             //ROS_INFO("I'm near something! [%f]", sensorMsg->ranges[i]);
 
-            if (i < 60)
+            if (i < left_vals)
             {
                 rightCollisionDetected();
                 break;
-            } else if (i >= 60 && i < 120)
+            } else if (i >= left_vals && i < right_vals)
             {
                 centerCollisionDetected();
                 break;
@@ -84,16 +87,16 @@ void Robot::leftCollisionDetected()
 {
     // Spin to the right
     //ROS_INFO("Spinning right");
-    linear_velocity_x = 1;
-    angular_velocity = -0.5;
+    linear_velocity_x = top_linear_speed;
+    angular_velocity = -top_angular_speed;
 }
 
 void Robot::rightCollisionDetected()
 {
     // Spin to the left
     //ROS_INFO("Spinning left");
-    linear_velocity_x = 1;
-    angular_velocity = 0.5;
+    linear_velocity_x = top_linear_speed;
+    angular_velocity = top_angular_speed;
 }
 
 void Robot::centerCollisionDetected()
@@ -101,7 +104,7 @@ void Robot::centerCollisionDetected()
     // Move backwards and spin right
     //ROS_INFO("Moving backwards and spinning right");
     linear_velocity_x = 0;
-    angular_velocity = -1.0;
+    angular_velocity = -2 * top_angular_speed;
 }
 
 
@@ -163,11 +166,11 @@ void Robot::updateVelocity()
         linear_velocity_x = 0;
         if (current_theta <= desiredAngle)
         {
-            angular_velocity = 0.5;
+            angular_velocity = top_angular_speed;
         }
         else
         {
-            angular_velocity = -0.5;
+            angular_velocity = -top_angular_speed;
         }
 
     }
@@ -176,8 +179,8 @@ void Robot::updateVelocity()
         // Go forward
         current_state = Moving;
         //ROS_INFO("Moving!");
-        linear_velocity_x = 1;
-        angular_velocity = 0;
+        linear_velocity_x = top_linear_speed;
+        angular_velocity = 0.0;
     }
 
     notifySpeedListeners();

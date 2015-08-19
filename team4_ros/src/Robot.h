@@ -60,7 +60,10 @@ class Robot
         double length;
         double width;
         double height;
-        double top_speed;
+        double top_linear_speed = 1.0;
+        double top_angular_speed = 0.5;
+        int sensor_size = 180; // This must correspond to sensor value defined in the world file
+        double sensor_range = 1.5; // This determines the range (in meters) at which the entity will detect and object
 
         // The state lets us know what speed to give to the robot
         robotState current_state;

@@ -17,8 +17,8 @@ class Person: public Robot
 
 void Person::leftCollisionDetected()
 {
-    current_x = -0.1;
-    current_theta = 1.5;
+    linear_velocity_x = -top_linear_speed;
+    angular_velocity = - 2 * top_angular_speed;
 }
 
 void Person::rightCollisionDetected()
