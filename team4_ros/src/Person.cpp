@@ -144,16 +144,16 @@ void Vibrate()
     //Update Current Position
     
     if (VibrateX == false){
-	//currentVelocity.linear.y = 3;
+    //currentVelocity.linear.y = 3;
     currentVelocity.angular.z = 0.95;
-	VibrateX = true;
-	}
-	else {
-	currentVelocity.linear.x = 0;
+    VibrateX = true;
+    }
+    else {
+    currentVelocity.linear.x = 0;
         currentVelocity.angular.z = -1.0;
 
         VibrateX = false;
-	}
+    }
 }
 
 void rotateAngle(double desiredAngle)
@@ -190,7 +190,7 @@ void updateCurrentVelocity() {
 
     if (nearCollision == true)
     {
-	Vibrate();
+    Vibrate();
         // Let collision resolution take place before we attempt to move towards the goal
         return;
     }

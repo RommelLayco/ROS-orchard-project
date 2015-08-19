@@ -39,10 +39,10 @@ geometry_msgs::Point desiredLocations[2];
 bool checkLocation(){
 if (        currentVelocity.linear.x == 0 && currentVelocity.angular.z == 0.0){
 
-	return true;
+    return true;
 }else{
 
-	return false;
+    return false;
 }
 }
 
@@ -197,7 +197,7 @@ void groundTruthCallback(const nav_msgs::Odometry msg)
     tf::Matrix3x3(tf::Quaternion(x, y, z, w)).getRPY(roll, pitch, yaw);
     currentAngle = yaw;
     //ROS_INFO("Yaw is : %f",yaw); 
-	
+    
 }
 
 void navigation(){
@@ -234,58 +234,58 @@ int main (int argc, char **argv)
 
     nearCollision = false;    
 
-	// command line ROS arguments/ name remapping 
-	ros::init(argc, argv, "DogNode"); 
+    // command line ROS arguments/ name remapping 
+    ros::init(argc, argv, "DogNode"); 
 
-	// ROS node hander
-	ros::NodeHandle velPub_handle;
-	ros::NodeHandle sub_handle; 
+    // ROS node hander
+    ros::NodeHandle velPub_handle;
+    ros::NodeHandle sub_handle; 
         ros::NodeHandle bark_handle;
 
-	// master registry pub and sub
-	//ros::Publisher mypub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_0/cmd_vel",1000);
+    // master registry pub and sub
+    //ros::Publisher mypub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_0/cmd_vel",1000);
         mypub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_1/cmd_vel",1000);
         ros::Publisher mypub_bark = bark_handle.advertise<std_msgs::String>("dog_topic",1000);
-	ros::Subscriber mysub_object;
-	
-	// loop 10 
-	ros::Rate loop_rate(10);
+    ros::Subscriber mysub_object;
+    
+    // loop 10 
+    ros::Rate loop_rate(10);
 
-	mysub_object = sub_handle.subscribe<nav_msgs::Odometry>("robot_1/base_pose_ground_truth",1000, groundTruthCallback);
+    mysub_object = sub_handle.subscribe<nav_msgs::Odometry>("robot_1/base_pose_ground_truth",1000, groundTruthCallback);
 
         // ROS comms access point 
-	ros::NodeHandle n;
+    ros::NodeHandle n;
 
         ros::Subscriber sub = n.subscribe("robot_1/base_scan", 1000, sensorCallback);
 
 
-	while (ros::ok()) 
-	{ 
-		loop_rate.sleep();
+    while (ros::ok()) 
+    { 
+        loop_rate.sleep();
 
-		updateCurrentVelocity(); 
-		// refer to advertise msg type 
+        updateCurrentVelocity(); 
+        // refer to advertise msg type 
 
-		mypub_object.publish(currentVelocity); 
-		z=0;
+        mypub_object.publish(currentVelocity); 
+        z=0;
                 if(checkLocation()){          
-		       break;
-		}
+               break;
+        }
 
-		ros::spinOnce();
-		loop_rate.sleep();
-	} 
+        ros::spinOnce();
+        loop_rate.sleep();
+    } 
 
         while (ros::ok()) 
-	{ 
+    { 
                 loop_rate.sleep();
                 navigation();
                 std_msgs::String mypub_msg;
-		mypub_msg.data = "I AM BARKING!!Woof Woof!!";        
-		ros::spinOnce();
-		loop_rate.sleep();
+        mypub_msg.data = "I AM BARKING!!Woof Woof!!";        
+        ros::spinOnce();
+        loop_rate.sleep();
 
         }
 
-	return 0; 
+    return 0; 
 }

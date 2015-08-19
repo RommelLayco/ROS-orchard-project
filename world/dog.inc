@@ -16,6 +16,7 @@ define dogLaser ranger
 define dog actor
 (
 
+
 	# right front Leg
 	model
 	(

@@ -13,7 +13,7 @@ define myLaser ranger
                                     ) 
         ) 
 
-define person1 actor
+define worker actor
 (
 
 	# Left Leg
@@ -134,34 +134,37 @@ define person1 actor
 	)
 
 
-	# neck
+	# Head
 	model
 	(
 		size [0.25 0.18 0.03] 
 		pose [0.0 0.0 1.198 0.0] 
 		color "ivory2"
 	)
+	
 	model
 	(
-		size [0.25 0.18 0.03] 
-		pose [0.0 0.0 1.198 0.0] 
-		color "ivory2"
-	)
-
-	#hair
-	model
-	(
-		size [0.26 0.26 0.1]
-		pose [0.0 0.0 1.45 0.0] 
-		color "black"
-	)
-	#head #0.3 in z size for old value
-	model
-	(
-		size [0.25 0.25 0.2] 
+		size [0.25 0.25 0.3] 
 		pose [0.0 0.0 1.25 0.0] 
 		color "PeachPuff1"
 	)
+
+	#cap
+	model
+	(
+		size [0.28 0.28 0.15] 
+		pose [0.0 0.0 1.5 0.0] 
+		color "blue"
+	)
+
+	#cap mouth
+	model
+	(
+		size [0.4 0.27 0.1] 
+		pose [0.07 0.0 1.5 0.0] 
+		color "blue"
+	)
+
 
 	# Left eye
 	model
