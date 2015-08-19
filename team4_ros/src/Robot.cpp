@@ -1,4 +1,5 @@
 #include "Robot.h"
+#include "Util.cpp"
 
 
 // Contructor
@@ -12,6 +13,15 @@ Robot::Robot(double x_position, double y_position, double theta_orientation)
     angular_velocity = 0;
     current_state = Orienting;
     goalIndex = 0;
+
+    // Get id of node
+    int id = Util::getNextId();
+    std::string baseString = "robot_" + std::to_string(id);
+
+    // Setup publisher and subscribers
+    positionPub = publisherHandle.advertise<geometry_msgs::Twist>(baseString + "/cmd_vel", 1000);
+    groundtruthSub = subscriberHandle.subscribe<nav_msgs::Odometry>(baseString + "/base_pose_ground_truth", 1000, &Robot::positionCallback, this);
+    sensorSub = subscriberHandle.subscribe(baseString + "/base_scan", 1000, &Robot::sensorCallback, this);
 
 }
 
@@ -188,7 +198,7 @@ void Robot::positionCallback(const nav_msgs::Odometry positionMsg)
     
     double yaw = tf::getYaw(tf::Quaternion(x, y, z, w));
     current_theta = yaw;
-    
+
 }
 
 
@@ -199,6 +209,9 @@ void Robot::notifySpeedListeners()
     geometry_msgs::Twist velocityMsg;
     velocityMsg.linear.x = linear_velocity_x;
     velocityMsg.angular.z = angular_velocity;
+
+    // Publish speed message
+    positionPub.publish(velocityMsg);
 
     // Loop through speedListeners and send them this speed message
     for (int i = 0; i < speedListeners.size(); i++)

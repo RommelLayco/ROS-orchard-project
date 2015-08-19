@@ -36,6 +36,15 @@ class Robot
         std::vector<geometry_msgs::Point> goals;
         int goalIndex;
 
+        // Publisher and subscriber objects
+        ros::Publisher positionPub;
+        ros::Subscriber groundtruthSub;
+        ros::Subscriber sensorSub;
+
+        // Ros handles
+        ros::NodeHandle publisherHandle;
+        ros::NodeHandle subscriberHandle;
+
         // The attributes of the robot
         double linear_velocity_x;
         double linear_velocity_y;
