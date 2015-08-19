@@ -187,7 +187,7 @@ add_executable(sensor_node src/mypub.cpp)
 find_package(rostest REQUIRED)
 find_package(gtest)
 
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
+SET(CMAKE_CXX_FLAGS "-std=c++0x ${CMAKE_CXX_FLAGS} -pthread")
 
 add_rostest_gtest(AlphaRobotTest test/alpharobot.test test/AlphaRobotTest.cpp)
 target_link_libraries(AlphaRobotTest ${catkin_LIBRARIES})
