@@ -48,7 +48,7 @@ define person1 actor
 	(
 		size [0.01 0.01 0.2]
 		pose [0.15 0 1.0 0.0]
-		color "black"
+		color "red"
 	)
 
 	model
