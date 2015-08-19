@@ -31,7 +31,21 @@ define actor2 position
 
 )
 
+#floorplan
+model
+(
+	size [20 80 0.1 0]
+	bitmap "floorplan.png"
+	color "DarkOliveGreen4"
+)
 
+#driveway
+model
+(
+	size [20 20 0.1 0]
+	pose [-20 15 0 0]
+	bitmap "driveway.png"
+)
 # throw in a robot  
 
 picker( pose [ -1.750 20.000 0.000 90.000] name "picker1" )
