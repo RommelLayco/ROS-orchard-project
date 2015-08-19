@@ -7,7 +7,7 @@ include "tractorWithWorker.inc"
 include "tractor.inc"
 include "carrier.inc"
 include "worker.inc"
-
+include "masterNode.inc"
 
 # milliseconds per update step 
 interval_sim 100 
@@ -34,7 +34,7 @@ picker( pose [ -1.750 20.000 0.000 90.000] name "picker1" )
 #tractor( pose [ -14.067 5.600 0.000 90.000 ] name "tractor")
 
 dog( pose [8.743 13.106 0.000 0.000] name "dog")
-person1( pose [-1.540 -1.300 0.000 -50.628] name "person1" )
+person1( pose [-4.825 4.342 0.000 -50.628] name "person1" )
 bin( pose [ -1.750 20.000 1.010 90.000] name "bin")
 tractorWithWorker( pose [ -14.067 5.600 0.000 90.000 ] name "tractorWithWorker")
 
@@ -42,5 +42,6 @@ tractorWithWorker( pose [ -14.067 5.600 0.000 90.000 ] name "tractorWithWorker")
 picker( pose [ -6.379 -2.979 0.000 -53.239] name "picker2" )
 
 carrier( pose [ -5.539 -1.892 0.000 0.000] name "carrier1")
-worker( pose [0.622 -2.636 0.000 0.000] name "worker")
+worker( pose [1.803 1.126 0.000 0.000] name "worker")
+masterNode( pose [-1.197 -0.961 1.800 0.000] name "master")
 

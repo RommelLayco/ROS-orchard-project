@@ -13,7 +13,7 @@ define pickerLaser ranger
                                     ) 
         ) 
 
-define carrier actor2 
+define carrier actor
 ( 
 	#body
   	model
