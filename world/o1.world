@@ -1,6 +1,7 @@
 include "orchard.inc"
 include "picker.inc"
 include "person1.inc"
+include "walls.inc"
 include "dog.inc"
 include "bin.inc"
 include "carrier.inc"
