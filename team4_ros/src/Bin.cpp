@@ -35,7 +35,7 @@ void groundTruthCallback(const nav_msgs::Odometry msg)
 		//mypub_msg.data = "I AM Full"; 
 	        //bin_pub.publish(mypub_msg);
                 team4_ros::binIsFull mypub_msg; 
-                mypub_msg.my_counter=0;
+                //mypub_msg.my_counter=0;
 		mypub_msg.isFull = true; 
                 mypub_msg.x= currentLocation.position.x;
                 mypub_msg.y= currentLocation.position.y;

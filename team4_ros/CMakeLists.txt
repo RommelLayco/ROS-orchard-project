@@ -137,14 +137,6 @@ add_executable(bin_node src/Bin.cpp)
 target_link_libraries(bin_node ${catkin_LIBRARIES})
 add_dependencies(bin_node ${catkin_EXPORTED_TARGETS})
 
-add_executable(a src/mypub2.cpp)
-target_link_libraries(a ${catkin_LIBRARIES})
-add_dependencies(a ${catkin_EXPORTED_TARGETS})
-
-add_executable(b src/mysub.cpp)
-target_link_libraries(b ${catkin_LIBRARIES})
-add_dependencies(b ${catkin_EXPORTED_TARGETS})
-
 add_executable(TractorWithWorkerNode src/TractorWithWorker.cpp)
 target_link_libraries(TractorWithWorkerNode ${catkin_LIBRARIES})
 add_dependencies(TractorWithWorkerNode ${catkin_EXPORTED_TARGETS})
