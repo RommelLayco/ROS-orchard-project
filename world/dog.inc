@@ -13,7 +13,7 @@ define dogLaser ranger
                                     ) 
  ) 
 
-define dog actor
+define dog actor2
 (
 
 

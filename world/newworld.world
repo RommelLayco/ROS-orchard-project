@@ -9,6 +9,7 @@ include "carrier.inc"
 include "worker.inc"
 include "masterNode.inc"
 include "weedGroups.inc"
+include "tallTreeWall.inc"
 
 # milliseconds per update step 
 interval_sim 100 
@@ -25,13 +26,15 @@ define actor position
 
 define actor2 position
 (
+	name "testfly"
+	size [0 0 0 0]
 	drive "omni"
 	localization "gps"
-
+	velocity_enable 1
 
 )
-
 #floorplan
+
 model
 (
 	size [20 80 0.1 0]
