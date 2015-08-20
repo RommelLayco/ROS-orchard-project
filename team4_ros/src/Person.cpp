@@ -5,31 +5,39 @@
 class Person: public Robot
 {
     public:
-        Person(double x, double y, double z) : Robot(x, y, z) {}
+        Person(double x, double y, double z, int sensor_range, int sensor_angle) : Robot(x, y, z, sensor_range, sensor_angle) {}
     protected:
-        virtual void leftCollisionDetected();
+        /*virtual void leftCollisionDetected();
         virtual void rightCollisionDetected();
-        virtual void centerCollisionDetected();
+        virtual void centerCollisionDetected();*/
         void generateRandomDesiredLocations();
         virtual void reachedLastGoal();
 };
 
 
-void Person::leftCollisionDetected()
+/*void Person::leftCollisionDetected()
 {
-    linear_velocity_x = -top_linear_speed;
-    angular_velocity = - 2 * top_angular_speed;
+    // Move back and spin clockwise
+    ROS_INFO("LEFT COLLISION");
+    linear_velocity_x = 1.0;
+    angular_velocity = -0.5;
 }
 
 void Person::rightCollisionDetected()
 {
-    ROS_INFO("SUBCLASS!");
+    // Move back and spin anticlockwise
+    ROS_INFO("RIGHT COLLISION");
+    linear_velocity_x = 1.0;
+    angular_velocity = 0.5;
 }
 
 void Person::centerCollisionDetected()
 {
-    ROS_INFO("SUBCLASS!");
-}
+    // Move back faster, obstacle at middle.
+    ROS_INFO("CENTER COLLISION");
+    linear_velocity_x = 0.0;
+    angular_velocity = -2.0;
+}*/
 
 void Person::generateRandomDesiredLocations()
 {

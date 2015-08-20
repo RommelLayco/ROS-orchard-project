@@ -3,7 +3,7 @@
 
 
 // Contructor
-Robot::Robot(double x_position, double y_position, double theta_orientation)
+Robot::Robot(double x_position, double y_position, double theta_orientation, int sensor_range, int sensor_angle)
 {
     current_x = x_position;
     current_y = y_position;
@@ -13,6 +13,9 @@ Robot::Robot(double x_position, double y_position, double theta_orientation)
     angular_velocity = 0;
     current_state = Orienting;
     goalIndex = 0;
+
+    sensorRange = sensor_range;
+    sensorAngle = sensor_angle;
 
     // Get id of node
     int id = Util::getNextId();
@@ -42,19 +45,17 @@ robotState Robot::getState()
 
 void Robot::sensorCallback(const sensor_msgs::LaserScan::ConstPtr& sensorMsg)
 {// Handle sensor data
-    int left_vals = sensor_size / 3;
-    int right_vals = sensor_size - left_vals;
-
+    int left_vals = sensorAngle / 3;
+    int right_vals = sensorAngle - left_vals;
 
     int i = 0;
     bool isNear = false;
     //ROS_INFO("Sensor:");
-    for (i; i < sensor_size; i++) {
-        if (sensorMsg->ranges[i] < sensor_range)
+    for (i; i < sensorAngle; i++) {
+        if (sensorMsg->ranges[i] < sensorRange)
         {
             isNear = true;
             current_state = CollisionResolution;
-            //ROS_INFO("I'm near something! [%f]", sensorMsg->ranges[i]);
 
             if (i < left_vals)
             {
@@ -86,7 +87,6 @@ void Robot::sensorCallback(const sensor_msgs::LaserScan::ConstPtr& sensorMsg)
 void Robot::leftCollisionDetected()
 {
     // Spin to the right
-    //ROS_INFO("Spinning right");
     linear_velocity_x = top_linear_speed;
     angular_velocity = -top_angular_speed;
 }
@@ -94,7 +94,6 @@ void Robot::leftCollisionDetected()
 void Robot::rightCollisionDetected()
 {
     // Spin to the left
-    //ROS_INFO("Spinning left");
     linear_velocity_x = top_linear_speed;
     angular_velocity = top_angular_speed;
 }
@@ -102,7 +101,6 @@ void Robot::rightCollisionDetected()
 void Robot::centerCollisionDetected()
 {
     // Move backwards and spin right
-    //ROS_INFO("Moving backwards and spinning right");
     linear_velocity_x = 0;
     angular_velocity = -2 * top_angular_speed;
 }
@@ -115,7 +113,6 @@ void Robot::updateVelocity()
         // Let collision resolution take place before we attempt to move towards the goal
         return;
     }
-    // Find the correct angle
 
     // Check if robot has any goals defined. If not, do nothing.
     if (goals.empty())
@@ -123,7 +120,6 @@ void Robot::updateVelocity()
         ROS_INFO("No Goal, doing nothing");
         return;
     }
-
 
     geometry_msgs::Point desiredLocation = goals[goalIndex];
     // This is the maximum distance a robot can be from it's
@@ -157,31 +153,7 @@ void Robot::updateVelocity()
     
     // Calculate the desired angle
     double desiredAngle = atan2(directionVector.y, directionVector.x);
-
-    if (fabs(current_theta - desiredAngle) > 0.1)
-    {
-        // Spin
-        current_state = Orienting;
-        //ROS_INFO("Spinning!");
-        linear_velocity_x = 0;
-        if (current_theta <= desiredAngle)
-        {
-            angular_velocity = top_angular_speed;
-        }
-        else
-        {
-            angular_velocity = -top_angular_speed;
-        }
-
-    }
-    else
-    {
-        // Go forward
-        current_state = Moving;
-        //ROS_INFO("Moving!");
-        linear_velocity_x = top_linear_speed;
-        angular_velocity = 0.0;
-    }
+    rotateToGoal(desiredAngle);
 
     notifySpeedListeners();
 }
@@ -229,6 +201,32 @@ void Robot::reachedLastGoal()
     // Reset index
     ROS_INFO("Reached final destination, going back to the start");
     goalIndex++;
+}
+
+void Robot::rotateToGoal(double desiredAngle)
+{
+    if (fabs(current_theta - desiredAngle) > 0.1)
+    {
+        // Spin
+        current_state = Orienting;
+        linear_velocity_x = 0;
+        if (current_theta <= desiredAngle)
+        {
+            angular_velocity = top_angular_speed;
+        }
+        else
+        {
+            angular_velocity = -top_angular_speed;
+        }
+
+    }
+    else
+    {
+        // Go forward
+        current_state = Moving;
+        linear_velocity_x = top_linear_speed;
+        angular_velocity = 0.0;
+    }
 }
 
 

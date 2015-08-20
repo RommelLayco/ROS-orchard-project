@@ -30,7 +30,7 @@ int main(int argc, char **argv)
     ros::init(argc, argv, "MainNode");
 
     // Create robot object
-    Robot myRobot = Robot(0, 0, 0);
+    Robot myRobot = Robot(0, 0, 0, 2, 60);
     entityList.push_back(&myRobot);
 
     // loop 10 Hz
@@ -52,11 +52,10 @@ int main(int argc, char **argv)
     
 
     // Instantiate a person
-    Person myPerson = Person(1, 2, 3);
+    Person myPerson = Person(1, 2, 3, 2, 110);
     entityList.push_back(&myPerson);
 
     myPerson.addGoal(desiredLocation1);
-
 
     while (ros::ok()) 
 	{ 
