@@ -5,7 +5,8 @@ cp wood.inc world
 mv orchard.inc world
 
 #move wall instance to world file
-mv walls.inc world
+#uncomment when i get more info Rommel
+#mv walls.inc world
 
 #move orchard world to world file
 mv o1.world world

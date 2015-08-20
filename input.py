@@ -165,33 +165,10 @@ def needToAppend():
 # the picker has to be between each of the 7 rows.
 def addPicker(r_spacing):
 
-# make a world file similar to newworld.world in the world folder and then just append 7 pickers to it
-# and then change the bash file to move the newly appended to world file to the world folder
-
+# append to the world file 7 picker robots
 # loop from 0 to 7 as there are 7 rows. take the row spacing and column spacing in to count
 
 	f = open('o1.world', 'a')
-
-	f.write('include "orchard.inc"\n') #tree model
-	f.write('include "picker.inc"\n') #canopy model
-	f.write('include "person1.inc"\n') #tree model
-	f.write('include "walls.inc"\n')#wall model
-	f.write('include "dog.inc"\n') #canopy model
-	f.write('include "bin.inc"\n') #tree model
-	f.write('include "carrier.inc"\n') #canopy model
-
-	f.write('interval_sim 100\n')
-
-	f.write('define actor position\n')
-	f.write('(\n')
-	f.write('name "actor"\n')
-	f.write('size [0.000 0.000 0.000]\n')
-	f.write('drive "diff"\n')
-	f.write('stack_children 0\n')
-	f.write('gui_nose 0\n')
-	f.write('obstacle_return 0\n')
-	f.write(')\n')
-
 
 	count = 1
 	
@@ -221,6 +198,40 @@ def addPicker(r_spacing):
 
 	f.close()
 
+def add_Instances_to_world():
+	f = open('o1.world', 'w')
+
+	#adding models to the world file
+
+	f.write('include "orchard.inc"\n') #tree model
+	f.write('include "picker.inc"\n') #canopy model
+	f.write('include "person1.inc"\n') #tree model
+	f.write('include "dog.inc"\n') #canopy model
+	f.write('include "bin.inc"\n') #tree model
+	f.write('include "carrier.inc"\n\n') #canopy model
+
+	f.write('interval_sim 100\n\n')
+
+	f.close()
+
+def add_actor_pos():
+
+	f = open('o1.world', 'a')
+
+	#add actor postions to world file
+	f.write('define actor position\n')
+	f.write('(\n')
+	f.write('name "actor"\n')
+	f.write('size [0.000 0.000 0.000]\n')
+	f.write('drive "diff"\n')
+	f.write('stack_children 0\n')
+	f.write('gui_nose 0\n')
+	f.write('obstacle_return 0\n')
+	f.write(')\n\n')
+
+	#add more actors here
+
+
 def configwall(r_spacing, t_spacing):
 	f = open('wall.inc', 'w')
 
@@ -240,7 +251,9 @@ def createWalls(r_spacing, t_spacing):
 	#code currently spawns a tree
 	# can loop round and make tall as wall but will have gap
 	# if a wall will use code above to config else if just a series of tall tree
-	#will loop around and buil
+	#will loop around and build 
+
+	#note add walls to "----- add_instances_to_world method"
 
 	r = r_spacing		
 	t = t_spacing
@@ -277,9 +290,21 @@ if(needToAppend()):
 	changeCanopyModel(t_spacing)
 	
 
-addPicker(r_spacing)
+#addPicker(r_spacing)
 
 createTrees(r_spacing, t_spacing)
+
+#create world file put methods here
+
+#add instances first
+add_Instances_to_world()
+
+#add actor positions
+add_actor_pos()
+
+#add robots here
+#picker first
+addPicker(r_spacing)
 
 
 
