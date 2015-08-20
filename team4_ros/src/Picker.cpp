@@ -260,7 +260,7 @@ int main (int argc, char **argv)
 	
 	// Sensor 
 	ros::NodeHandle n;
-	ros::Subscriber sensorSub = n.subscribe("robot_0/base_scan", 1000, sensorCallback)
+	ros::Subscriber sensorSub = n.subscribe("robot_0/base_scan", 1000, sensorCallback);
 
     //ros::Subscriber sub = n.subscribe("robot_0/base_scan", 1000, sensorCallback);
     ros::Subscriber sub_bin = sub_handle.subscribe("bin_topic",10,binCallback); 

@@ -9,6 +9,7 @@
 #include <sstream>
 #include "math.h"
 #include <unistd.h>
+#include <team4_ros/readyToUse.h>
 
 
 // Current velocity of the Robot
@@ -131,13 +132,6 @@ void updateCurrentVelocity() {
     // Calculate the desired angle
     double desiredAngle = atan2(directionVector.y, directionVector.x);
 
-  //  if (z != 0)
-    //{
-      //  currentVelocity.linear.x = 2;
-        //currentVelocity.angular.z = z;
-        //return;
-    //}
-
     // If the desired angle is 0
     if(desiredAngle != 0 && desiredAngle != M_PI)
     {    
@@ -203,7 +197,6 @@ int main (int argc, char **argv)
 
     pathIndex = 0;
 
-
     nearCollision = false;    
 
 	// command line ROS arguments/ name remapping 
@@ -215,7 +208,7 @@ int main (int argc, char **argv)
 
 	// master registry pub and sub
 	//ros::Publisher mypub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_0/cmd_vel",1000);
-    mypub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_0/cmd_vel",1000);
+        mypub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_0/cmd_vel",1000);
 	ros::Subscriber mysub_object;
 	
 	// loop 25 
