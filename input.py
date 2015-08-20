@@ -343,8 +343,45 @@ def addWeeds(r_spacing, t_spacing):
 	#close file after writing
 	f.close()
 
+def dogLocation(r_spacing, t_spacing):
 
-	
+	#pick a row
+	row = randint(0,6)
+	x = row * r_spacing
+
+	#pick a tree in the row
+	tree = randint(0,13)
+	y = tree * t_spacing
+
+	#save location into a file
+	f = open('dogLocation', 'w') 
+	f.write(str(x) + " " + str(y) + "\n")
+	f.close()
+
+
+def tractorLocations(r_spacing, t_spacing):
+	f = open('tractorLocations', 'w')
+
+	#coordinates for top left
+	x = -3
+	y = (13 * t_spacing) + 3
+	f.write(str(x) + " " + str(y) + "\n")
+
+	#coordinates for top right
+	x = (7 * r_spacing) + 3
+	y = (13 * t_spacing) + 3
+	f.write(str(x) + " " + str(y) + "\n")
+
+	#coordinates for bottom right
+	x = (7 * r_spacing) + 3
+	y = -3
+	f.write(str(x) + " " + str(y) + "\n")
+
+	#coordinates for bottom left
+	x = -3
+	y = -3
+	f.write(str(x) + " " + str(y) + "\n")
+
 
 
 
@@ -384,6 +421,11 @@ add_model(r_spacing, t_spacing)
 #add robots here
 #picker first
 addPicker(r_spacing)
+
+'''------------------------------------ Destination locations for actors to read -----------------------------------'''
+dogLocation(r_spacing,t_spacing)
+tractorLocations(r_spacing,t_spacing)
+
 
 
 
