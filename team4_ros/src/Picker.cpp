@@ -39,6 +39,8 @@ int pathIndex;
 // Boolean for the direction of the vibrate
 bool VibrateX=false;
 
+// When the bin is full, stop the robot and the bin
+bool isFull=false;
 geometry_msgs::Point desiredLocations[2];
 
 void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
@@ -107,8 +109,13 @@ void Vibrate()
 void binCallback(const team4_ros::binIsFull::ConstPtr& msg) 
 { 
 	//ROS_INFO("sub echoing pub: %s", msg->data.c_str());
-        ROS_INFO("sub echoing pub: %f",msg->x);
+       
         //ROS_INFO("sub echoing pub: %s",msg->isFull);
+
+		if(msg->isFull){
+		 isFull=true;
+		ROS_INFO("AAAAAAAAAA");
+		}
       
 }
 
@@ -276,10 +283,10 @@ int main (int argc, char **argv)
 
 		updateCurrentVelocity(); 
 		// refer to advertise msg type 
-	
+		if(!isFull){
 		mypub_object.publish(currentVelocity); 
 		binVelPub_object.publish(currentVelocity);
-
+		}
 		z=0;
 
 		ros::spinOnce();
