@@ -41,11 +41,6 @@ bool VibrateX=false;
 
 geometry_msgs::Point desiredLocations[2];
 
-void myBinCallback(const std_msgs::String::ConstPtr& msg) 
-{ 
-	ROS_INFO("sub echoing pub: %s",msg->data.c_str()); 
-}
-
 void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
 {
 int i = 0;
@@ -114,7 +109,7 @@ void binCallback(const team4_ros::binIsFull::ConstPtr& msg)
 	//ROS_INFO("sub echoing pub: %s", msg->data.c_str());
         ROS_INFO("sub echoing pub: %f",msg->x);
         //ROS_INFO("sub echoing pub: %s",msg->isFull);
-        Vibrate();
+      
 }
 
 
@@ -160,12 +155,9 @@ void updateCurrentVelocity() {
         {
             // Reset index
             ROS_INFO("Reached final destination");
-<<<<<<< HEAD
-			//Vibrate();
-=======
+
 			Vibrate();
 			pathIndex=0;
->>>>>>> da42abb7df30e5e2e99743d5a66dc58f589cc2b3
             
         }
         
@@ -198,11 +190,8 @@ void updateCurrentVelocity() {
         } else
         {
             // Go forward
-<<<<<<< HEAD
             currentVelocity.linear.x = 1.5;
-=======
-            currentVelocity.linear.x = 1;
->>>>>>> da42abb7df30e5e2e99743d5a66dc58f589cc2b3
+
             currentVelocity.angular.z = 0;
         }
     }
@@ -271,23 +260,14 @@ int main (int argc, char **argv)
 	
 	// Sensor 
 	ros::NodeHandle n;
-	ros::Subscriber sensorSub = n.subscribe("robot_0/base_scan", 1000, sensorCallback);
-
-	// Message from bin
-	ros::Subscriber binSub = n.subscribe("bin_topic", 1000, myBinCallback);
-
-	
-<<<<<<< HEAD
-	// ROS comms access point 
-	//ros::NodeHandle n;
+	ros::Subscriber sensorSub = n.subscribe("robot_0/base_scan", 1000, sensorCallback)
 
     //ros::Subscriber sub = n.subscribe("robot_0/base_scan", 1000, sensorCallback);
     ros::Subscriber sub_bin = sub_handle.subscribe("bin_topic",10,binCallback); 
-=======
 	// loop 25 
 	ros::Rate loop_rate(10);
 
->>>>>>> da42abb7df30e5e2e99743d5a66dc58f589cc2b3
+
 
 
 	while (ros::ok()) 
