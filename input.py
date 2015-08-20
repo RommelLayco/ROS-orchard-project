@@ -175,6 +175,7 @@ def addPicker(r_spacing):
 	f.write('include "orchard.inc"\n') #tree model
 	f.write('include "picker.inc"\n') #canopy model
 	f.write('include "person1.inc"\n') #tree model
+	f.write('include "walls.inc"\n')#wall model
 	f.write('include "dog.inc"\n') #canopy model
 	f.write('include "bin.inc"\n') #tree model
 	f.write('include "carrier.inc"\n') #canopy model
@@ -218,7 +219,45 @@ def addPicker(r_spacing):
 		#increment y position
 		current_x = current_x + r_spacing
 
-	f.close()	
+	f.close()
+
+def configwall(r_spacing, t_spacing):
+	f = open('wall.inc', 'w')
+
+
+
+	#include model to tree
+	f.write('include "talltree.inc\n"')
+
+		#do nothing for now 
+
+
+
+#create walls for orchard add to orchard instance
+def createWalls(r_spacing, t_spacing):
+	f = open('walls.inc', 'w') #file that defines the positions of the walls
+
+	#code currently spawns a tree
+	# can loop round and make tall as wall but will have gap
+	# if a wall will use code above to config else if just a series of tall tree
+	#will loop around and buil
+
+	r = r_spacing		
+	t = t_spacing
+		
+	f.write('include "tallTree.inc"\n\n')
+
+	line = "tallTree( pose [ " 
+	line = line + str(-5) + " "
+	line = line + str(-5) + " "
+	line = line + "0 0 ] )\n"
+
+	
+	
+	#add left wall
+	f.write(line)
+
+	f.close()
 
 
 
@@ -230,9 +269,8 @@ r_spacing = getRowSpacing()
 t_spacing = getTreeSpacing()
 
 
-writeModels()
 #need before create trees as create tree depends on the file created by changeCanopy
-
+writeModels()
 
 #check if you have to append
 if(needToAppend()):
@@ -242,5 +280,7 @@ if(needToAppend()):
 addPicker(r_spacing)
 
 createTrees(r_spacing, t_spacing)
+
+
 
 print("Finished making environment")
