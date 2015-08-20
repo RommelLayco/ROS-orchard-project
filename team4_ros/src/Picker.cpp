@@ -41,21 +41,43 @@ bool VibrateX=false;
 
 geometry_msgs::Point desiredLocations[2];
 
+void myBinCallback(const std_msgs::String::ConstPtr& msg) 
+{ 
+	ROS_INFO("sub echoing pub: %s",msg->data.c_str()); 
+}
+
 void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
 {
-    int i = 0;
+int i = 0;
     bool isNear = false;
     ROS_INFO("Sensor:");
     for (i; i < 60; i++) {
-        if (msg->ranges[i] < 2)
+        if (msg->ranges[i] < 0.5)
         {
             isNear = true;
             nearCollision = true;
             ROS_INFO("I'm near something! [%f]", msg->ranges[i]);
 
-			    currentVelocity.linear.x = 0;
-                currentVelocity.angular.z = 0;
-			
+            if (i < 20)
+            {
+                // Spin to the left
+                ROS_INFO("Spinning left");
+                currentVelocity.linear.x = 0.5;
+                currentVelocity.angular.z = 1;
+            } else if (i >= 20 && i < 40)
+            {
+                // Move backwards and spin right
+                ROS_INFO("Moving backwards and spinning right");
+                currentVelocity.linear.x = -0.5;
+                currentVelocity.angular.z = -0.5;
+            } else
+            {
+                // Spin to the right
+                ROS_INFO("Spinning right");
+                currentVelocity.linear.x = 0.5;
+                currentVelocity.angular.z = -1;
+            }
+
         }
 
         if (isNear == false)
@@ -65,7 +87,6 @@ void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
             //currentVelocity.angular.z = 0.0;
         }
         
-        mypub_object.publish(currentVelocity);
 
     }
 }
@@ -121,7 +142,7 @@ void updateCurrentVelocity() {
     //ROS_INFO("Y distance: [%f]", currentLocation.position.y);
 
     // Check if we are at the desired location
-    if (abs(directionVector.x) <= distanceThreshold && abs(directionVector.y) <= distanceThreshold)
+    if (fabs(directionVector.x) <= distanceThreshold && fabs(directionVector.y) <= distanceThreshold)
     {
         // Robot has reached it's desired location
         // For now, make robot stop. In future, robot should now try to move
@@ -132,13 +153,19 @@ void updateCurrentVelocity() {
         if (pathIndex < sizeof(desiredLocations) / sizeof(*desiredLocations) - 1)
         {
             pathIndex++;
+			sleep(2);
 			ROS_INFO("Reached destination");
         }
         else
         {
             // Reset index
             ROS_INFO("Reached final destination");
+<<<<<<< HEAD
 			//Vibrate();
+=======
+			Vibrate();
+			pathIndex=0;
+>>>>>>> da42abb7df30e5e2e99743d5a66dc58f589cc2b3
             
         }
         
@@ -148,12 +175,12 @@ void updateCurrentVelocity() {
     // Calculate the desired angle
     double desiredAngle = atan2(directionVector.y, directionVector.x);
 
-  //  if (z != 0)
-    //{
-      //  currentVelocity.linear.x = 2;
-        //currentVelocity.angular.z = z;
-        //return;
-    //}
+    if (z != 0)
+    {
+        currentVelocity.linear.x = 1;
+        currentVelocity.angular.z = z;
+        return;
+    }
 
     // If the desired angle is 0
     if(desiredAngle != 0 && desiredAngle != M_PI)
@@ -162,11 +189,22 @@ void updateCurrentVelocity() {
         //ROS_INFO("desiredAngle is : %f",desiredAngle); 
 
         // If the deifference between current angle and desired angle is less than 0.1 stop spining
-
+        if (currentAngle - desiredAngle > 0.1 || desiredAngle - currentAngle > 0.1)
+        {
+            // Spin
+            currentVelocity.linear.x = 0;
+            currentVelocity.angular.z = 0.5;
+            
+        } else
+        {
             // Go forward
+<<<<<<< HEAD
             currentVelocity.linear.x = 1.5;
+=======
+            currentVelocity.linear.x = 1;
+>>>>>>> da42abb7df30e5e2e99743d5a66dc58f589cc2b3
             currentVelocity.angular.z = 0;
-        
+        }
     }
 }
 
@@ -198,7 +236,7 @@ int main (int argc, char **argv)
     //desiredLocation1.x = -10;
     desiredLocation1.x = -1.75;
     //desiredLocation1.y = -21;
-    desiredLocation1.y = 30;
+    desiredLocation1.y = 25;
     desiredLocation1.z = 0;
 
     geometry_msgs::Point desiredLocation2;
@@ -219,25 +257,37 @@ int main (int argc, char **argv)
 	// command line ROS arguments/ name remapping 
 	ros::init(argc, argv, "PickerNode"); 
 
-	// ROS node hander
+	// Control robot 0
 	ros::NodeHandle velPub_handle;
 	mypub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_0/cmd_vel",1000);
 
+	// control robot 1
 	ros::Publisher binVelPub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_3/cmd_vel",1000);
-
+	
+	// Subscribe the ground truth of robot 1
 	ros::NodeHandle sub_handle; 
 	ros::Subscriber mysub_object;
+	mysub_object = sub_handle.subscribe<nav_msgs::Odometry>("robot_0/base_pose_ground_truth",1000, groundTruthCallback);
 	
-	// loop 25 
-	ros::Rate loop_rate(10);
+	// Sensor 
+	ros::NodeHandle n;
+	ros::Subscriber sensorSub = n.subscribe("robot_0/base_scan", 1000, sensorCallback);
 
-	mysub_object = sub_handle.subscribe<nav_msgs::Odometry>("robot_0/base_pose_ground_truth",1000, groundTruthCallback); 
+	// Message from bin
+	ros::Subscriber binSub = n.subscribe("bin_topic", 1000, myBinCallback);
+
 	
+<<<<<<< HEAD
 	// ROS comms access point 
 	//ros::NodeHandle n;
 
     //ros::Subscriber sub = n.subscribe("robot_0/base_scan", 1000, sensorCallback);
     ros::Subscriber sub_bin = sub_handle.subscribe("bin_topic",10,binCallback); 
+=======
+	// loop 25 
+	ros::Rate loop_rate(10);
+
+>>>>>>> da42abb7df30e5e2e99743d5a66dc58f589cc2b3
 
 
 	while (ros::ok()) 
@@ -246,13 +296,13 @@ int main (int argc, char **argv)
 
 		updateCurrentVelocity(); 
 		// refer to advertise msg type 
-
+	
 		mypub_object.publish(currentVelocity); 
 		binVelPub_object.publish(currentVelocity);
+
 		z=0;
 
 		ros::spinOnce();
-		loop_rate.sleep();
 	} 
 
 	return 0; 

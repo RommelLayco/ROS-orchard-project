@@ -27,8 +27,6 @@ double desiredAngle = 0;
 
 int counter = 0;
 
-// Boolean for the direction of the 
-bool VibrateX=false;
 
 // Pub object
 ros::Publisher mypub_object;
@@ -44,31 +42,39 @@ bool nearCollision;
 int pathIndex;
 
 geometry_msgs::Point desiredLocations[2];
-void generateRandomDesiredLocations(){
+void generateDesiredLocations(){
     // set up for random number generation
     srand (time(NULL));
 
     // Setup points on robot's path
     geometry_msgs::Point desiredLocation1;
-    //desiredLocation1.x = -10;
-    desiredLocation1.x = -5 + rand() % (5 - -5) + 1;
-    //desiredLocation1.y = -21;
-    desiredLocation1.y = -15 + rand() % (15 - -15) + 1;
+    desiredLocation1.x = -8;
+    desiredLocation1.y = 36;
     desiredLocation1.z = 0;
 
     geometry_msgs::Point desiredLocation2;
-    //desiredLocation2.x = 10;
-    desiredLocation2.x = -5 + rand() % (5 - -5) + 1;
-    //desiredLocation2.y = 21;
-    desiredLocation2.y = -15 + rand() % (15 - -15) + 1;
+    desiredLocation2.x = 8;
+    desiredLocation2.y = 36;
     desiredLocation2.z = 0;
+
+	geometry_msgs::Point desiredLocation3;
+    desiredLocation3.x = 8;
+    desiredLocation3.y = -36;
+    desiredLocation3.z = 0;
+
+	geometry_msgs::Point desiredLocation4;
+    desiredLocation4.x = -8;
+    desiredLocation4.y = -36;
+    desiredLocation4.z = 0;
 
     desiredLocations[0] = desiredLocation1;
     desiredLocations[1] = desiredLocation2;
+	desiredLocations[2] = desiredLocation3;
+	desiredLocations[3] = desiredLocation4;
 
 }
 
-
+/*
 void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
 {
     int i = 0;
@@ -135,25 +141,9 @@ void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
     }
 }
 
+*/
 
 
-
-void Vibrate() 
-{     
-    //Update Current Position
-    
-    if (VibrateX == false){
-    //currentVelocity.linear.y = 3;
-    currentVelocity.angular.z = 0.95;
-    VibrateX = true;
-    }
-    else {
-    currentVelocity.linear.x = 0;
-        currentVelocity.angular.z = -1.0;
-
-        VibrateX = false;
-    }
-}
 
 void rotateAngle(double desiredAngle)
 {
@@ -186,13 +176,12 @@ void rotateAngle(double desiredAngle)
 
 void updateCurrentVelocity() {
 
-
+	/*
     if (nearCollision == true)
-    {
-    Vibrate();
+    {    
         // Let collision resolution take place before we attempt to move towards the goal
         return;
-    }
+    }*/
 
     // Find the correct angle
 
@@ -225,11 +214,7 @@ void updateCurrentVelocity() {
         else
         {
             // Reset index
-            ROS_INFO("Reached final destination, going back to the start");
-            
-            // call to generate random values for destination
-            generateRandomDesiredLocations();
-
+            ROS_INFO("Reached final destination, going back to the start");                       
             pathIndex = 0;
         }
         
@@ -265,15 +250,13 @@ void groundTruthCallback(const nav_msgs::Odometry msg)
 int main (int argc, char **argv) 
 {
 
-    generateRandomDesiredLocations();
+    generateDesiredLocations();
   
     pathIndex = 0;
-
-
-    nearCollision = false;    
+    
 
     // command line ROS arguments/ name remapping 
-    ros::init(argc, argv, "PersonNode"); 
+    ros::init(argc, argv, "TractorWithWorkerNode"); 
 
     // ROS node hander
     ros::NodeHandle velPub_handle;
@@ -282,19 +265,19 @@ int main (int argc, char **argv)
 
     // master registry pub and sub
     //ros::Publisher mypub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_0/cmd_vel",1000);
-        mypub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_2/cmd_vel",1000);
-        ros::Publisher mypub_bark = bark_handle.advertise<std_msgs::String>("person_topic",1000);
+        mypub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_4/cmd_vel",1000);
+        //ros::Publisher mypub_bark = bark_handle.advertise<std_msgs::String>("person_topic",1000);
     ros::Subscriber mysub_object;
     
     // loop 10 
     ros::Rate loop_rate(10);
 
-    mysub_object = sub_handle.subscribe<nav_msgs::Odometry>("robot_2/base_pose_ground_truth",1000, groundTruthCallback);
+    mysub_object = sub_handle.subscribe<nav_msgs::Odometry>("robot_4/base_pose_ground_truth",1000, groundTruthCallback);
 
         // ROS comms access point 
     ros::NodeHandle n;
 
-    ros::Subscriber sub = n.subscribe("robot_2/base_scan", 1000, sensorCallback);
+    //ros::Subscriber sub = n.subscribe("robot_4/base_scan", 1000, sensorCallback);
 
             
     while (ros::ok()) 

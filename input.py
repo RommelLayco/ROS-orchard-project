@@ -53,7 +53,8 @@ def getTreeSpacing():
 
 	return tree_spacing
 
-#import graphic models and create instance file
+#import graphic models and create instance file. This method just adds the headers into the orchard.inc
+# and sets it up for creating the environment
 def writeModels():
 	f = open('orchard.inc','w')
 	f.write('include "tree.inc"\n') #tree model
@@ -61,6 +62,8 @@ def writeModels():
 	f.write('\n')#leave a line space
 	f.close()
 
+# this method creates trees and adds them to the orchard.inc file. It also makes
+# canopies and adds them to the orchard.inc file 
 def createTrees(r_spacing, t_spacing):
 	f = open('orchard.inc', 'a')
 
@@ -90,7 +93,7 @@ def createTrees(r_spacing, t_spacing):
 		#leave a line space to seperate trees
 		f.write('\n')
 
-
+	# set the current x and y back to 0 to ensure the canopies are created on top of the trees made above
 	current_y = 0
 	current_x = 0
 		
@@ -120,6 +123,8 @@ def createTrees(r_spacing, t_spacing):
 
 	f.close()
 
+# this method appends the model of the canopy based on the dimensions mentioned by the user.
+# this is done before the orchard.inc is made so that the new model of canopy is used for the environment
 def changeCanopyModel(t_spacing):
 	f = open('wood.inc', 'a')
 
@@ -156,6 +161,66 @@ def needToAppend():
 		return True
 
 
+# add a picker to the environment 
+# the picker has to be between each of the 7 rows.
+def addPicker(r_spacing):
+
+# make a world file similar to newworld.world in the world folder and then just append 7 pickers to it
+# and then change the bash file to move the newly appended to world file to the world folder
+
+# loop from 0 to 7 as there are 7 rows. take the row spacing and column spacing in to count
+
+	f = open('o1.world', 'a')
+
+	f.write('include "orchard.inc"\n') #tree model
+	f.write('include "picker.inc"\n') #canopy model
+	f.write('include "person1.inc"\n') #tree model
+	f.write('include "dog.inc"\n') #canopy model
+	f.write('include "bin.inc"\n') #tree model
+	f.write('include "carrier.inc"\n') #canopy model
+
+	f.write('interval_sim 100\n')
+
+	f.write('define actor position\n')
+	f.write('(\n')
+	f.write('name "actor"\n')
+	f.write('size [0.000 0.000 0.000]\n')
+	f.write('drive "diff"\n')
+	f.write('stack_children 0\n')
+	f.write('gui_nose 0\n')
+	f.write('obstacle_return 0\n')
+	f.write(')\n')
+
+
+	count = 1
+	
+
+	# set the current x and y back to 0 to ensure the canopies are created on top of the trees made above
+	current_y = 0 
+	current_x = 0 + r_spacing/2  - 0.5
+
+	# for i from 0 to 6 included (7 elements)
+	for picker in range(0,7):
+
+		name = "\"picker" + str(count) + "\""
+		
+		picker = "picker( pose [ " 
+		picker = picker + str(current_x) + " "
+		picker = picker + str(current_y) + " "
+		picker = picker + "0 0 ] name " + name + " )\n"
+	
+
+		#append tree to file
+		f.write(picker)
+
+		count = count + 1
+			
+		#increment y position
+		current_x = current_x + r_spacing
+
+	f.close()	
+
+
 
 
 
@@ -173,6 +238,8 @@ writeModels()
 if(needToAppend()):
 	changeCanopyModel(t_spacing)
 	
+
+addPicker(r_spacing)
 
 createTrees(r_spacing, t_spacing)
 
