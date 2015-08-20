@@ -102,8 +102,8 @@ void updateCurrentVelocity() {
     directionVector.y = desiredLocation.y - currentLocation.position.y;
     directionVector.z = desiredLocation.z - currentLocation.position.z;
 
-    ROS_INFO("X distance: [%f]", currentLocation.position.x);
-    ROS_INFO("Y distance: [%f]", currentLocation.position.y);
+    //ROS_INFO("X distance: [%f]", currentLocation.position.x);
+    //ROS_INFO("Y distance: [%f]", currentLocation.position.y);
 
     // Check if we are at the desired location
     if (abs(directionVector.x) <= distanceThreshold && abs(directionVector.y) <= distanceThreshold)
@@ -200,7 +200,7 @@ int main (int argc, char **argv)
     nearCollision = false;    
 
 	// command line ROS arguments/ name remapping 
-	ros::init(argc, argv, "CarrierRobotNode"); 
+	ros::init(argc, argv, "CarrierNode"); 
 
 	// ROS node hander
 	ros::NodeHandle velPub_handle;
@@ -208,19 +208,21 @@ int main (int argc, char **argv)
 
 	// master registry pub and sub
 	//ros::Publisher mypub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_0/cmd_vel",1000);
-        mypub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_0/cmd_vel",1000);
+        mypub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_6/cmd_vel",1000);
 	ros::Subscriber mysub_object;
 	
 	// loop 25 
 	ros::Rate loop_rate(10);
 
-	mysub_object = sub_handle.subscribe<nav_msgs::Odometry>("robot_0/base_pose_ground_truth",1000, groundTruthCallback); 
+	mysub_object = sub_handle.subscribe<nav_msgs::Odometry>("robot_6/base_pose_ground_truth",1000, groundTruthCallback); 
 	
 	// ROS comms access point 
-	ros::NodeHandle n;
+	ros::NodeHandle n;	
+	ros::Publisher carrier_pub;
 
-    ros::Subscriber sub = n.subscribe("robot_0/base_scan", 1000, sensorCallback);
+        ros::Subscriber sub = n.subscribe("robot_6/base_scan", 1000, sensorCallback);
 
+        team4_ros::readyToUse mypub_msg; 
 
 	while (ros::ok()) 
 	{ 
@@ -228,7 +230,12 @@ int main (int argc, char **argv)
 
 		updateCurrentVelocity(); 
 		// refer to advertise msg type 
-
+                if(currentVelocity.linear.x == 0 && currentVelocity.angular.z == 0){
+			mypub_msg.isReady = true; 
+                }else{
+			mypub_msg.isReady = false; 
+		}
+		carrier_pub.publish(mypub_msg); 
 		mypub_object.publish(currentVelocity); 
 		z=0;
 

@@ -48,6 +48,7 @@ find_package(catkin REQUIRED COMPONENTS
 add_message_files(
  FILES 
  binIsFull.msg
+ readyToUse.msg
 )
 #   FILES
 #   Message1.msg
@@ -119,6 +120,10 @@ add_dependencies(AlphaWithSensorRobotNode ${catkin_EXPORTED_TARGETS})
 add_executable(PickerNode src/Picker.cpp)
 target_link_libraries(PickerNode ${catkin_LIBRARIES})
 add_dependencies(PickerNode ${catkin_EXPORTED_TARGETS})
+
+add_executable(CarrierNode src/Carrier.cpp)
+target_link_libraries(CarrierNode ${catkin_LIBRARIES})
+add_dependencies(CarrierNode ${catkin_EXPORTED_TARGETS})
 
 add_executable(SwingRobotNode src/SwingRobot.cpp)
 target_link_libraries(SwingRobotNode ${catkin_LIBRARIES})

@@ -14,7 +14,11 @@ if (msg.data.compare("I AM Full") != 0 )
 
 }
 
+void searchNearestCarrier()
+{
+	
 
+}
 
 
 int main (int argc, char **argv) 
@@ -25,7 +29,7 @@ int main (int argc, char **argv)
 	// ROS comms access point 
 	ros::NodeHandle n;
 
-    ros::Subscriber sub = n.subscribe("bin_topic", 1000, binCallback);
+        ros::Subscriber sub = n.subscribe("bin_topic", 1000, binCallback);
 
     // master registry pub/sub 
 
@@ -38,7 +42,6 @@ int main (int argc, char **argv)
     int counter=0;
 	while (ros::ok()) 
 	{
-
 		ros::spinOnce();
 		loop_rate.sleep();
 
