@@ -10,6 +10,7 @@
 #include "math.h"
 #include <unistd.h>
 #include "std_msgs/String.h"
+#include <team4_ros/binIsFull.h> 
 
 int x;
 float z;
@@ -23,23 +24,25 @@ void groundTruthCallback(const nav_msgs::Odometry msg)
 	
 	geometry_msgs::Point directionVector; // Vector from currentLocation to desiredLocation
     directionVector.x = (-1.75) - currentLocation.position.x;
-    directionVector.y = 15 - currentLocation.position.y;
+    directionVector.y = 31 - currentLocation.position.y;
     directionVector.z = 0;
 
-	ROS_INFO("Bin x distance: [%f]", directionVector.x);
-    ROS_INFO("Bin Y distance: [%f]", directionVector.y);
+	//ROS_INFO("Bin x distance: [%f]", directionVector.x);
+   // ROS_INFO("Bin Y distance: [%f]", directionVector.y);
 
-	if((directionVector.x<0.2&&directionVector.x>-0.2)&&(directionVector.y<0.2&&directionVector.y>-0.2)){
-	std_msgs::String mypub_msg;
-		mypub_msg.data = "I AM Full"; 
-	  bin_pub.publish(mypub_msg);
+	if(directionVector.y<0.3 && directionVector.y>-0.3){
+	        //std_msgs::String mypub_msg;
+		//mypub_msg.data = "I AM Full"; 
+	        //bin_pub.publish(mypub_msg);
+                team4_ros::binIsFull mypub_msg; 
+                mypub_msg.my_counter=0;
+		mypub_msg.isFull = true; 
+                mypub_msg.x= currentLocation.position.x;
+                mypub_msg.y= currentLocation.position.y;
+		bin_pub.publish(mypub_msg); 
 	}
 	
 }
-
-
-
-
 
 int main (int argc, char **argv) 
 { 
@@ -49,11 +52,11 @@ int main (int argc, char **argv)
 	// ROS comms access point 
 	ros::NodeHandle n;
 	// master registry pub/sub 
-	bin_pub = n.advertise<std_msgs::String>("bin_topic",100);
-
+	bin_pub = n.advertise<team4_ros::binIsFull>("bin_topic",10);
+  
 
     // master registry pub/sub 
-	ros::Publisher bin_pub = n.advertise<std_msgs::String>("bin_topic",100);
+	//bin_pub = n.advertise<std_msgs::String>("bin_topic",100);
         
 	ros::NodeHandle sub_handle; 
 	ros::Subscriber mysub_object;
@@ -66,8 +69,6 @@ int main (int argc, char **argv)
     int counter=0;
 	while (ros::ok()) 
 	{
-	 
-
 		ros::spinOnce();
 		loop_rate.sleep();
 

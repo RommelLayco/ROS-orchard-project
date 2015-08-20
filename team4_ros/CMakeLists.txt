@@ -45,7 +45,7 @@ find_package(catkin REQUIRED COMPONENTS
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
 ## Generate messages in the 'msg' folder
- add_message_files(
+add_message_files(
  FILES 
  binIsFull.msg
 )
@@ -136,6 +136,14 @@ add_dependencies(PersonNode ${catkin_EXPORTED_TARGETS})
 add_executable(bin_node src/Bin.cpp)
 target_link_libraries(bin_node ${catkin_LIBRARIES})
 add_dependencies(bin_node ${catkin_EXPORTED_TARGETS})
+
+add_executable(a src/mypub2.cpp)
+target_link_libraries(a ${catkin_LIBRARIES})
+add_dependencies(a ${catkin_EXPORTED_TARGETS})
+
+add_executable(b src/mysub.cpp)
+target_link_libraries(b ${catkin_LIBRARIES})
+add_dependencies(b ${catkin_EXPORTED_TARGETS})
 
 ## Declare a cpp executable
 # add_executable(team4_ros_node src/team4_ros_node.cpp)

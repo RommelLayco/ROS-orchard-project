@@ -10,6 +10,7 @@
 #include "math.h"
 #include <unistd.h>
 #include "std_msgs/String.h"
+#include <team4_ros/binIsFull.h> 
 
 
 
@@ -87,6 +88,14 @@ void Vibrate()
 	}
 }
 
+void binCallback(const team4_ros::binIsFull::ConstPtr& msg) 
+{ 
+	//ROS_INFO("sub echoing pub: %s", msg->data.c_str());
+        ROS_INFO("sub echoing pub: %f",msg->x);
+        //ROS_INFO("sub echoing pub: %s",msg->isFull);
+        Vibrate();
+}
+
 
 void updateCurrentVelocity() {
 
@@ -108,8 +117,8 @@ void updateCurrentVelocity() {
     directionVector.y = desiredLocation.y - currentLocation.position.y;
     directionVector.z = desiredLocation.z - currentLocation.position.z;
 
-    ROS_INFO("X distance: [%f]", currentLocation.position.x);
-    ROS_INFO("Y distance: [%f]", currentLocation.position.y);
+    //ROS_INFO("X distance: [%f]", currentLocation.position.x);
+    //ROS_INFO("Y distance: [%f]", currentLocation.position.y);
 
     // Check if we are at the desired location
     if (abs(directionVector.x) <= distanceThreshold && abs(directionVector.y) <= distanceThreshold)
@@ -129,7 +138,7 @@ void updateCurrentVelocity() {
         {
             // Reset index
             ROS_INFO("Reached final destination");
-			Vibrate();
+			//Vibrate();
             
         }
         
@@ -155,7 +164,7 @@ void updateCurrentVelocity() {
         // If the deifference between current angle and desired angle is less than 0.1 stop spining
 
             // Go forward
-            currentVelocity.linear.x = 0.1;
+            currentVelocity.linear.x = 1.5;
             currentVelocity.angular.z = 0;
         
     }
@@ -225,9 +234,10 @@ int main (int argc, char **argv)
 	mysub_object = sub_handle.subscribe<nav_msgs::Odometry>("robot_0/base_pose_ground_truth",1000, groundTruthCallback); 
 	
 	// ROS comms access point 
-	ros::NodeHandle n;
+	//ros::NodeHandle n;
 
-    ros::Subscriber sub = n.subscribe("robot_0/base_scan", 1000, sensorCallback);
+    //ros::Subscriber sub = n.subscribe("robot_0/base_scan", 1000, sensorCallback);
+    ros::Subscriber sub_bin = sub_handle.subscribe("bin_topic",10,binCallback); 
 
 
 	while (ros::ok()) 
