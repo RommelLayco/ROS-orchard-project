@@ -112,7 +112,7 @@ void updateCurrentVelocity() {
     ROS_INFO("Y distance: [%f]", currentLocation.position.y);
 
     // Check if we are at the desired location
-    if (abs(directionVector.x) <= distanceThreshold && abs(directionVector.y) <= distanceThreshold)
+    if (fabs(directionVector.x) <= distanceThreshold && fabs(directionVector.y) <= distanceThreshold)
     {
         // Robot has reached it's desired location
         // For now, make robot stop. In future, robot should now try to move
@@ -122,7 +122,8 @@ void updateCurrentVelocity() {
         currentVelocity.angular.z = 0.0;
         if (pathIndex < sizeof(desiredLocations) / sizeof(*desiredLocations) - 1)
         {
-            pathIndex++;
+            //pathIndex++;
+			sleep(2);
 			ROS_INFO("Reached destination");
         }
         else
@@ -189,7 +190,7 @@ int main (int argc, char **argv)
     //desiredLocation1.x = -10;
     desiredLocation1.x = -1.75;
     //desiredLocation1.y = -21;
-    desiredLocation1.y = 30;
+    desiredLocation1.y = 25;
     desiredLocation1.z = 0;
 
     geometry_msgs::Point desiredLocation2;

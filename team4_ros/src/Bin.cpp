@@ -23,13 +23,13 @@ void groundTruthCallback(const nav_msgs::Odometry msg)
 	
 	geometry_msgs::Point directionVector; // Vector from currentLocation to desiredLocation
     directionVector.x = (-1.75) - currentLocation.position.x;
-    directionVector.y = 15 - currentLocation.position.y;
+    directionVector.y = 32 - currentLocation.position.y;
     directionVector.z = 0;
 
 	ROS_INFO("Bin x distance: [%f]", directionVector.x);
     ROS_INFO("Bin Y distance: [%f]", directionVector.y);
 
-	if((directionVector.x<0.2&&directionVector.x>-0.2)&&(directionVector.y<0.2&&directionVector.y>-0.2)){
+	if((directionVector.x<0.2&&directionVector.x>-0.2)&&(directionVector.y<1&&directionVector.y>-1)){
 	std_msgs::String mypub_msg;
 		mypub_msg.data = "I AM Full"; 
 	  bin_pub.publish(mypub_msg);
