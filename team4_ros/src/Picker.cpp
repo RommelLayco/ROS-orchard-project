@@ -40,6 +40,11 @@ bool VibrateX=false;
 
 geometry_msgs::Point desiredLocations[2];
 
+void myBinCallback(const std_msgs::String::ConstPtr& msg) 
+{ 
+	ROS_INFO("sub echoing pub: %s",msg->data.c_str()); 
+}
+
 void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
 {
 int i = 0;
@@ -235,24 +240,29 @@ int main (int argc, char **argv)
 	// command line ROS arguments/ name remapping 
 	ros::init(argc, argv, "PickerNode"); 
 
-	// ROS node hander
+	// Control robot 0
 	ros::NodeHandle velPub_handle;
 	mypub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_0/cmd_vel",1000);
 
+	// control robot 1
 	ros::Publisher binVelPub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_3/cmd_vel",1000);
-
+	
+	// Subscribe the ground truth of robot 1
 	ros::NodeHandle sub_handle; 
 	ros::Subscriber mysub_object;
+	mysub_object = sub_handle.subscribe<nav_msgs::Odometry>("robot_0/base_pose_ground_truth",1000, groundTruthCallback);
+	
+	// Sensor 
+	ros::NodeHandle n;
+	ros::Subscriber sensorSub = n.subscribe("robot_0/base_scan", 1000, sensorCallback);
+
+	// Message from bin
+	ros::Subscriber binSub = n.subscribe("bin_topic", 1000, myBinCallback);
+
 	
 	// loop 25 
 	ros::Rate loop_rate(10);
 
-	mysub_object = sub_handle.subscribe<nav_msgs::Odometry>("robot_0/base_pose_ground_truth",1000, groundTruthCallback); 
-	
-	// ROS comms access point 
-	ros::NodeHandle n;
-
-    ros::Subscriber sub = n.subscribe("robot_0/base_scan", 1000, sensorCallback);
 
 
 	while (ros::ok()) 
@@ -261,13 +271,13 @@ int main (int argc, char **argv)
 
 		updateCurrentVelocity(); 
 		// refer to advertise msg type 
-
+	
 		mypub_object.publish(currentVelocity); 
 		binVelPub_object.publish(currentVelocity);
+
 		z=0;
 
 		ros::spinOnce();
-		loop_rate.sleep();
 	} 
 
 	return 0; 

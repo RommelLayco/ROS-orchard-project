@@ -14,6 +14,7 @@
 int x;
 float z;
 ros::Publisher bin_pub;
+bool isSent=false;
 
 void groundTruthCallback(const nav_msgs::Odometry msg) 
 {     
@@ -29,10 +30,16 @@ void groundTruthCallback(const nav_msgs::Odometry msg)
 	ROS_INFO("Bin x distance: [%f]", directionVector.x);
     ROS_INFO("Bin Y distance: [%f]", directionVector.y);
 
-	if((directionVector.x<0.2&&directionVector.x>-0.2)&&(directionVector.y<1&&directionVector.y>-1)){
+
+	
+	//if((directionVector.x<0.2&&directionVector.x>-0.2)&&(directionVector.y<1&&directionVector.y>-1)){}
+	if(!isSent){
+	sleep(30);
+	ROS_INFO("I have reached my destination!");
 	std_msgs::String mypub_msg;
 		mypub_msg.data = "I AM Full"; 
 	  bin_pub.publish(mypub_msg);
+	isSent=true;
 	}
 	
 }
@@ -46,24 +53,19 @@ int main (int argc, char **argv)
 	// command line ROS arguments/ name remapping 
 	ros::init(argc, argv, "bin_node");
 	
-	// ROS comms access point 
+	// Publisher
 	ros::NodeHandle n;
-	// master registry pub/sub 
 	bin_pub = n.advertise<std_msgs::String>("bin_topic",100);
-
-
-    // master registry pub/sub 
 	ros::Publisher bin_pub = n.advertise<std_msgs::String>("bin_topic",100);
-        
+    
+	// Subscriber    
 	ros::NodeHandle sub_handle; 
 	ros::Subscriber mysub_object;
 	mysub_object = sub_handle.subscribe<nav_msgs::Odometry>("robot_3/base_pose_ground_truth",1000, groundTruthCallback); 
 
 	// loop 10 Hz 
 	ros::Rate loop_rate(10);
-	
-	
-    int counter=0;
+
 	while (ros::ok()) 
 	{
 	 
