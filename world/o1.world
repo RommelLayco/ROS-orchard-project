@@ -4,6 +4,7 @@ include "person1.inc"
 include "dog.inc"
 include "bin.inc"
 include "carrier.inc"
+include "weedLocation.inc"
 
 interval_sim 100
 
@@ -25,10 +26,10 @@ pose [ -16.000 59.0 0.000 0.000]
 bitmap "driveway.png"
 )
 
-picker( pose [ 2.0 0 0 0 ] name "picker1" )
-picker( pose [ 7.0 0 0 0 ] name "picker2" )
-picker( pose [ 12.0 0 0 0 ] name "picker3" )
-picker( pose [ 17.0 0 0 0 ] name "picker4" )
-picker( pose [ 22.0 0 0 0 ] name "picker5" )
-picker( pose [ 27.0 0 0 0 ] name "picker6" )
-picker( pose [ 32.0 0 0 0 ] name "picker7" )
+picker( pose [ 2.0 -2 0 0 ] name "picker1" )
+picker( pose [ 7.0 -2 0 0 ] name "picker2" )
+picker( pose [ 12.0 -2 0 0 ] name "picker3" )
+picker( pose [ 17.0 -2 0 0 ] name "picker4" )
+picker( pose [ 22.0 -2 0 0 ] name "picker5" )
+picker( pose [ 27.0 -2 0 0 ] name "picker6" )
+picker( pose [ 32.0 -2 0 0 ] name "picker7" )

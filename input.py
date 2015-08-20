@@ -1,6 +1,7 @@
 #author: Rommel
 #subauthored : Anmol
 import sys
+from random import randint
 
 #get row spacing from user
 def getRowSpacing():
@@ -174,7 +175,7 @@ def addPicker(r_spacing):
 	
 
 	# set the current x and y back to 0 to ensure the canopies are created on top of the trees made above
-	current_y = 0 
+	current_y = -2 
 	current_x = 0 + r_spacing/2  - 0.5
 
 	# for i from 0 to 6 included (7 elements)
@@ -208,7 +209,8 @@ def add_Instances_to_world():
 	f.write('include "person1.inc"\n') #tree model
 	f.write('include "dog.inc"\n') #canopy model
 	f.write('include "bin.inc"\n') #tree model
-	f.write('include "carrier.inc"\n\n') #canopy model
+	f.write('include "carrier.inc"\n') #canopy model
+	f.write('include "weedLocation.inc"\n\n')#weed model
 
 	f.write('interval_sim 100\n\n')
 
@@ -299,6 +301,88 @@ def addDriveway(t_spacing):
 
 	return line
 
+def addWeeds(r_spacing, t_spacing):
+	f = open('weedLocation.inc', 'w')
+	f.write('include "weed.inc"\n\n')
+
+	#need 1 weed per row
+	for i in range(0,7):
+		pre_x = int(r_spacing)
+		pre_y = int(t_spacing)
+
+		#pick a tree to put a weed next to
+		tree = randint(0, 12)
+
+		#choose how far x the weed should be placed from the tree
+		#i is the row
+		x = randint(0, pre_x)
+		x = (i * r_spacing) + x + 0.1
+
+		#choose how far y the weed should be placed from the tree
+		y = randint(0, pre_y)
+		y = (tree * t_spacing) + y + 0.1
+
+		
+		#add weeds in a bunch of 4 to file (2 x 2)
+		for h in range(0,2):
+			for v in range(0,2):
+				line = "weed( pose [" + str(x) + " "
+				line = line + str(y) + " "
+				line = line + "0 0])\n"
+				f.write(line)
+
+				#change vertical position
+				y = y + 0.1
+
+			#change horizontal position
+			x = x + 0.1
+
+		#leave a line to sepertate bunch			
+		f.write('\n')
+
+	#close file after writing
+	f.close()
+
+def dogLocation(r_spacing, t_spacing):
+
+	#pick a row
+	row = randint(0,6)
+	x = row * r_spacing
+
+	#pick a tree in the row
+	tree = randint(0,13)
+	y = tree * t_spacing
+
+	#save location into a file
+	f = open('dogLocation', 'w') 
+	f.write(str(x) + " " + str(y) + "\n")
+	f.close()
+
+
+def tractorLocations(r_spacing, t_spacing):
+	f = open('tractorLocations', 'w')
+
+	#coordinates for top left
+	x = -3
+	y = (13 * t_spacing) + 3
+	f.write(str(x) + " " + str(y) + "\n")
+
+	#coordinates for top right
+	x = (7 * r_spacing) + 3
+	y = (13 * t_spacing) + 3
+	f.write(str(x) + " " + str(y) + "\n")
+
+	#coordinates for bottom right
+	x = (7 * r_spacing) + 3
+	y = -3
+	f.write(str(x) + " " + str(y) + "\n")
+
+	#coordinates for bottom left
+	x = -3
+	y = -3
+	f.write(str(x) + " " + str(y) + "\n")
+
+
 
 
 
@@ -320,6 +404,7 @@ if(needToAppend()):
 	
 
 createTrees(r_spacing, t_spacing)
+addWeeds(r_spacing, t_spacing)
 
 
 ''' --------------------------------------- create world file put methods here --------------------------------'''
@@ -336,6 +421,11 @@ add_model(r_spacing, t_spacing)
 #add robots here
 #picker first
 addPicker(r_spacing)
+
+'''------------------------------------ Destination locations for actors to read -----------------------------------'''
+dogLocation(r_spacing,t_spacing)
+tractorLocations(r_spacing,t_spacing)
+
 
 
 
