@@ -1,0 +1,23 @@
+include "orchard.inc"
+include "picker.inc"
+include "person1.inc"
+include "dog.inc"
+include "bin.inc"
+include "carrier.inc"
+interval_sim 100
+define actor position
+(
+name "actor"
+size [0.000 0.000 0.000]
+drive "diff"
+stack_children 0
+gui_nose 0
+obstacle_return 0
+)
+picker( pose [ 2.0 0 0 0 ] name "picker1" )
+picker( pose [ 7.0 0 0 0 ] name "picker2" )
+picker( pose [ 12.0 0 0 0 ] name "picker3" )
+picker( pose [ 17.0 0 0 0 ] name "picker4" )
+picker( pose [ 22.0 0 0 0 ] name "picker5" )
+picker( pose [ 27.0 0 0 0 ] name "picker6" )
+picker( pose [ 32.0 0 0 0 ] name "picker7" )
