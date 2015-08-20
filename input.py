@@ -53,7 +53,8 @@ def getTreeSpacing():
 
 	return tree_spacing
 
-#import graphic models and create instance file
+#import graphic models and create instance file. This method just adds the headers into the orchard.inc
+# and sets it up for creating the environment
 def writeModels():
 	f = open('orchard.inc','w')
 	f.write('include "tree.inc"\n') #tree model
@@ -61,6 +62,8 @@ def writeModels():
 	f.write('\n')#leave a line space
 	f.close()
 
+# this method creates trees and adds them to the orchard.inc file. It also makes
+# canopies and adds them to the orchard.inc file 
 def createTrees(r_spacing, t_spacing):
 	f = open('orchard.inc', 'a')
 
@@ -120,6 +123,8 @@ def createTrees(r_spacing, t_spacing):
 
 	f.close()
 
+# this method appends the model of the canopy based on the dimensions mentioned by the user.
+# this is done before the orchard.inc is made so that the new model of canopy is used for the environment
 def changeCanopyModel(t_spacing):
 	f = open('wood.inc', 'a')
 
@@ -154,6 +159,10 @@ def needToAppend():
 	else:
 		#append
 		return True
+
+
+
+def addPicker():
 
 
 
