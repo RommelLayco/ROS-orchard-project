@@ -219,6 +219,8 @@ def add_actor_pos():
 	f = open('o1.world', 'a')
 
 	#add actor postions to world file
+
+	#actor position for picker? maybe
 	f.write('define actor position\n')
 	f.write('(\n')
 	f.write('name "actor"\n')
@@ -231,6 +233,15 @@ def add_actor_pos():
 
 	#add more actors here
 
+def add_model(r_spacing, t_spacing):
+	f = open('o1.world', 'a')
+
+	r = r_spacing
+
+	#add drive way
+	line = addDriveway(t_spacing)
+	f.write(line)
+	f.write('\n')
 
 def configwall(r_spacing, t_spacing):
 	f = open('wall.inc', 'w')
@@ -272,15 +283,33 @@ def createWalls(r_spacing, t_spacing):
 
 	f.close()
 
+def addDriveway(t_spacing):
+
+	#furtherest tree y co-ordinate
+	#13 trees 
+	#subtracting 6 leaves the bottom of the bend 1 away from the last tree
+	# 13 x position leaves the end of the drivway 6 away from the last tree
+	y = (t_spacing * 13) - 6
+
+	line = "#driveway\n"
+	line = line + "model\n(\n"
+	line = line + "size [20.000 20.000 0.100 0]\n"
+	line = line + "pose [ -16.000 " + str(y) + " 0.000 0.000]\n"
+	line = line + "bitmap \"driveway.png\"\n)\n"
+
+	return line
 
 
 
+
+'''----------------------------- Essentially the  main of the class below here ------------------------------'''
 
 
 #main function
 r_spacing = getRowSpacing()
 t_spacing = getTreeSpacing()
 
+'''--------------------------------------- cretae instance files here ---------------------------------------------'''
 
 #need before create trees as create tree depends on the file created by changeCanopy
 writeModels()
@@ -290,17 +319,19 @@ if(needToAppend()):
 	changeCanopyModel(t_spacing)
 	
 
-#addPicker(r_spacing)
-
 createTrees(r_spacing, t_spacing)
 
-#create world file put methods here
+
+''' --------------------------------------- create world file put methods here --------------------------------'''
 
 #add instances first
 add_Instances_to_world()
 
 #add actor positions
 add_actor_pos()
+
+#add models
+add_model(r_spacing, t_spacing)
 
 #add robots here
 #picker first
