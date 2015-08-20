@@ -137,6 +137,11 @@ add_executable(bin_node src/Bin.cpp)
 target_link_libraries(bin_node ${catkin_LIBRARIES})
 add_dependencies(bin_node ${catkin_EXPORTED_TARGETS})
 
+add_executable(TractorWithWorkerNode src/TractorWithWorker.cpp)
+target_link_libraries(TractorWithWorkerNode ${catkin_LIBRARIES})
+add_dependencies(TractorWithWorkerNode ${catkin_EXPORTED_TARGETS})
+
+
 ## Declare a cpp executable
 # add_executable(team4_ros_node src/team4_ros_node.cpp)
 add_executable(sensor_node src/mypub.cpp)

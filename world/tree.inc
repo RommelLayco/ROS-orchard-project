@@ -1,6 +1,6 @@
 define tree model 
 (  
-        # trank
+    # trank
 	model
 	(
 		size [0.16 0.16 1.04]  

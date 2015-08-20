@@ -11,6 +11,7 @@
 #include "math.h"
 #include <unistd.h>
 #include <time.h> 
+#include "stage.hh"
 
 // Current velocity of the Robot
 geometry_msgs::Twist currentVelocity;
@@ -170,14 +171,18 @@ void updateCurrentVelocity() {
         if (currentAngle - desiredAngle > 0.1 || desiredAngle - currentAngle > 0.1)
         {
             // Spin
-            currentVelocity.linear.x = 0;
-            currentVelocity.angular.z = 0.5;
+            //currentVelocity.linear.x = 0;
+            //currentVelocity.angular.z = 0.5;
+            currentVelocity.linear.x = 1;
+            currentVelocity.linear.z = 1.5;
+            currentVelocity.angular.x = 1;
+
             
         } else
         {
             // Go forward
-            currentVelocity.linear.x = 2;
-            currentVelocity.angular.z = 0;
+            //currentVelocity.linear.x = 2;
+            //currentVelocity.angular.z = 0;
         }
     }
 }
@@ -203,14 +208,13 @@ void groundTruthCallback(const nav_msgs::Odometry msg)
 void navigation(){
         ROS_INFO("I'm trying to run around the tree.");
         
-        currentVelocity.angular.z =2; 
-        currentVelocity.linear.x = 1;   
+        //currentVelocity.angular.z =2; 
+        //currentVelocity.linear.x = 1;   
 
 }
 
 int main (int argc, char **argv) 
 {
-
     // Setup points on robot's path
     geometry_msgs::Point desiredLocation1;
     //desiredLocation1.x = -10;
@@ -240,7 +244,7 @@ int main (int argc, char **argv)
     // ROS node hander
     ros::NodeHandle velPub_handle;
     ros::NodeHandle sub_handle; 
-        ros::NodeHandle bark_handle;
+    ros::NodeHandle bark_handle;
 
     // master registry pub and sub
     //ros::Publisher mypub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_0/cmd_vel",1000);

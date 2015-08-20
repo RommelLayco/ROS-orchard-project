@@ -21,18 +21,25 @@ define masterNode actor
 	model
 	(
 		size [0.3 0.3 0.3]
-		pose [0 0 -0.7 0.0]
+		pose [0 0 0.7 0.0]
 		color "red"
 	)
-	bitmap "Circle.png"
-	size [1 1 0.1]
-	color "grey"
+
+	#wings
+	model
+	(
+		bitmap "Circle.png"
+		size [1 1 0.1]
+		pose [0 0 1.5 0]
+		color "grey"
+	)
+	
 
 	#propeller
 	model
 	(
 		size [0.1 0.1 0.8]
-		pose [0 0 -0.7 0.0]
+		pose [0 0 0.7 0.0]
 		color "grey"
 	)
 
@@ -41,14 +48,14 @@ define masterNode actor
 	model
 	(
 		size [0.15 0.15 0.15]
-		pose [0 0.15 -0.6 0.0]
+		pose [0 0.15 0.8 0.0]
 		color "black"
 	)
 
 	model
 	(
 		size [0.08 0.08 0.08]
-		pose [0 0.2 -0.55 0.0]
+		pose [0 0.2 0.85 0.0]
 		color "white"
 	)
 
