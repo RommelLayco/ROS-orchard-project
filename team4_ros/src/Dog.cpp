@@ -1,19 +1,33 @@
 #include "Robot.h"
 #include <time.h>
+#include "std_msgs/String.h"
 
 
 class Dog: public Robot
 {
     public:
-        Dog(double x, double y, double z, int sensor_range, int sensor_angle) : Robot(x, y, z, sensor_range, sensor_angle) {}
+        Dog(double x, double y, double z, int sensor_range, int sensor_angle) : Robot(x, y, z, sensor_range, sensor_angle)
+        {
+            // Setup bark publisher
+            barkPub = publisherHandle.advertise<std_msgs::String>("dog_topic", 1000);
+        }
     protected:
+        ros::Publisher barkPub;
         virtual void leftCollisionDetected();
         virtual void rightCollisionDetected();
         virtual void centerCollisionDetected();
         void generateRandomDesiredLocations();
         virtual void reachedLastGoal();
+        void bark();
 };
 
+/* Publish dog's bark message */
+void Dog::bark()
+{
+    std_msgs::String barkMsg;
+    barkMsg.data = "I AM BARKING!! Woof Woof!!";
+    barkPub.publish(barkMsg);
+}
 
 void Dog::leftCollisionDetected()
 {
@@ -33,6 +47,7 @@ void Dog::rightCollisionDetected()
 
 void Dog::centerCollisionDetected()
 {
+    bark();
     // Move back faster, obstacle at middle.
     ROS_INFO("CENTER COLLISION");
     linear_velocity_x = 0.0;
