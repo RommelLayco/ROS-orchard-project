@@ -108,36 +108,11 @@ add_executable(MainNode src/MainNode.cpp)
 target_link_libraries(MainNode ${catkin_LIBRARIES})
 add_dependencies(MainNode ${catkin_EXPORTED_TARGETS})
 
-add_executable(AlphaRobotNode src/AlphaRobot.cpp)
-target_link_libraries(AlphaRobotNode ${catkin_LIBRARIES})
-add_dependencies(AlphaRobotNode ${catkin_EXPORTED_TARGETS})
-
-add_executable(AlphaWithSensorRobotNode src/AlphaWithSensor.cpp)
-target_link_libraries(AlphaWithSensorRobotNode ${catkin_LIBRARIES})
-add_dependencies(AlphaWithSensorRobotNode ${catkin_EXPORTED_TARGETS})
-
-add_executable(SwingRobotNode src/SwingRobot.cpp)
-target_link_libraries(SwingRobotNode ${catkin_LIBRARIES})
-add_dependencies(SwingRobotNode ${catkin_EXPORTED_TARGETS})
-
-
-add_executable(DogNode src/Dog.cpp)
-target_link_libraries(DogNode ${catkin_LIBRARIES})
-add_dependencies(DogNode ${catkin_EXPORTED_TARGETS})
-
-## Declare a cpp executable
-# add_executable(team4_ros_node src/team4_ros_node.cpp)
-add_executable(sensor_node src/mypub.cpp)
-
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
 # add_dependencies(team4_ros_node team4_ros_generate_messages_cpp)
 
 ## Specify libraries to link a library or executable target against
- target_link_libraries(sensor_node
-   ${catkin_LIBRARIES}
- )
-
 
 #############
 ## Install ##
