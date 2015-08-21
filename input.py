@@ -199,6 +199,25 @@ def addPicker(r_spacing):
 
 	f.close()
 
+def add_dog():
+
+	f = open('o1.world','a')
+
+	current_x = 0 - 4
+	current_y = 0 - 8
+
+	name = "\"dog\""
+		
+	dog = "dog( pose [ " 
+	dog = dog + str(current_x) + " "
+	dog = dog + str(current_y) + " "
+	dog = dog + "0 90 ] name " + name + " )\n"
+
+	f.write(dog)
+
+	f.close()
+	
+
 def add_Instances_to_world():
 	f = open('o1.world', 'w')
 
@@ -237,6 +256,15 @@ def add_actor_pos():
 	f.write(')\n\n')
 
 	#add more actors here
+
+	f.write('define actor2 position\n')
+	f.write('(\n')
+	f.write('name "testfly"\n')
+	f.write('size [0 0 0 0]\n')
+	f.write('drive "omni"\n')
+	f.write('localization "gps"\n')
+	f.write('velocity_enable 1\n')
+	f.write(')\n\n')
 
 def add_model(r_spacing, t_spacing):
 	f = open('o1.world', 'a')
@@ -496,6 +524,9 @@ add_model(r_spacing, t_spacing)
 #add robots here
 #picker first
 addPicker(r_spacing)
+
+#add the dog
+add_dog()
 
 '''------------------------------------ Destination locations for actors to read -----------------------------------'''
 dogLocation(r_spacing,t_spacing)
