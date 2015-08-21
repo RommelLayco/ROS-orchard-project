@@ -479,6 +479,16 @@ def pickerLocations(r_spacing, t_spacing):
 
 	f.close()
 
+def binArea(r_spacing, t_spacing):
+	f = open('binArea', 'w')
+
+	x = 4 * r_spacing
+	y = 13 * t_spacing + 8
+
+	line = str(x) + " " + str(y) +"\n"
+	f.write(line)
+	f.close()
+
 
 
 
@@ -523,6 +533,7 @@ addPicker(r_spacing)
 dogLocation(r_spacing,t_spacing)
 tractorLocations(r_spacing,t_spacing)
 pickerLocations(r_spacing, t_spacing)
+binArea(r_spacing, t_spacing)
 
 
 
