@@ -5,6 +5,7 @@ include "dog.inc"
 include "bin.inc"
 include "wood.inc"
 include "carrier.inc"
+include "walls.inc"
 include "weedLocation.inc"
 
 interval_sim 100
@@ -23,7 +24,7 @@ obstacle_return 0
 model
 (
 size [20.000 20.000 0.100 0]
-pose [ -16.000 59.0 0.000 0.000]
+pose [ -20.000 59.0 0.000 0.000]
 bitmap "driveway.png"
 )
 
