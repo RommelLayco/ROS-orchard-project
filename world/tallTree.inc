@@ -7,7 +7,7 @@ define tallTree model
         model
         (
             size [1.28 1.28 0.04 ]
-            pose [0.0 0.0 12.04 0.0]
+            pose [0.0 0.0 2.04 0.0]
             color "green"
         )
         model
