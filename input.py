@@ -484,6 +484,28 @@ def tractorLocations(r_spacing, t_spacing):
 	y = -3
 	f.write(str(x) + " " + str(y) + "\n")
 
+def pickerLocations(r_spacing, t_spacing):
+	f = open('pickerLocations', 'w')
+
+	#start point
+	current_x = 0 + r_spacing/2  - 0.5
+	current_y = -2
+
+	#destnation point
+	#note that the picker moves in a straight line up hence the x co ordinate stays the same
+	final_y = 13 * t_spacing + 2
+
+
+	for i in range(0,7):
+		line = str(current_x) + " " + str(current_y) + " "
+		line = line + str(current_x) + " " + str(final_y) + "\n"
+		f.write(line)
+
+		#change x positions
+		current_x = current_x + r_spacing
+
+
+	f.close()
 
 
 
@@ -531,6 +553,7 @@ add_dog()
 '''------------------------------------ Destination locations for actors to read -----------------------------------'''
 dogLocation(r_spacing,t_spacing)
 tractorLocations(r_spacing,t_spacing)
+pickerLocations(r_spacing, t_spacing)
 
 
 
