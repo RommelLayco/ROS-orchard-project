@@ -209,6 +209,7 @@ def add_Instances_to_world():
 	f.write('include "person1.inc"\n') #tree model
 	f.write('include "dog.inc"\n') #canopy model
 	f.write('include "bin.inc"\n') #tree model
+	f.write('include "wood.inc"\n') # change canopy base on size
 	f.write('include "carrier.inc"\n') #canopy model
 	f.write('include "weedLocation.inc"\n\n')#weed model
 
@@ -245,15 +246,6 @@ def add_model(r_spacing, t_spacing):
 	f.write(line)
 	f.write('\n')
 
-def configwall(r_spacing, t_spacing):
-	f = open('wall.inc', 'w')
-
-
-
-	#include model to tree
-	f.write('include "talltree.inc\n"')
-
-		#do nothing for now 
 
 
 
@@ -405,6 +397,7 @@ if(needToAppend()):
 
 createTrees(r_spacing, t_spacing)
 addWeeds(r_spacing, t_spacing)
+createWalls(r)
 
 
 ''' --------------------------------------- create world file put methods here --------------------------------'''
