@@ -20,6 +20,15 @@ gui_nose 0
 obstacle_return 0
 )
 
+define actor2 position
+(
+name "testfly"
+size [0 0 0 0]
+drive "omni"
+localization "gps"
+velocity_enable 1
+)
+
 #driveway
 model
 (
@@ -35,3 +44,4 @@ picker( pose [ 17.0 -2 0 90 ] name "picker4" )
 picker( pose [ 22.0 -2 0 90 ] name "picker5" )
 picker( pose [ 27.0 -2 0 90 ] name "picker6" )
 picker( pose [ 32.0 -2 0 90 ] name "picker7" )
+dog( pose [ -4 -8 0 90 ] name "dog" )
