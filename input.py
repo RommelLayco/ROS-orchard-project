@@ -186,7 +186,7 @@ def addPicker(r_spacing):
 		picker = "picker( pose [ " 
 		picker = picker + str(current_x) + " "
 		picker = picker + str(current_y) + " "
-		picker = picker + "0 0 ] name " + name + " )\n"
+		picker = picker + "0 90 ] name " + name + " )\n"
 	
 
 		#append tree to file
@@ -397,7 +397,7 @@ if(needToAppend()):
 
 createTrees(r_spacing, t_spacing)
 addWeeds(r_spacing, t_spacing)
-createWalls(r)
+createWalls(r_spacing, t_spacing);
 
 
 ''' --------------------------------------- create world file put methods here --------------------------------'''
