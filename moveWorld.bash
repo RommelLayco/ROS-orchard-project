@@ -8,8 +8,7 @@ mv orchard.inc world
 mv weedLocation.inc world
 
 #move wall instance to world file
-#uncomment when i get more info Rommel
-#mv walls.inc world
+mv walls.inc world
 
 #move orchard world to world file
 mv o1.world world
