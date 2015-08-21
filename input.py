@@ -211,7 +211,9 @@ def add_Instances_to_world():
 	f.write('include "bin.inc"\n') #tree model
 	f.write('include "wood.inc"\n') # change canopy base on size
 	f.write('include "carrier.inc"\n') #canopy model
+	f.write('include "walls.inc"\n') # add walls
 	f.write('include "weedLocation.inc"\n\n')#weed model
+
 
 	f.write('interval_sim 100\n\n')
 
@@ -265,15 +267,95 @@ def createWalls(r_spacing, t_spacing):
 		
 	f.write('include "tallTree.inc"\n\n')
 
-	line = "tallTree( pose [ " 
-	line = line + str(-5) + " "
-	line = line + str(-5) + " "
-	line = line + "0 0 ] )\n"
+
+	#add left wall
+	current_x = -10
+	current_y = -10
+
+	#work out length
+	f.write("#left wall")
+	l = int(13 * t_spacing + 10)
+	for i in range(0, l):
+		line = "tallTree( pose [ " 
+		line = line + str(current_x) + " "
+		line = line + str(current_y) + " "
+		line = line + "0 0 ] )\n"
+
+		current_y = current_y + 1
+	
+		#add left wall
+		f.write(line)
+
+	#continue left wall after driveway
+	current_y = 13 * t_spacing + 5
+	for i in range(0, 6):
+		line = "tallTree( pose [ " 
+		line = line + str(current_x) + " "
+		line = line + str(current_y) + " "
+		line = line + "0 0 ] )\n"
+		
+		current_y = current_y + 1
+
+		f.write(line)
+
+	#leave a line to seprerate
+	f.write('\n')
+	
+	f.write("#top wall")
+	#create top wall
+	current_y = 13 * t_spacing + 10	
+	current_x = -10
+	l = int(7 * r_spacing + 21)
+	for i in range(0, l):
+		line = "tallTree( pose [ " 
+		line = line + str(current_x) + " "
+		line = line + str(current_y) + " "
+		line = line + "0 0 ] )\n"
+		
+		current_x = current_x + 1
+
+		f.write(line)
+
+	#leave a line to seprerate
+	f.write('\n')
+	
+	f.write("#right wall")
+	#create right wall
+	current_y = -10
+	current_x = 7 * r_spacing + 11
+	l = int(13 * t_spacing + 21)
+	for i in range(0, l):
+		line = "tallTree( pose [ " 
+		line = line + str(current_x) + " "
+		line = line + str(current_y) + " "
+		line = line + "0 0 ] )\n"
+		
+		current_y = current_y + 1
+
+		f.write(line)
 
 	
+	#leave a line to seprerate
+	f.write('\n')
 	
-	#add left wall
-	f.write(line)
+	f.write("#bottom wall")
+	#create bottom wall
+	current_y = -10
+	current_x = -10
+	l = int(7 * r_spacing + 21)
+	for i in range(0, l):
+		line = "tallTree( pose [ " 
+		line = line + str(current_x) + " "
+		line = line + str(current_y) + " "
+		line = line + "0 0 ] )\n"
+		
+		current_x = current_x + 1
+
+		f.write(line)
+
+
+
+	
 
 	f.close()
 
@@ -288,7 +370,7 @@ def addDriveway(t_spacing):
 	line = "#driveway\n"
 	line = line + "model\n(\n"
 	line = line + "size [20.000 20.000 0.100 0]\n"
-	line = line + "pose [ -16.000 " + str(y) + " 0.000 0.000]\n"
+	line = line + "pose [ -20.000 " + str(y) + " 0.000 0.000]\n"
 	line = line + "bitmap \"driveway.png\"\n)\n"
 
 	return line
