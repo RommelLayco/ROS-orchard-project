@@ -1,5 +1,6 @@
 #include "Robot.cpp"
 #include "Person.cpp"
+#include "Dog.cpp"
 
 class myClass: public SpeedListener {
     private:
@@ -24,6 +25,8 @@ void myClass::speedUpdate(geometry_msgs::Twist speedMsg)
 
 int main(int argc, char **argv)
 {
+    // NOTE: The order in which entities are instantiaed here must
+    // match the order in which they are defined in the world file.
 
     std::vector<Robot*> entityList;
 
@@ -33,7 +36,7 @@ int main(int argc, char **argv)
     Robot myRobot = Robot(0, 0, 0, 2, 60);
     entityList.push_back(&myRobot);
 
-    // loop 10 Hz
+    // Set loop rate to 10 Hz
 	ros::Rate loop_rate(10);
 
     // Add some goals to robot
@@ -56,6 +59,22 @@ int main(int argc, char **argv)
     entityList.push_back(&myPerson);
 
     myPerson.addGoal(desiredLocation1);
+
+    // Instantiate a dog
+    Dog myDog = Dog(0, 0, 0, 1, 180);
+    entityList.push_back(&myDog);
+
+    // Add some goals to dog
+    desiredLocation1.x = 3.5;
+    desiredLocation1.y = 15.5;
+    desiredLocation1.z = 0;
+
+    desiredLocation2.x = 1.6;
+    desiredLocation2.y = -2;
+    desiredLocation2.z = 0;
+
+    myDog.addGoal(desiredLocation1);
+    myDog.addGoal(desiredLocation2);
 
     while (ros::ok()) 
 	{ 

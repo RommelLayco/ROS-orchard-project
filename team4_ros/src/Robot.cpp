@@ -28,6 +28,7 @@ Robot::Robot(double x_position, double y_position, double theta_orientation, int
 
 }
 
+/* Add goal to end of entity's goal list */
 void Robot::addGoal(geometry_msgs::Point goal)
 {
     goals.push_back(goal);
@@ -38,11 +39,13 @@ void Robot::addSpeedListener(SpeedListener* listener)
     speedListeners.push_back(listener);
 }
 
+/* Returns the state of the entity */
 robotState Robot::getState()
 {
     return this->current_state;
 }
 
+/* This method is invoked by ROS when sensor data is available for this entity */
 void Robot::sensorCallback(const sensor_msgs::LaserScan::ConstPtr& sensorMsg)
 {// Handle sensor data
     int left_vals = sensorAngle / 3;
@@ -51,22 +54,28 @@ void Robot::sensorCallback(const sensor_msgs::LaserScan::ConstPtr& sensorMsg)
     int i = 0;
     bool isNear = false;
     //ROS_INFO("Sensor:");
+    // Loop through sensor data array
     for (i; i < sensorAngle; i++) {
+        // If an object is detected within sensorRange,
+        // determine it's position relative to the entity
         if (sensorMsg->ranges[i] < sensorRange)
         {
             isNear = true;
-            current_state = CollisionResolution;
+            current_state = CollisionResolution; // Entity is now in CollisionResolution state
 
             if (i < left_vals)
             {
+                // Collision is on right
                 rightCollisionDetected();
                 break;
             } else if (i >= left_vals && i < right_vals)
             {
+                // Collision is in front
                 centerCollisionDetected();
                 break;
             } else
             {
+                // Collision is on left
                 leftCollisionDetected();
                 break;
             }
@@ -75,7 +84,7 @@ void Robot::sensorCallback(const sensor_msgs::LaserScan::ConstPtr& sensorMsg)
 
         if (isNear == false)
         {
-            current_state = Orienting;
+            current_state = Orienting; // No collision was detected, current state is Orienting
         }
         
         notifySpeedListeners();
@@ -106,6 +115,7 @@ void Robot::centerCollisionDetected()
 }
 
 
+/* This method is invoked by MainNode in a loop to progress the simulation */
 void Robot::updateVelocity()
 {
     if (current_state == CollisionResolution)
@@ -130,11 +140,9 @@ void Robot::updateVelocity()
     directionVector.y = desiredLocation.y - current_y;
 
     // Check if we are at the desired location
-    if (abs(directionVector.x) <= distanceThreshold && abs(directionVector.y) <= distanceThreshold)
+    if (fabs(directionVector.x) <= distanceThreshold && fabs(directionVector.y) <= distanceThreshold)
     {
         // Robot has reached it's desired location
-        // For now, make robot stop. In future, robot should now try to move
-        // to the next location on it's path.
         linear_velocity_x = 0;
         angular_velocity = 0.0;
         if (goalIndex < goals.size() - 1)
@@ -159,6 +167,7 @@ void Robot::updateVelocity()
 }
 
 
+/* This method is invoked by ROS when position data for this entity is available */
 void Robot::positionCallback(const nav_msgs::Odometry positionMsg)
 {// Handle position data
 
@@ -171,6 +180,7 @@ void Robot::positionCallback(const nav_msgs::Odometry positionMsg)
     double z = currentLocation.orientation.z;
     double w = currentLocation.orientation.w;
     
+    // Calculate orientation
     double yaw = tf::getYaw(tf::Quaternion(x, y, z, w));
     current_theta = yaw;
 
@@ -196,6 +206,8 @@ void Robot::notifySpeedListeners()
     
 }
 
+/* Invoked in updateVelocity() when the entity has reached it's last goal.
+This method should be overridden in subclasses to provide more specific behavior */
 void Robot::reachedLastGoal()
 {
     // Reset index
@@ -203,6 +215,7 @@ void Robot::reachedLastGoal()
     goalIndex++;
 }
 
+/* Called from updateVelocity() when entity needs to realign itself so it is facing it's goal */
 void Robot::rotateToGoal(double desiredAngle)
 {
     if (fabs(current_theta - desiredAngle) > 0.1)

@@ -13,9 +13,11 @@
 #include <vector>
 #include "SpeedListener.h"
 
+/* Represents the three possible states an entity can be in */
 enum robotState {CollisionResolution, Moving, Orienting};
 
 
+/* Base class that represents an entity in the simulation */
 class Robot
 {
     public:
@@ -33,6 +35,7 @@ class Robot
 
         std::vector<SpeedListener*> speedListeners; // Must be a pointer because SpeedListener is an abstract type
 
+        // List of entity's goals
         std::vector<geometry_msgs::Point> goals;
         int goalIndex;
 
@@ -68,6 +71,7 @@ class Robot
         // The state lets us know what speed to give to the robot
         robotState current_state;
 
+        // Method that is called from updateVelocity() when entity wishes to rotate towards it's current goal
         void rotateToGoal(double desiredAngle);
     
         // These methods should be overridden in subclasses to provide more specific behavior
