@@ -6,10 +6,13 @@ include "bin.inc"
 include "wood.inc"
 include "carrier.inc"
 include "walls.inc"
+include "bin.inc"
+include "tractorWithWorker.inc"
 include "weedLocation.inc"
 
 interval_sim 100
 
+# this for picker i think
 define actor position
 (
 name "actor"
@@ -20,6 +23,7 @@ gui_nose 0
 obstacle_return 0
 )
 
+#this for dog i think
 define actor2 position
 (
 name "testfly"
@@ -44,4 +48,20 @@ picker( pose [ 17.0 -2 0 90 ] name "picker4" )
 picker( pose [ 22.0 -2 0 90 ] name "picker5" )
 picker( pose [ 27.0 -2 0 90 ] name "picker6" )
 picker( pose [ 32.0 -2 0 90 ] name "picker7" )
+
 dog( pose [ -4 -8 0 90 ] name "dog" )
+
+person1( pose [ 40.0 -5 0 90 ] name "person1" )
+
+tractorWithWorker( pose [ -9 68.0 0 0 ] name "tractorWithWorker" )
+
+bin( pose [ 20.0 73.0 0 90 ] name "bin1" )
+bin( pose [ 21.0 73.0 0 90 ] name "bin2" )
+bin( pose [ 22.0 73.0 0 90 ] name "bin3" )
+bin( pose [ 23.0 73.0 0 90 ] name "bin4" )
+bin( pose [ 24.0 73.0 0 90 ] name "bin5" )
+bin( pose [ 25.0 73.0 0 90 ] name "bin6" )
+bin( pose [ 26.0 73.0 0 90 ] name "bin7" )
+bin( pose [ 27.0 73.0 0 90 ] name "bin8" )
+bin( pose [ 28.0 73.0 0 90 ] name "bin9" )
+bin( pose [ 29.0 73.0 0 90 ] name "bin10" )
