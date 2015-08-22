@@ -199,6 +199,25 @@ def addPicker(r_spacing):
 
 	f.close()
 
+def add_dog():
+
+	f = open('o1.world','a')
+
+	current_x = 0 - 4
+	current_y = 0 - 8
+
+	name = "\"dog\""
+		
+	dog = "dog( pose [ " 
+	dog = dog + str(current_x) + " "
+	dog = dog + str(current_y) + " "
+	dog = dog + "0 90 ] name " + name + " )\n"
+
+	f.write(dog)
+
+	f.close()
+	
+
 def add_Instances_to_world():
 	f = open('o1.world', 'w')
 
@@ -237,6 +256,15 @@ def add_actor_pos():
 	f.write(')\n\n')
 
 	#add more actors here
+
+	f.write('define actor2 position\n')
+	f.write('(\n')
+	f.write('name "testfly"\n')
+	f.write('size [0 0 0 0]\n')
+	f.write('drive "omni"\n')
+	f.write('localization "gps"\n')
+	f.write('velocity_enable 1\n')
+	f.write(')\n\n')
 
 def add_model(r_spacing, t_spacing):
 	f = open('o1.world', 'a')
@@ -456,6 +484,38 @@ def tractorLocations(r_spacing, t_spacing):
 	y = -3
 	f.write(str(x) + " " + str(y) + "\n")
 
+def pickerLocations(r_spacing, t_spacing):
+	f = open('pickerLocations', 'w')
+
+	#start point
+	current_x = 0 + r_spacing/2  - 0.5
+	current_y = -2
+
+	#destnation point
+	#note that the picker moves in a straight line up hence the x co ordinate stays the same
+	final_y = 13 * t_spacing + 2
+
+
+	for i in range(0,7):
+		line = str(current_x) + " " + str(current_y) + " "
+		line = line + str(current_x) + " " + str(final_y) + "\n"
+		f.write(line)
+
+		#change x positions
+		current_x = current_x + r_spacing
+
+
+	f.close()
+
+def binArea(r_spacing, t_spacing):
+	f = open('binArea', 'w')
+
+	x = 4 * r_spacing
+	y = 13 * t_spacing + 8
+
+	line = str(x) + " " + str(y) +"\n"
+	f.write(line)
+	f.close()
 
 
 
@@ -497,9 +557,14 @@ add_model(r_spacing, t_spacing)
 #picker first
 addPicker(r_spacing)
 
+#add the dog
+add_dog()
+
 '''------------------------------------ Destination locations for actors to read -----------------------------------'''
 dogLocation(r_spacing,t_spacing)
 tractorLocations(r_spacing,t_spacing)
+pickerLocations(r_spacing, t_spacing)
+binArea(r_spacing, t_spacing)
 
 
 
