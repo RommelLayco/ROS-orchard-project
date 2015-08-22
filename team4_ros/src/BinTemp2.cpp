@@ -46,15 +46,21 @@ void groundTruthCallback(const nav_msgs::Odometry msg)
 	
 }
 
+void exchange()
+{
+        currentVelocity.linear.x = 1;
+        currentVelocity.angular.z = 2;	
+}
+
 int main (int argc, char **argv) 
 { 
 	// command line ROS arguments/ name remapping 
-	ros::init(argc, argv, "bin_node");
+	ros::init(argc, argv, "bin_node_t2");
 	
 	// ROS comms access point 
 	ros::NodeHandle n;
 	// master registry pub/sub 
-	bin_pub = n.advertise<team4_ros::binIsFull>("bin_topic",10);
+	bin_pub = n.advertise<team4_ros::binIsFull>("bin_topic_t2",10);
   
 
     // master registry pub/sub 
@@ -62,7 +68,10 @@ int main (int argc, char **argv)
         
 	ros::NodeHandle sub_handle; 
 	ros::Subscriber mysub_object;
-	mysub_object = sub_handle.subscribe<nav_msgs::Odometry>("robot_4/base_pose_ground_truth",1000, groundTruthCallback); 
+	//mysub_object = sub_handle.subscribe<nav_msgs::Odometry>("robot_4/base_pose_ground_truth",1000, groundTruthCallback); 
+
+	ros::NodeHandle velPub_handle;
+	ros::Publisher binVelPub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_4/cmd_vel",1000);
 
 	// loop 10 Hz 
 	ros::Rate loop_rate(10);
@@ -71,7 +80,9 @@ int main (int argc, char **argv)
     int counter=0;
 	while (ros::ok()) 
 	{
+		exchange();
 		ros::spinOnce();
+		binVelPub_object.publish(currentVelocity);
 		loop_rate.sleep();
 
 	} 
