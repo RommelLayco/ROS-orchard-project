@@ -24,7 +24,7 @@ double desiredAngle = 0;
 
 
 // counter
-
+int timeCount = 0;
 int counter = 0;
 
 // Boolean for the direction of the 
@@ -69,6 +69,56 @@ void generateRandomDesiredLocations(){
 }
 
 
+bool rotateAngle(double angle2Turn, int angularSpd)
+{
+   //Calculate the angle to rotate
+   
+
+    int timeLimit = angle2Turn/6.28 * 20);
+
+    ROS_INFO("angle2Turn: [%f]", angle2Turn);
+    ROS_INFO("currentAngle: [%f]", currentAngle);
+    ROS_INFO("timeLimit : [%i]", timeLimit);
+
+
+    if (timeCount < timeLimit)
+    {
+        ROS_INFO("Time Count: [%i]", timeCount);
+        currentVelocity.angular.z = angularSpd;
+        timeCount++;
+        return false;
+    } 
+    else
+    {
+        ROS_INFO("Time Count will be RESET NOW");
+
+        currentVelocity.angular.z = 0;
+        timeCount = 0;
+        return true;
+    } 
+/*
+     // If the difference between current angle and desired angle is less than 0.5 stop spining
+        if (abs(difference) > 0.5)
+        {
+            ROS_INFO("currentAngle is : %f",currentAngle); 
+            ROS_INFO("desiredAngle is : %f",desiredAngle); 
+            // Spin
+            currentVelocity.linear.x = 0;
+            currentVelocity.angular.z = 1;
+            
+        } else
+        {
+            // Go forward
+            currentVelocity.linear.x = 1;
+            currentVelocity.angular.z = 0;
+        }
+      */
+
+
+
+}
+
+
 void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
 {
     int i = 0;
@@ -107,23 +157,27 @@ void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
             if (desiredAngle - obstacleAngle > 0.5)
             {
                 //move back and spin anticlockwise
-                currentVelocity.linear.x = -0.2;
-                currentVelocity.angular.z = 2;
+                //currentVelocity.linear.x = -0.2;
+                //currentVelocity.angular.z = 2;
+                if (rotateAngle(1.57))
+                {
+                    /* code */
+                }
 
 
             }
             else if(desiredAngle - obstacleAngle < 0.5 && desiredAngle - obstacleAngle >-0.5){
 
                 //move back faster, obstacle at middle.
-                 currentVelocity.linear.x = -0.5;
-                currentVelocity.angular.z = 0.8;
+                //currentVelocity.linear.x = -0.5;
+                //currentVelocity.angular.z = 0.8;
 
 
             }
             else{
                 //move back and spin clockwise
-                currentVelocity.linear.x = -0.2;
-                currentVelocity.angular.z = -2;
+                //currentVelocity.linear.x = -0.2;
+                //currentVelocity.angular.z = -2;
 
             }
 
@@ -153,34 +207,6 @@ void Vibrate()
 
         VibrateX = false;
     }
-}
-
-void rotateAngle(double desiredAngle)
-{
-   //Calculate the angle to rotate
-    double difference = currentAngle - desiredAngle;
-    //Do not rotate if already at desired angle
-    if (difference == 0.0){
-        return;
-    }
-
-     // If the difference between current angle and desired angle is less than 0.5 stop spining
-        if (abs(difference) > 0.5)
-        {
-            ROS_INFO("currentAngle is : %f",currentAngle); 
-            ROS_INFO("desiredAngle is : %f",desiredAngle); 
-            // Spin
-            currentVelocity.linear.x = 0;
-            currentVelocity.angular.z = 1;
-            
-        } else
-        {
-            // Go forward
-            currentVelocity.linear.x = 1;
-            currentVelocity.angular.z = 0;
-        }
-        
-
 }
 
 
@@ -239,7 +265,39 @@ void updateCurrentVelocity() {
     // Calculate the desired angle
     desiredAngle = atan2(directionVector.y, directionVector.x) + 3.14;
 
-    rotateAngle(desiredAngle);
+     //Calculate the angle to rotate
+    double difference = currentAngle - desiredAngle;
+
+
+    //Do not rotate if already at desired angle
+    if (abs(difference) <0.5){
+        currentVelocity.angular.z = 0;
+        return true;
+    }
+
+
+    if (difference < 0)
+    {
+        rotateAngle(abs(difference),2);
+    }
+    else
+    {
+        rotateAngle(difference, -2);
+    }
+
+    int timeLimit = abs(difference/6.28 * 20);
+
+    ROS_INFO("desiredAngle: [%f]", desiredAngle);
+    ROS_INFO("currentAngle: [%f]", currentAngle);
+    ROS_INFO("timeLimit : [%i]", timeLimit);
+    
+    
+
+    if(rotateAngle(desiredAngle))
+    {
+        currentVelocity.linear.x = 1;
+        currentVelocity.angular.z = 0;
+    }
  
 }
 
