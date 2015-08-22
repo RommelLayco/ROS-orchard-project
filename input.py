@@ -533,18 +533,23 @@ def add_tractor(t_spacing):
 """----------------------------------------------Print file Location ---------------------------------------"""
 def dogLocation(r_spacing, t_spacing):
 
-	#pick a row
-	row = randint(0,6)
-	x = row * r_spacing
+    f = open('dogLocation', 'w')
+    for i in range(0, 10):
+	    #pick a row
+	    row = randint(0,6)
+	    x = row * r_spacing
 
-	#pick a tree in the row
-	tree = randint(0,13)
-	y = tree * t_spacing
+	    #pick a tree in the row
+	    tree = randint(0,13)
+	    y = tree * t_spacing
 
-	#save location into a file
-	f = open('dogLocation', 'w') 
-	f.write(str(x) + " " + str(y) + "\n")
-	f.close()
+        #save location into a file
+	    f.write(str(x - 1.2) + " " + str(y) + "\n")
+	    f.write(str(x) + " " + str(y - 1.2) + "\n")
+	    f.write(str(x + 1.2) + " " + str(y) + "\n")
+	    f.write(str(x) + " " + str(y + 1.2) + "\n")
+
+    f.close()
 
 
 def tractorLocations(r_spacing, t_spacing):

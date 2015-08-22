@@ -26,6 +26,8 @@ Robot::Robot(double x_position, double y_position, double theta_orientation, int
     groundtruthSub = subscriberHandle.subscribe<nav_msgs::Odometry>(baseString + "/base_pose_ground_truth", 1000, &Robot::positionCallback, this);
     sensorSub = subscriberHandle.subscribe(baseString + "/base_scan", 1000, &Robot::sensorCallback, this);
 
+    ROS_INFO("Robot [%d] instantiated", id);
+
 }
 
 /* Add goal to end of entity's goal list */
@@ -96,22 +98,22 @@ void Robot::sensorCallback(const sensor_msgs::LaserScan::ConstPtr& sensorMsg)
 void Robot::leftCollisionDetected()
 {
     // Spin to the right
-    linear_velocity_x = top_linear_speed;
-    angular_velocity = -top_angular_speed;
+    linear_velocity_x = 4 * top_linear_speed;
+    angular_velocity = -4 * top_angular_speed;
 }
 
 void Robot::rightCollisionDetected()
 {
     // Spin to the left
-    linear_velocity_x = top_linear_speed;
-    angular_velocity = top_angular_speed;
+    linear_velocity_x = 4 * top_linear_speed;
+    angular_velocity = 4 * top_angular_speed;
 }
 
 void Robot::centerCollisionDetected()
 {
     // Move backwards and spin right
-    linear_velocity_x = 0;
-    angular_velocity = -2 * top_angular_speed;
+    linear_velocity_x = 4 * top_linear_speed;
+    angular_velocity = -4 * top_angular_speed;
 }
 
 
@@ -127,14 +129,15 @@ void Robot::updateVelocity()
     // Check if robot has any goals defined. If not, do nothing.
     if (goals.empty())
     {
-        ROS_INFO("No Goal, doing nothing");
+        //ROS_INFO("No Goal, doing nothing");
         return;
     }
 
     geometry_msgs::Point desiredLocation = goals[goalIndex];
     // This is the maximum distance a robot can be from it's
     // desired poisition and still be considered to have reached it
-    float distanceThreshold = 0.5;
+    //float distanceThreshold = 0.5;
+    float distanceThreshold = 1.0;
     geometry_msgs::Point directionVector; // Vector from currentLocation to desiredLocation
     directionVector.x = desiredLocation.x - current_x;
     directionVector.y = desiredLocation.y - current_y;
@@ -212,7 +215,8 @@ void Robot::reachedLastGoal()
 {
     // Reset index
     ROS_INFO("Reached final destination, going back to the start");
-    goalIndex++;
+    goalIndex = 0;
+    //goalIndex++;
 }
 
 /* Called from updateVelocity() when entity needs to realign itself so it is facing it's goal */

@@ -17,7 +17,7 @@ class Dog: public Robot
         virtual void rightCollisionDetected();
         virtual void centerCollisionDetected();
         void generateRandomDesiredLocations();
-        virtual void reachedLastGoal();
+        /*virtual void reachedLastGoal();*/
         void bark();
 };
 
@@ -31,27 +31,26 @@ void Dog::bark()
 
 void Dog::leftCollisionDetected()
 {
-    // Move back and spin clockwise
-    ROS_INFO("LEFT COLLISION");
-    linear_velocity_x = 1.0;
-    angular_velocity = -0.5;
+    // Spin to the right
+    ROS_INFO("Dog Left collision");
+    linear_velocity_x = 4 * top_linear_speed;
+    angular_velocity = -4 * top_angular_speed;
 }
 
 void Dog::rightCollisionDetected()
 {
-    // Move back and spin anticlockwise
-    ROS_INFO("RIGHT COLLISION");
-    linear_velocity_x = 1.0;
-    angular_velocity = 0.5;
+    ROS_INFO("Dog Right collision");
+    // Spin to the left
+    linear_velocity_x = 4 * top_linear_speed;
+    angular_velocity = 4 * top_angular_speed;
 }
 
 void Dog::centerCollisionDetected()
 {
-    bark();
-    // Move back faster, obstacle at middle.
-    ROS_INFO("CENTER COLLISION");
-    linear_velocity_x = 0.0;
-    angular_velocity = -1.0;
+        ROS_INFO("Dog Center collision");
+    // Move backwards and spin right
+    linear_velocity_x = 4 * top_linear_speed;
+    angular_velocity = -4 * top_angular_speed;
 }
 
 void Dog::generateRandomDesiredLocations()
@@ -74,8 +73,9 @@ void Dog::generateRandomDesiredLocations()
     addGoal(desiredLocation2);
 }
 
-void Dog::reachedLastGoal()
+/*void Dog::reachedLastGoal()
 {
-    generateRandomDesiredLocations();
-}
+    //generateRandomDesiredLocations();
+
+}*/
 

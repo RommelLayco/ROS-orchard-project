@@ -31,44 +31,45 @@ int main(int argc, char **argv)
     // NOTE: The order in which entities are instantiaed here must
     // match the order in which they are defined in the world file.
 
+    if (argc < 2)
+    {
+        printf("Must specify directory that contains generated locations\n");
+        printf("Example:\n");
+        printf("%s ~/catkin_ws/src/se306-1/locations/\n", argv[0]);
+        return -1;
+    }
+
     std::vector<Robot*> entityList;
 
     ros::init(argc, argv, "MainNode");
 
-    // Create robot object
-    Robot myRobot = Robot(0, 0, 0, 2, 60);
-    entityList.push_back(&myRobot);
+    std::string GoalsLocation = argv[1];
+
+    // Read goals for pickers
+    std::string name = GoalsLocation + "pickerLocations";
+    std::vector<geometry_msgs::Point> picker_points = Util::readFile(name.c_str());
+
+    for (int i = 0; i < 13; i+=2)
+    {
+        // Create robot object
+        Robot *myRobot = new Robot(0, 0, 0, 2, 120);
+        entityList.push_back(myRobot);
+        // Add some goals to robot
+        ROS_INFO("X: %f", picker_points[i].x);
+        ROS_INFO("Y: %f", picker_points[i].y);
+        myRobot->addGoal(picker_points[i]);
+        myRobot->addGoal(picker_points[i+1]);
+    }
 
     // Set loop rate to 10 Hz
 	ros::Rate loop_rate(10);
 
-    // Add some goals to robot
-    geometry_msgs::Point desiredLocation1;
-    desiredLocation1.x = 14.0;
-    desiredLocation1.y = 18.0;
-    desiredLocation1.z = 0;
-
-    geometry_msgs::Point desiredLocation2;
-    desiredLocation2.x = 1.6;
-    desiredLocation2.y = -2;
-    desiredLocation2.z = 0;
-
-    myRobot.addGoal(desiredLocation1);
-    myRobot.addGoal(desiredLocation2);
-    
-
-    // Instantiate a person
-    Person myPerson = Person(1, 2, 3, 2, 110);
-    entityList.push_back(&myPerson);
-
-    myPerson.addGoal(desiredLocation1);
-
     // Read location of trees for dog
-    char filename[] = "dogLocation";
-    std::vector<geometry_msgs::Point> trees = Util::readFile(filename);
+    std::string filename = GoalsLocation + "dogLocation";
+    std::vector<geometry_msgs::Point> trees = Util::readFile(filename.c_str());
 
     // Instantiate a dog
-    Dog myDog = Dog(0, 0, 0, 1, 180);
+    Dog myDog = Dog(0, 0, 0, 1, 220);
     entityList.push_back(&myDog);
 
     // Add some goals to dog
@@ -77,8 +78,13 @@ int main(int argc, char **argv)
         myDog.addGoal(trees[i]);
     }
 
-    myDog.addGoal(desiredLocation1);
-    myDog.addGoal(desiredLocation2);
+
+    // Instantiate a person
+    Person myPerson = Person(1, 2, 3, 2, 110);
+    entityList.push_back(&myPerson);
+
+    //myPerson.addGoal(desiredLocation1);
+
 
     while (ros::ok()) 
 	{ 

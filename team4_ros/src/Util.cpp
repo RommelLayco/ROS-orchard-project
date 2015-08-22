@@ -19,7 +19,7 @@ namespace Util
         double y;
     };
 
-    std::vector<geometry_msgs::Point> readFile(char filename[])
+    std::vector<geometry_msgs::Point> readFile(const char filename[])
     {
         std::ifstream myReadFile;
         myReadFile.open(filename);
