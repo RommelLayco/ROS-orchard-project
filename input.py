@@ -233,6 +233,7 @@ def add_Instances_to_world():
 	f.write('include "carrier.inc"\n') #canopy model
 	f.write('include "walls.inc"\n') # add walls
 	f.write('include "bin.inc"\n') # add bin
+	f.write('include "tractorWithWorker.inc"\n') # add tractor model
 	f.write('include "weedLocation.inc"\n\n')#weed model
 
 
@@ -505,6 +506,26 @@ def add_person(r_spacing):
 	f.close()
 
 
+def add_tractor(t_spacing):
+
+	f = open('o1.world','a')
+
+	f.write("\n")
+
+	current_x = -9
+	current_y = t_spacing *13 + 3
+
+	name = "\"tractorWithWorker\""
+
+	line = "tractorWithWorker( pose [ " 
+	line = line + str(current_x) + " "
+	line = line + str(current_y) + " "
+	line = line + "0 0 ] name " + name + " )\n"
+
+	f.write(line)
+
+	f.close()
+
 
 
 
@@ -584,7 +605,7 @@ def binArea(r_spacing, t_spacing):
 		x += 1
 
 	final_x = -10
-	final_y = 13 * t_spacing + 2
+	final_y = 13 * t_spacing + 1
 
 	l = str(final_x) + " " +str(final_y) + "\n"
 	f.write(l)
@@ -639,6 +660,9 @@ add_dog()
 
 # add person
 add_person(r_spacing)
+
+# add tractor
+add_tractor(t_spacing)
 
 # add bin	
 add_bin(r_spacing,t_spacing)
