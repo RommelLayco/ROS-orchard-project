@@ -1,0 +1,71 @@
+include "myinstances.inc"
+include "picker.inc"
+include "person1.inc"
+include "dog.inc"
+include "bin.inc"
+include "tractorWithWorker.inc"
+include "tractor.inc"
+include "carrier.inc"
+include "worker.inc"
+include "masterNode.inc"
+include "weedGroups.inc"
+include "tallTreeWall.inc"
+
+# milliseconds per update step 
+interval_sim 100 
+
+define actor position
+(
+  name "actor"
+  size [0.000 0.000 0.000]
+  drive "diff"
+  stack_children 0
+  gui_nose 0
+  obstacle_return 0
+)
+
+define actor2 position
+(
+	name "testfly"
+	size [0 0 0 0]
+	drive "omni"
+	localization "gps"
+	velocity_enable 1
+
+)
+#floorplan
+
+model
+(
+	size [20.000 80.000 0.100 0]
+	bitmap "floorplan.png"
+	color "DarkOliveGreen4"
+)
+
+#driveway
+model
+(
+	size [20.000 20.000 0.100 0]
+	pose [-20.000 15.000 0.000 0.000]
+	bitmap "driveway.png"
+)
+# throw in a robot  
+
+picker( pose [ -1.750 20.000 0.000 90.000] name "picker1" )
+#picker( pose [ -0.656 -0.237 0.000 90.000] name "picker" )
+#tractor( pose [ -14.067 5.600 0.000 90.000 ] name "tractor")
+
+dog( pose [8.743 13.106 0.000 0.000] name "dog")
+person1( pose [-4.825 4.342 0.000 -50.628] name "person1" )
+bin( pose [ -1.750 20.000 1.010 90.000] name "bin1")
+bin( pose [ -1.750 1.4.000 1.010 0.000] name "bin2")
+bin( pose [ -1.750 0.000 1.010 90.000] name "bin3")
+tractorWithWorker( pose [ -8.000 -4.800 0.000 90.000 ] name "tractorWithWorker")
+
+#picker( pose [ -1.755 -0.270 0.000 90.000] name "picker1" )
+picker( pose [ -6.379 -2.979 0.000 -53.239] name "picker2" )
+
+carrier( pose [ -5.539 -1.892 0.000 0.000] name "carrier1")
+worker( pose [1.803 1.126 0.000 0.000] name "worker")
+masterNode( pose [6.328 1.278 2.800 0.000] name "master")
+
