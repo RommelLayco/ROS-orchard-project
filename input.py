@@ -126,12 +126,15 @@ def createTrees(r_spacing, t_spacing):
 
 # this method appends the model of the canopy based on the dimensions mentioned by the user.
 # this is done before the orchard.inc is made so that the new model of canopy is used for the environment
-def changeCanopyModel(t_spacing):
-	f = open('wood.inc', 'a')
+def changeCanopyModel(r_spacing):
+	f = open('wood.inc', 'w')
+	line = "define canopy model\n(\n"
+	f.write(line)
 
 	#length of canopy wood
-	length = t_spacing + 0.08
+	length = r_spacing + 0.08
 
+	#stuff that changes
 	model_line = "model\n(\n"
 	model_line = model_line + "size [" + str(length) + " "
 	model_line = model_line + "0.08 0.04 ]\n"
@@ -140,6 +143,14 @@ def changeCanopyModel(t_spacing):
 	#write to file
 	f.write(model_line)
 	f.write('\n')
+
+	#stuff that does not change
+	line = "model\n(\nsize [3.58 0.03 0.04 ]\npose [0.0 -0.02 1.9 0.0]\ncolor \"green\")\n\n"
+	line = line + "model\n(\nsize [0.08 0.08 0.08 ]\npose [1.0 0.0 1.82 0.0]\ncolor \"yellow\"\n)\n\n"
+	line = line + "model\n(\nsize [0.08 0.08 0.08 ]\npose [0.1 0.0 1.82 0.0]\ncolor \"yellow\"\n)\n\n"
+	line = line + "model\n(\nsize [0.08 0.08 0.08 ]\npose [-0.8 0.0 1.82 0.0]\ncolor \"yellow\"\n)\n\n"
+	f.write(line)
+
 
 	#write the base to the file
 	base = "# Base\n size [0 0 0]\ncolor \"green\"\nstack_children 0\ngui_nose 0\nobstacle_return 0\n)\n"
@@ -234,6 +245,7 @@ def add_Instances_to_world():
 	f.write('include "walls.inc"\n') # add walls
 	f.write('include "bin.inc"\n') # add bin
 	f.write('include "tractorWithWorker.inc"\n') # add tractor model
+	f.write('include "worker.inc"\n') #add worker model
 	f.write('include "weedLocation.inc"\n\n')#weed model
 
 
@@ -656,8 +668,7 @@ t_spacing = getTreeSpacing()
 writeModels()
 
 #check if you have to append
-if(needToAppend()):
-	changeCanopyModel(t_spacing)
+changeCanopyModel(r_spacing)
 	
 
 createTrees(r_spacing, t_spacing)
