@@ -212,7 +212,8 @@ def add_dog():
 	dog = dog + str(current_x) + " "
 	dog = dog + str(current_y) + " "
 	dog = dog + "0 90 ] name " + name + " )\n"
-
+	
+	f.write("\n")
 	f.write(dog)
 
 	f.close()
@@ -231,6 +232,7 @@ def add_Instances_to_world():
 	f.write('include "wood.inc"\n') # change canopy base on size
 	f.write('include "carrier.inc"\n') #canopy model
 	f.write('include "walls.inc"\n') # add walls
+	f.write('include "bin.inc"\n') # add bin
 	f.write('include "weedLocation.inc"\n\n')#weed model
 
 
@@ -245,6 +247,7 @@ def add_actor_pos():
 	#add actor postions to world file
 
 	#actor position for picker? maybe
+	f.write("# this for picker i think\n")
 	f.write('define actor position\n')
 	f.write('(\n')
 	f.write('name "actor"\n')
@@ -256,7 +259,7 @@ def add_actor_pos():
 	f.write(')\n\n')
 
 	#add more actors here
-
+	f.write("#this for dog i think\n")
 	f.write('define actor2 position\n')
 	f.write('(\n')
 	f.write('name "testfly"\n')
@@ -445,6 +448,44 @@ def addWeeds(r_spacing, t_spacing):
 	#close file after writing
 	f.close()
 
+
+def add_bin(r_spacing,t_spacing):
+
+	f = open('o1.world','a')
+
+	current_x = 4 * r_spacing
+	current_y = 13 *t_spacing + 8
+
+	count = 1
+
+
+	f.write("\n")
+
+
+
+	for v in range(0,10):
+
+		name = "\"bin" + str(count) + "\""
+
+		line = "bin( pose [ " 
+		line = line + str(current_x) + " "
+		line = line + str(current_y) + " "
+		line = line + "0 90 ] name " + name + " )\n"
+		
+	
+		count = count + 1
+
+		current_x = current_x + 1
+
+		f.write(line)
+
+	
+	f.close()	
+
+
+
+
+"""----------------------------------------------Print file Location ---------------------------------------"""
 def dogLocation(r_spacing, t_spacing):
 
 	#pick a row
@@ -513,9 +554,14 @@ def binArea(r_spacing, t_spacing):
 	x = 4 * r_spacing
 	y = 13 * t_spacing + 8
 
-	line = str(x) + " " + str(y) +"\n"
-	f.write(line)
+	for i in range(0,10):
+		line = str(x) + " " + str(y) +"\n"
+		f.write(line)
+		x += 1
+	
 	f.close()
+
+
 
 
 
@@ -559,6 +605,9 @@ addPicker(r_spacing)
 
 #add the dog
 add_dog()
+
+# add bin	
+add_bin(r_spacing,t_spacing)
 
 '''------------------------------------ Destination locations for actors to read -----------------------------------'''
 dogLocation(r_spacing,t_spacing)
