@@ -1,0 +1,13 @@
+#move generate file locations to locations folder
+
+#move picker 
+mv pickerLocations locations
+
+#move tractor 
+mv tractorLocations locations
+
+#move dog locations
+mv dogLocation locations
+
+#move bin Area
+mv binArea locations
