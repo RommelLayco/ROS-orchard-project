@@ -30,17 +30,3 @@ define canopy model
         )
 
 
-
-model
-(
-size [5.08 0.08 0.04 ]
-pose [0.0 0.0 1.9 0.0]
-color "burlywood"
-)
-# Base
- size [0 0 0]
-color "green"
-stack_children 0
-gui_nose 0
-obstacle_return 0
-)
