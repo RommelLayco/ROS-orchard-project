@@ -20,12 +20,12 @@ geometry_msgs::Pose currentLocation;
 
 // The current angle of the robot
 double currentAngle;
-double desiredAngle = 0;
+double desiredAngle = -1.57;
 
 
 // counter
-
-int counter = 0;
+int timeCount = 0;	//for rotatAngle function
+int counter = 0;	//for sensorCallback function
 
 
 // Pub object
@@ -144,38 +144,35 @@ void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
 */
 
 
-
-void rotateAngle(double desiredAngle)
+bool rotateAngle(double angle2Turn, int angularSpd)
 {
-   //Calculate the angle to rotate
-    double difference = currentAngle - desiredAngle;
-    //Do not rotate if already at desired angle
-    if (difference == 0.0){
-        return;
-    }
-
-     // If the difference between current angle and desired angle is less than 0.5 stop spining
-        if (abs(difference) > 0.5)
-        {
-            ROS_INFO("currentAngle is : %f",currentAngle); 
-            ROS_INFO("desiredAngle is : %f",desiredAngle); 
-            // Spin
-            currentVelocity.linear.x = 0;
-            currentVelocity.angular.z = 1;
-            
-        } else
-        {
-            // Go forward
-            currentVelocity.linear.x = 1;
-            currentVelocity.angular.z = 0;
-        }
-        
+	//Calculate the angle to rotate
+	currentVelocity.linear.x = 0;
+	int timeLimit = angle2Turn/6.28 * 20;
+	/*
+	ROS_INFO("angle2Turn: [%f]", angle2Turn);
+	ROS_INFO("desiredAngle: [%f]", desiredAngle);
+	ROS_INFO("currentAngle: [%f]", currentAngle);
+	ROS_INFO("timeLimit : [%i]", timeLimit);
+	*/
+	if (timeCount < timeLimit)
+	{
+		currentVelocity.angular.z = angularSpd;
+		timeCount++;
+		return false;
+	}
+	else
+	{
+		ROS_INFO("Time Count will be RESET NOW");
+		currentVelocity.angular.z = 0;
+		timeCount = 0;
+		return true;
+	}
 
 }
 
-
 void updateCurrentVelocity() {
-
+ROS_INFO("currentAngle is : %f",currentAngle); 
 	/*
     if (nearCollision == true)
     {    
@@ -195,8 +192,8 @@ void updateCurrentVelocity() {
     directionVector.y = desiredLocation.y - currentLocation.position.y;
     directionVector.z = desiredLocation.z - currentLocation.position.z;
 
-    ROS_INFO("X distance: [%f]", directionVector.x);
-    ROS_INFO("Y distance: [%f]", directionVector.y);
+   // ROS_INFO("X distance: [%f]", directionVector.x);
+   // ROS_INFO("Y distance: [%f]", directionVector.y);
 
     // Check if we are at the desired location
     if (abs(directionVector.x) <= distanceThreshold && abs(directionVector.y) <= distanceThreshold)
@@ -207,9 +204,22 @@ void updateCurrentVelocity() {
         ROS_INFO("I have reached my destination!");
         currentVelocity.linear.x = 0;
         currentVelocity.angular.z = 0.0;
-        if (pathIndex < sizeof(desiredLocations) / sizeof(*desiredLocations) - 1)
+        if (pathIndex < (sizeof(desiredLocations) / sizeof(*desiredLocations)) )
         {
             pathIndex++;
+			
+    		/*
+			bool move = false;
+			// rotate 90 degrees right	
+			if(!move)
+			{	
+				move = rotateAngle(1.57,-2);
+			}
+			else{
+				currentVelocity.linear.x = 1;
+				currentVelocity.angular =0;
+			}*/
+ 
         }
         else
         {
@@ -220,12 +230,35 @@ void updateCurrentVelocity() {
         
         return;
     }
+	
+	double difference = currentAngle - desiredAngle;
+	bool move = false;
+	//Do not rotate if already at desired angle
+	if (abs(difference) <0.5){
+		currentVelocity.angular.z = 0;
+		move = true;
+	}
+	if (!move)
+	{	
+		if (difference < 0)
+		{
+			ROS_INFO("difference : [%f]", difference);
+			move = rotateAngle(fabs(difference),2);
+		}
+		else
+		{
+			move = rotateAngle(difference, -2);
+		}
+	}
+	else{
+		currentVelocity.linear.x = 1;
+		currentVelocity.angular.z = 0;
+	}
+
     
     // Calculate the desired angle
-    desiredAngle = atan2(directionVector.y, directionVector.x) + 3.14;
-
-    rotateAngle(desiredAngle);
- 
+    //desiredAngle = atan2(directionVector.y, directionVector.x) + 3.14;
+	
 }
 
 
@@ -241,7 +274,7 @@ void groundTruthCallback(const nav_msgs::Odometry msg)
     
     double roll, pitch, yaw;
     tf::Matrix3x3(tf::Quaternion(x, y, z, w)).getRPY(roll, pitch, yaw);
-    currentAngle = yaw + 3.14;
+    currentAngle = yaw;
     //ROS_INFO("Yaw is : %f",yaw); 
     
 }
@@ -265,14 +298,14 @@ int main (int argc, char **argv)
 
     // master registry pub and sub
     //ros::Publisher mypub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_0/cmd_vel",1000);
-        mypub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_4/cmd_vel",1000);
+        mypub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_6/cmd_vel",1000);
         //ros::Publisher mypub_bark = bark_handle.advertise<std_msgs::String>("person_topic",1000);
     ros::Subscriber mysub_object;
     
     // loop 10 
     ros::Rate loop_rate(10);
 
-    mysub_object = sub_handle.subscribe<nav_msgs::Odometry>("robot_4/base_pose_ground_truth",1000, groundTruthCallback);
+    mysub_object = sub_handle.subscribe<nav_msgs::Odometry>("robot_6/base_pose_ground_truth",1000, groundTruthCallback);
 
         // ROS comms access point 
     ros::NodeHandle n;
