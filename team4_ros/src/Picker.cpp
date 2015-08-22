@@ -39,7 +39,7 @@ int pathIndex;
 // Boolean for the direction of the vibrate
 bool VibrateX=false;
 
-// When the bin is full, stop the robot and the bin
+// When the bin is full, stop the robot and the 
 bool isFull=false;
 geometry_msgs::Point desiredLocations[2];
 
@@ -257,10 +257,10 @@ int main (int argc, char **argv)
 	ros::NodeHandle velPub_handle;
 	mypub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_0/cmd_vel",1000);
 
-	// control robot 1
+	// control bin
 	ros::Publisher binVelPub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_3/cmd_vel",1000);
 	
-	// Subscribe the ground truth of robot 1
+	// Subscribe the ground truth of robot 0
 	ros::NodeHandle sub_handle; 
 	ros::Subscriber mysub_object;
 	mysub_object = sub_handle.subscribe<nav_msgs::Odometry>("robot_0/base_pose_ground_truth",1000, groundTruthCallback);

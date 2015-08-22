@@ -129,7 +129,6 @@ add_executable(SwingRobotNode src/SwingRobot.cpp)
 target_link_libraries(SwingRobotNode ${catkin_LIBRARIES})
 add_dependencies(SwingRobotNode ${catkin_EXPORTED_TARGETS})
 
-
 add_executable(DogNode src/Dog.cpp)
 target_link_libraries(DogNode ${catkin_LIBRARIES})
 add_dependencies(DogNode ${catkin_EXPORTED_TARGETS})
@@ -141,6 +140,14 @@ add_dependencies(PersonNode ${catkin_EXPORTED_TARGETS})
 add_executable(bin_node src/Bin.cpp)
 target_link_libraries(bin_node ${catkin_LIBRARIES})
 add_dependencies(bin_node ${catkin_EXPORTED_TARGETS})
+
+add_executable(bin_node_t src/BinTemp.cpp)
+target_link_libraries(bin_node_t ${catkin_LIBRARIES})
+add_dependencies(bin_node_t ${catkin_EXPORTED_TARGETS})
+
+add_executable(bin_node_t2 src/BinTemp2.cpp)
+target_link_libraries(bin_node_t2 ${catkin_LIBRARIES})
+add_dependencies(bin_node_t2 ${catkin_EXPORTED_TARGETS})
 
 add_executable(TractorWithWorkerNode src/TractorWithWorker.cpp)
 target_link_libraries(TractorWithWorkerNode ${catkin_LIBRARIES})
