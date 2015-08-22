@@ -21,6 +21,18 @@ float z;
 geometry_msgs::Point desiredLocation;
 int readyToUseCarrier[2];
 ros::Publisher publishTheChoosenCarrier;
+geometry_msgs::Point desiredLocations[2];
+
+void groundTruthCallback1(const nav_msgs::Odometry msg) 
+{     
+    //Update Current Position
+    currentLocation = msg.pose.pose;
+    double x = currentLocation.position.x;
+    double y = currentLocation.position.y;
+
+    
+	
+}
 
 
 void binCallback(const team4_ros::binIsFull::ConstPtr& msg) 
@@ -62,12 +74,16 @@ int main (int argc, char **argv)
 	// ROS comms access point 
 	ros::NodeHandle n;
 
-
+	// Subscribe the binsifull message
 	ros::Subscriber sub_bin = n.subscribe("bin_topic",10,binCallback);  
 
     // publish a message, identify the id of the carrier need to move
 	publishTheChoosenCarrier = n.advertise<team4_ros::findPicker>("choosen_carrier",1000);
 	
+	// subscribe the groundtruth of all of the carriers
+	ros::Subscriber mysub_object0 = n.subscribe<nav_msgs::Odometry>("robot_7/base_pose_ground_truth",1000, groundTruthCallback0);
+	ros::Subscriber mysub_object1 = n.subscribe<nav_msgs::Odometry>("robot_7/base_pose_ground_truth",1000, groundTruthCallback1);
+
 
 	// loop 10 Hz 
 	ros::Rate loop_rate(10);
