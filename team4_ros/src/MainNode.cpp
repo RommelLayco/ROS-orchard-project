@@ -1,6 +1,11 @@
+#include<iostream>
+#include<fstream>
+#include <vector>
+#include <string>
 #include "Robot.cpp"
 #include "Person.cpp"
 #include "Dog.cpp"
+#include "Util.cpp"
 
 class myClass: public SpeedListener {
     private:
@@ -19,8 +24,6 @@ void myClass::speedUpdate(geometry_msgs::Twist speedMsg)
 {
     publisher.publish(speedMsg);
 }
-
-
 
 
 int main(int argc, char **argv)
@@ -60,18 +63,19 @@ int main(int argc, char **argv)
 
     myPerson.addGoal(desiredLocation1);
 
+    // Read location of trees for dog
+    char filename[] = "dogLocation";
+    std::vector<geometry_msgs::Point> trees = Util::readFile(filename);
+
     // Instantiate a dog
     Dog myDog = Dog(0, 0, 0, 1, 180);
     entityList.push_back(&myDog);
 
     // Add some goals to dog
-    desiredLocation1.x = 3.5;
-    desiredLocation1.y = 15.5;
-    desiredLocation1.z = 0;
-
-    desiredLocation2.x = 1.6;
-    desiredLocation2.y = -2;
-    desiredLocation2.z = 0;
+    for(int i = 0; i < trees.size(); i++)
+    {
+        myDog.addGoal(trees[i]);
+    }
 
     myDog.addGoal(desiredLocation1);
     myDog.addGoal(desiredLocation2);
