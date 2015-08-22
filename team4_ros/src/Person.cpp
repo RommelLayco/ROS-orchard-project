@@ -24,8 +24,9 @@ double desiredAngle = 0;
 
 
 // counter
-int timeCount = 0;
-int counter = 0;
+int timeCount = 0; //for rotateAngle function
+int counter = 0;    // for sensor call back function
+int aroundCounter = 0; // for goARound function
 
 // Boolean for the direction of the 
 bool VibrateX=false;
@@ -73,17 +74,18 @@ bool rotateAngle(double angle2Turn, int angularSpd)
 {
    //Calculate the angle to rotate
    
-
-    int timeLimit = angle2Turn/6.28 * 20);
-
+    currentVelocity.linear.x = 0;
+    int timeLimit = angle2Turn/6.28 * 20;
+/*
     ROS_INFO("angle2Turn: [%f]", angle2Turn);
+    ROS_INFO("desiredAngle: [%f]", desiredAngle);
+
     ROS_INFO("currentAngle: [%f]", currentAngle);
     ROS_INFO("timeLimit : [%i]", timeLimit);
-
+*/
 
     if (timeCount < timeLimit)
     {
-        ROS_INFO("Time Count: [%i]", timeCount);
         currentVelocity.angular.z = angularSpd;
         timeCount++;
         return false;
@@ -118,6 +120,72 @@ bool rotateAngle(double angle2Turn, int angularSpd)
 
 }
 
+void goAround(bool turnRight){
+            bool success = false;
+
+    //Turn Right first
+    if(turnRight){
+        ROS_INFO("Time Count: [%i]", aroundCounter);
+
+        ROS_INFO("Turn Right");
+        //first rotate Left
+        if(aroundCounter == 0){
+            success = rotateAngle(1.57,22);
+            aroundCounter++;
+        }       
+
+        if(!success){
+            return;
+        }
+        //move forward 1 metre
+        if (aroundCounter < 10)
+        {
+            ROS_INFO("moving forward");
+
+            currentVelocity.angular.z = 0;
+            currentVelocity.linear.x = 1;
+            aroundCounter++;
+        }else
+        {
+            aroundCounter = 0;
+            return;
+        }
+        //then rotate left
+        rotateAngle(1.57, 2);
+    }
+    //Turn Left first
+    else{
+        ROS_INFO("Turn Left");
+        ROS_INFO("Time Count: [%i]", aroundCounter);
+        //first rotate Left
+        if(aroundCounter == 0){
+            success = rotateAngle(1.57,-2);
+            aroundCounter++;
+        }       
+
+        if(!success){
+            return;
+        }
+        //move forward 1 metre
+        if (aroundCounter < 10)
+        {
+                        ROS_INFO("moving forward");
+
+            currentVelocity.angular.z = 0;
+            currentVelocity.linear.x = 1;
+            aroundCounter++;
+        }else
+        {
+            aroundCounter = 0;
+            return;
+        }
+        //then rotate Right
+        rotateAngle(1.57, -2);
+    }
+
+
+}
+
 
 void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
 {
@@ -140,7 +208,7 @@ void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
             isNear = true;
             nearCollision = true;
           
-            ROS_INFO("This thing is cool!"); 
+            //ROS_INFO("This thing is cool!"); 
 
 
             //Find the angle of the obstacle to the person
@@ -159,10 +227,8 @@ void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
                 //move back and spin anticlockwise
                 //currentVelocity.linear.x = -0.2;
                 //currentVelocity.angular.z = 2;
-                if (rotateAngle(1.57))
-                {
-                    /* code */
-                }
+                ROS_INFO("On my RIGHT");
+               goAround(false);
 
 
             }
@@ -171,13 +237,21 @@ void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
                 //move back faster, obstacle at middle.
                 //currentVelocity.linear.x = -0.5;
                 //currentVelocity.angular.z = 0.8;
-
+                ROS_INFO("At middle");
+               // currentVelocity.linear.x = -0.5;
+               // rotateAngle(1.57, -2);
+                if (rotateAngle(1.57,2))
+                {
+                    currentVelocity.linear.x = -0.2;
+                }
 
             }
             else{
                 //move back and spin clockwise
                 //currentVelocity.linear.x = -0.2;
                 //currentVelocity.angular.z = -2;
+                ROS_INFO("On my LEFT");
+                goAround(true);
 
             }
 
@@ -215,7 +289,7 @@ void updateCurrentVelocity() {
 
     if (nearCollision == true)
     {
-    Vibrate();
+   // Vibrate();
         // Let collision resolution take place before we attempt to move towards the goal
         return;
     }
@@ -268,37 +342,31 @@ void updateCurrentVelocity() {
      //Calculate the angle to rotate
     double difference = currentAngle - desiredAngle;
 
+    bool move = false;
 
     //Do not rotate if already at desired angle
     if (abs(difference) <0.5){
         currentVelocity.angular.z = 0;
-        return true;
+        move = true;
     }
 
-
-    if (difference < 0)
+    if (!move)
     {
-        rotateAngle(abs(difference),2);
+        if (difference < 0)
+            {
+                ROS_INFO("difference : [%f]", difference);
+                move = rotateAngle(fabs(difference),2);
+            }
+            else
+            {
+                move = rotateAngle(difference, -2);
+            }    
     }
-    else
-    {
-        rotateAngle(difference, -2);
-    }
+    else{
 
-    int timeLimit = abs(difference/6.28 * 20);
-
-    ROS_INFO("desiredAngle: [%f]", desiredAngle);
-    ROS_INFO("currentAngle: [%f]", currentAngle);
-    ROS_INFO("timeLimit : [%i]", timeLimit);
-    
-    
-
-    if(rotateAngle(desiredAngle))
-    {
         currentVelocity.linear.x = 1;
         currentVelocity.angular.z = 0;
     }
- 
 }
 
 
