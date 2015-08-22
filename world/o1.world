@@ -8,6 +8,7 @@ include "carrier.inc"
 include "walls.inc"
 include "bin.inc"
 include "tractorWithWorker.inc"
+include "worker.inc"
 include "weedLocation.inc"
 
 interval_sim 100
@@ -52,6 +53,8 @@ picker( pose [ 32.0 -2 0 90 ] name "picker7" )
 dog( pose [ -4 -8 0 90 ] name "dog" )
 
 person1( pose [ 40.0 -5 0 90 ] name "person1" )
+
+worker( pose [ 40.0 70.0 0 270 ] name "worker" )
 
 tractorWithWorker( pose [ -9 68.0 0 0 ] name "tractorWithWorker" )
 
