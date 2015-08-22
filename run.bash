@@ -6,6 +6,42 @@ cd ../..
 catkin_make
 source devel/setup.bash
 
+#----------------------------------------------------------------------------------
+#move static objects to world file
+cd $DIR
+#copy wood instance to world file
+cp wood.inc world
+
+#move orchard instance to world file
+mv orchard.inc world
+
+#move weedlocation instance to world file
+mv weedLocation.inc world
+
+#move wall instance to world file
+mv walls.inc world
+
+#move orchard world to world file
+mv o1.world world
+
+#----------------------------------------------------------------
+#move dynmanic object info
+#move generate file locations to locations folder
+
+#move picker 
+mv pickerLocations locations
+
+#move tractor 
+mv tractorLocations locations
+
+#move dog locations
+mv dogLocation locations
+
+#move bin Area
+mv binArea locations
+
+#-------------------------------------------------------------
+
 #run nodes
 cd $DIR
 xterm -hold -e roscore&
