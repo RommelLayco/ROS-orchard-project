@@ -9,7 +9,8 @@
 #include <sstream>
 #include "math.h"
 #include <unistd.h>
-#include <team4_ros/readyToUse.h>
+#include <team4_ros/binIsFull.h> 
+//#include <team4_ros/readyToUse.h>
 
 
 // Current velocity of the Robot
@@ -30,17 +31,32 @@ float z;
 
 // Set by sensorCallback when robot is near an obstacle
 bool nearCollision;
+bool canMove=false;
 
-// Index that points to current position in path index
-int pathIndex;
+geometry_msgs::Point desiredLocation;
 
-geometry_msgs::Point desiredLocations[2];
+
+void binCallback(const team4_ros::binIsFull::ConstPtr& msg) 
+{ 
+	//ROS_INFO("sub echoing pub: %s", msg->data.c_str());
+       
+        ROS_INFO("sub echoing pub:");
+
+		if(msg->isFull){
+   		desiredLocation.x = msg->x;
+   	 		desiredLocation.y = msg->y;
+    		desiredLocation.z = 0; 
+			canMove=true;
+		}
+      
+}
+
 
 void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
 {
     int i = 0;
     bool isNear = false;
-    ROS_INFO("Sensor:");
+    ROS_INFO("I am carrier");
     for (i; i < 60; i++) {
         if (msg->ranges[i] < 1)
         {
@@ -90,9 +106,6 @@ void updateCurrentVelocity() {
         return;
     }
 
-    // Find the correct angle
-
-    geometry_msgs::Point desiredLocation = desiredLocations[pathIndex];
     // This is the maximum distance a robot can be from it's
     // desired poisition and still be considered to have reached it
     float distanceThreshold = 0.5;
@@ -106,7 +119,7 @@ void updateCurrentVelocity() {
     //ROS_INFO("Y distance: [%f]", currentLocation.position.y);
 
     // Check if we are at the desired location
-    if (abs(directionVector.x) <= distanceThreshold && abs(directionVector.y) <= distanceThreshold)
+    if (fabs(directionVector.x) <= distanceThreshold && fabs(directionVector.y) <= distanceThreshold)
     {
         // Robot has reached it's desired location
         // For now, make robot stop. In future, robot should now try to move
@@ -114,17 +127,6 @@ void updateCurrentVelocity() {
         ROS_INFO("I have reached my destination!");
         currentVelocity.linear.x = 0;
         currentVelocity.angular.z = 0.0;
-        if (pathIndex < sizeof(desiredLocations) / sizeof(*desiredLocations) - 1)
-        {
-            pathIndex++;
-			ROS_INFO("Reached destination");
-        }
-        else
-        {
-            // Reset index
-            ROS_INFO("Reached final destination");
-            //pathIndex = 0;
-        }
         
         return;
     }
@@ -177,25 +179,6 @@ void groundTruthCallback(const nav_msgs::Odometry msg)
 int main (int argc, char **argv) 
 {
 
-    // Setup points on robot's path
-    geometry_msgs::Point desiredLocation1;
-    //desiredLocation1.x = -10;
-    desiredLocation1.x = 0;
-    //desiredLocation1.y = -21;
-    desiredLocation1.y = 0;
-    desiredLocation1.z = 0;
-
-    geometry_msgs::Point desiredLocation2;
-    //desiredLocation2.x = 10;
-    desiredLocation2.x = -10;
-    //desiredLocation2.y = 21;
-    desiredLocation2.y = -10;
-    desiredLocation2.z = 0;
-
-    desiredLocations[0] = desiredLocation1;
-    desiredLocations[1] = desiredLocation2;
-
-    pathIndex = 0;
 
     nearCollision = false;    
 
@@ -208,21 +191,23 @@ int main (int argc, char **argv)
 
 	// master registry pub and sub
 	//ros::Publisher mypub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_0/cmd_vel",1000);
-        mypub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_6/cmd_vel",1000);
+        mypub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_7/cmd_vel",1000);
 	ros::Subscriber mysub_object;
 	
 	// loop 25 
 	ros::Rate loop_rate(10);
 
-	mysub_object = sub_handle.subscribe<nav_msgs::Odometry>("robot_6/base_pose_ground_truth",1000, groundTruthCallback); 
+	mysub_object = sub_handle.subscribe<nav_msgs::Odometry>("robot_7/base_pose_ground_truth",1000, groundTruthCallback); 
 	
 	// ROS comms access point 
 	ros::NodeHandle n;	
 	ros::Publisher carrier_pub;
 
-        ros::Subscriber sub = n.subscribe("robot_6/base_scan", 1000, sensorCallback);
+        ros::Subscriber sub = n.subscribe("robot_7/base_scan", 1000, sensorCallback);
 
-        team4_ros::readyToUse mypub_msg; 
+        //team4_ros::readyToUse mypub_msg;
+
+	ros::Subscriber sub_bin = sub_handle.subscribe("bin_topic",10,binCallback);  
 
 	while (ros::ok()) 
 	{ 
@@ -230,13 +215,16 @@ int main (int argc, char **argv)
 
 		updateCurrentVelocity(); 
 		// refer to advertise msg type 
-                if(currentVelocity.linear.x == 0 && currentVelocity.angular.z == 0){
-			mypub_msg.isReady = true; 
-                }else{
-			mypub_msg.isReady = false; 
-		}
-		carrier_pub.publish(mypub_msg); 
+                //if(currentVelocity.linear.x == 0 && currentVelocity.angular.z == 0){
+			//mypub_msg.isReady = true; 
+               // }else{
+			//mypub_msg.isReady = false; 
+	//	}
+		//carrier_pub.publish(mypub_msg);
+
+		if(canMove){ 
 		mypub_object.publish(currentVelocity); 
+		}
 		z=0;
 
 		ros::spinOnce();
