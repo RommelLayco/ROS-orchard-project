@@ -108,7 +108,7 @@ void updateCurrentVelocity() {
 
     // This is the maximum distance a robot can be from it's
     // desired poisition and still be considered to have reached it
-    float distanceThreshold = 0.5;
+    float distanceThreshold = 2;
 
     geometry_msgs::Point directionVector; // Vector from currentLocation to desiredLocation
     directionVector.x = desiredLocation.x - currentLocation.position.x;
@@ -203,9 +203,9 @@ int main (int argc, char **argv)
 	ros::NodeHandle n;	
 	ros::Publisher carrier_pub;
 
-        ros::Subscriber sub = n.subscribe("robot_7/base_scan", 1000, sensorCallback);
+    ros::Subscriber sub = n.subscribe("robot_7/base_scan", 1000, sensorCallback);
 
-        //team4_ros::readyToUse mypub_msg;
+    //team4_ros::readyToUse mypub_msg;
 
 	ros::Subscriber sub_bin = sub_handle.subscribe("bin_topic",10,binCallback);  
 
