@@ -20,7 +20,7 @@ geometry_msgs::Pose currentLocation;
 
 // The current angle of the robot
 double currentAngle;
-double desiredAngle = -1.57;
+double desiredAngle;
 
 
 // counter
@@ -34,14 +34,17 @@ ros::Publisher mypub_object;
 // Speed and angular velocity when sensor detects something
 int x;
 float z;
-
+//counter for desiredAngles
+int i;
 // Set by sensorCallback when robot is near an obstacle
 bool nearCollision;
 
 // Index that points to current position in path index
 int pathIndex;
 
-geometry_msgs::Point desiredLocations[2];
+geometry_msgs::Point desiredLocations[4];
+
+float desiredAngles[4] = {0.00, -1.57, -3.14, -4.71 };
 void generateDesiredLocations(){
     // set up for random number generation
     srand (time(NULL));
@@ -144,31 +147,30 @@ void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
 */
 
 
-bool rotateAngle(double angle2Turn, int angularSpd)
+void rotateAngle(double desiredAngle, int angularSpd)
 {
 	//Calculate the angle to rotate
 	currentVelocity.linear.x = 0;
-	int timeLimit = angle2Turn/6.28 * 20;
-	/*
-	ROS_INFO("angle2Turn: [%f]", angle2Turn);
-	ROS_INFO("desiredAngle: [%f]", desiredAngle);
-	ROS_INFO("currentAngle: [%f]", currentAngle);
-	ROS_INFO("timeLimit : [%i]", timeLimit);
-	*/
-	if (timeCount < timeLimit)
+	//int timeLimit = angle2Turn/6.28 * 20;
+	ros::Rate loop_rate(100);	
+	while(true)
 	{
+		//int d=currentAngle-desiredAngle;
+		if(fabs(currentAngle-desiredAngle)<0.01){break;}
+		ros::spinOnce();
+		ROS_INFO("Current Angle: %f",currentAngle);
+		//ROS_INFO("Desired Angle: %f",desiredAngle);
 		currentVelocity.angular.z = angularSpd;
-		timeCount++;
-		return false;
+		mypub_object.publish(currentVelocity);
+		loop_rate.sleep();
+		ROS_INFO("Desired Angle: %f",desiredAngle);
+		//timeCount++;
+		//return false;
 	}
-	else
-	{
-		ROS_INFO("Time Count will be RESET NOW");
-		currentVelocity.angular.z = 0;
-		timeCount = 0;
-		return true;
-	}
-
+	ROS_INFO("Time Count will be RESET NOW");
+	currentVelocity.angular.z = 0;
+	//timeCount = 0;
+	//return true;
 }
 
 void updateCurrentVelocity() {
@@ -208,29 +210,25 @@ ROS_INFO("currentAngle is : %f",currentAngle);
         {
             pathIndex++;
 			
-    		/*
-			bool move = false;
+    		
+			
 			// rotate 90 degrees right	
-			if(!move)
-			{	
-				move = rotateAngle(1.57,-2);
-			}
-			else{
-				currentVelocity.linear.x = 1;
-				currentVelocity.angular =0;
-			}*/
- 
+				
+			rotateAngle(desiredAngles[i],-2);
+				
+			i++;
         }
         else
         {
             // Reset index
             ROS_INFO("Reached final destination, going back to the start");                       
             pathIndex = 0;
+			i =0;
         }
         
         return;
-    }
-	
+    }else{currentVelocity.linear.x =1;}
+	/*
 	double difference = currentAngle - desiredAngle;
 	bool move = false;
 	//Do not rotate if already at desired angle
@@ -253,7 +251,7 @@ ROS_INFO("currentAngle is : %f",currentAngle);
 	else{
 		currentVelocity.linear.x = 1;
 		currentVelocity.angular.z = 0;
-	}
+	}*/
 
     
     // Calculate the desired angle
