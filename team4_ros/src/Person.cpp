@@ -24,8 +24,9 @@ double desiredAngle = 0;
 
 
 // counter
-
-int counter = 0;
+int timeCount = 0; //for rotateAngle function
+int counter = 0;    // for sensor call back function
+int aroundCounter = 0; // for goARound function
 
 // Boolean for the direction of the 
 bool VibrateX=false;
@@ -69,6 +70,123 @@ void generateRandomDesiredLocations(){
 }
 
 
+bool rotateAngle(double angle2Turn, int angularSpd)
+{
+   //Calculate the angle to rotate
+   
+    currentVelocity.linear.x = 0;
+    int timeLimit = angle2Turn/6.28 * 20;
+/*
+    ROS_INFO("angle2Turn: [%f]", angle2Turn);
+    ROS_INFO("desiredAngle: [%f]", desiredAngle);
+
+    ROS_INFO("currentAngle: [%f]", currentAngle);
+    ROS_INFO("timeLimit : [%i]", timeLimit);
+*/
+
+    if (timeCount < timeLimit)
+    {
+        currentVelocity.angular.z = angularSpd;
+        timeCount++;
+        return false;
+    } 
+    else
+    {
+        ROS_INFO("Time Count will be RESET NOW");
+
+        currentVelocity.angular.z = 0;
+        timeCount = 0;
+        return true;
+    } 
+/*
+     // If the difference between current angle and desired angle is less than 0.5 stop spining
+        if (abs(difference) > 0.5)
+        {
+            ROS_INFO("currentAngle is : %f",currentAngle); 
+            ROS_INFO("desiredAngle is : %f",desiredAngle); 
+            // Spin
+            currentVelocity.linear.x = 0;
+            currentVelocity.angular.z = 1;
+            
+        } else
+        {
+            // Go forward
+            currentVelocity.linear.x = 1;
+            currentVelocity.angular.z = 0;
+        }
+      */
+
+
+
+}
+
+void goAround(bool turnRight){
+            bool success = false;
+
+    //Turn Right first
+    if(turnRight){
+        ROS_INFO("Time Count: [%i]", aroundCounter);
+
+        ROS_INFO("Turn Right");
+        //first rotate Left
+        if(aroundCounter == 0){
+            success = rotateAngle(1.57,22);
+            aroundCounter++;
+        }       
+
+        if(!success){
+            return;
+        }
+        //move forward 1 metre
+        if (aroundCounter < 10)
+        {
+            ROS_INFO("moving forward");
+
+            currentVelocity.angular.z = 0;
+            currentVelocity.linear.x = 1;
+            aroundCounter++;
+        }else
+        {
+            aroundCounter = 0;
+            return;
+        }
+        //then rotate left
+        rotateAngle(1.57, 2);
+    }
+    //Turn Left first
+    else{
+        ROS_INFO("Turn Left");
+        ROS_INFO("Time Count: [%i]", aroundCounter);
+        //first rotate Left
+        if(aroundCounter == 0){
+            success = rotateAngle(1.57,-2);
+            aroundCounter++;
+        }       
+
+        if(!success){
+            return;
+        }
+        //move forward 1 metre
+        if (aroundCounter < 10)
+        {
+                        ROS_INFO("moving forward");
+
+            currentVelocity.angular.z = 0;
+            currentVelocity.linear.x = 1;
+            aroundCounter++;
+        }else
+        {
+            aroundCounter = 0;
+            return;
+        }
+        //then rotate Right
+        rotateAngle(1.57, -2);
+    }
+
+
+}
+
+
 void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
 {
     int i = 0;
@@ -90,7 +208,7 @@ void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
             isNear = true;
             nearCollision = true;
           
-            ROS_INFO("This thing is cool!"); 
+            //ROS_INFO("This thing is cool!"); 
 
 
             //Find the angle of the obstacle to the person
@@ -107,23 +225,33 @@ void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
             if (desiredAngle - obstacleAngle > 0.5)
             {
                 //move back and spin anticlockwise
-                currentVelocity.linear.x = -0.2;
-                currentVelocity.angular.z = 2;
+                //currentVelocity.linear.x = -0.2;
+                //currentVelocity.angular.z = 2;
+                ROS_INFO("On my RIGHT");
+               goAround(false);
 
 
             }
             else if(desiredAngle - obstacleAngle < 0.5 && desiredAngle - obstacleAngle >-0.5){
 
                 //move back faster, obstacle at middle.
-                 currentVelocity.linear.x = -0.5;
-                currentVelocity.angular.z = 0.8;
-
+                //currentVelocity.linear.x = -0.5;
+                //currentVelocity.angular.z = 0.8;
+                ROS_INFO("At middle");
+               // currentVelocity.linear.x = -0.5;
+               // rotateAngle(1.57, -2);
+                if (rotateAngle(1.57,2))
+                {
+                    currentVelocity.linear.x = -0.2;
+                }
 
             }
             else{
                 //move back and spin clockwise
-                currentVelocity.linear.x = -0.2;
-                currentVelocity.angular.z = -2;
+                //currentVelocity.linear.x = -0.2;
+                //currentVelocity.angular.z = -2;
+                ROS_INFO("On my LEFT");
+                goAround(true);
 
             }
 
@@ -155,41 +283,13 @@ void Vibrate()
     }
 }
 
-void rotateAngle(double desiredAngle)
-{
-   //Calculate the angle to rotate
-    double difference = currentAngle - desiredAngle;
-    //Do not rotate if already at desired angle
-    if (difference == 0.0){
-        return;
-    }
-
-     // If the difference between current angle and desired angle is less than 0.5 stop spining
-        if (abs(difference) > 0.5)
-        {
-            ROS_INFO("currentAngle is : %f",currentAngle); 
-            ROS_INFO("desiredAngle is : %f",desiredAngle); 
-            // Spin
-            currentVelocity.linear.x = 0;
-            currentVelocity.angular.z = 1;
-            
-        } else
-        {
-            // Go forward
-            currentVelocity.linear.x = 1;
-            currentVelocity.angular.z = 0;
-        }
-        
-
-}
-
 
 void updateCurrentVelocity() {
 
 
     if (nearCollision == true)
     {
-    Vibrate();
+   // Vibrate();
         // Let collision resolution take place before we attempt to move towards the goal
         return;
     }
@@ -239,8 +339,34 @@ void updateCurrentVelocity() {
     // Calculate the desired angle
     desiredAngle = atan2(directionVector.y, directionVector.x) + 3.14;
 
-    rotateAngle(desiredAngle);
- 
+     //Calculate the angle to rotate
+    double difference = currentAngle - desiredAngle;
+
+    bool move = false;
+
+    //Do not rotate if already at desired angle
+    if (abs(difference) <0.5){
+        currentVelocity.angular.z = 0;
+        move = true;
+    }
+
+    if (!move)
+    {
+        if (difference < 0)
+            {
+                ROS_INFO("difference : [%f]", difference);
+                move = rotateAngle(fabs(difference),2);
+            }
+            else
+            {
+                move = rotateAngle(difference, -2);
+            }    
+    }
+    else{
+
+        currentVelocity.linear.x = 1;
+        currentVelocity.angular.z = 0;
+    }
 }
 
 

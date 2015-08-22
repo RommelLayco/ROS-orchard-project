@@ -15,6 +15,14 @@
 int x;
 float z;
 ros::Publisher bin_pub;
+ros::Publisher binVelPub_object;
+
+// The current angle of the robot
+double currentAngle;
+double desiredAngle = 0;
+
+// counter
+int timeCount = 0; //for rotateAngle function
 
 // Current velocity of the Robot
 geometry_msgs::Twist currentVelocity;
@@ -27,11 +35,19 @@ void groundTruthCallback(const nav_msgs::Odometry msg)
     //Update Current Position
 	//geometry_msgs::Pose currentLocation;
     currentLocation = msg.pose.pose;
+    double x = currentLocation.orientation.x;
+    double y = currentLocation.orientation.y;
+    double z = currentLocation.orientation.z;
+    double w = currentLocation.orientation.w;
+    
+    double roll, pitch, yaw;
+    tf::Matrix3x3(tf::Quaternion(x, y, z, w)).getRPY(roll, pitch, yaw);
 	
     geometry_msgs::Point directionVector; // Vector from currentLocation to desiredLocation
     directionVector.x = (-1.75) - currentLocation.position.x;
     directionVector.y = 31 - currentLocation.position.y;
     directionVector.z = 0;
+    currentAngle = yaw + 3.14;
 
 	//ROS_INFO("Bin x distance: [%f]", directionVector.x);
    // ROS_INFO("Bin Y distance: [%f]", directionVector.y);
@@ -46,10 +62,58 @@ void groundTruthCallback(const nav_msgs::Odometry msg)
 	
 }
 
+void rotateAngle(double angle2Turn, int angularSpd)
+{
+   //Calculate the angle to rotate
+   
+    currentVelocity.linear.x = 0;
+    int timeLimit = angle2Turn/6.28 * 20;
+	ros::Rate loop_rate(10);
+	desiredAngle=3.14;
+        currentAngle=4.71;
+
+    while(true)
+    {
+	//int d=currentAngle-desiredAngle;
+	if(-0.01<currentAngle-3.14<0.01){break;}
+	ros::spinOnce();
+	ROS_INFO("Current Angle: %f",currentAngle);
+	//ROS_INFO("Desired Angle: %f",desiredAngle);
+        currentVelocity.angular.z = angularSpd;
+	binVelPub_object.publish(currentVelocity);
+	
+	loop_rate.sleep();
+	ROS_INFO("Desired Angle: %f",desiredAngle);
+        timeCount++;
+        //return false;
+    }
+        ROS_INFO("Time Count will be RESET NOW");
+
+        currentVelocity.angular.z = 0;
+        timeCount = 0;
+        //return true;
+
+}
+
+//void turnToX()
+//{
+//	while (rotateAngle(4.71,2)){
+//		ROS_INFO("Time");
+//		binVelPub_object.publish(currentVelocity);
+//	}
+//}
+
+void exchange()
+{
+	rotateAngle(4.71,1);
+        currentVelocity.linear.x = 1;
+        currentVelocity.angular.z = 2;	
+}
+
 int main (int argc, char **argv) 
 { 
 	// command line ROS arguments/ name remapping 
-	ros::init(argc, argv, "bin_node");
+	ros::init(argc, argv, "bin_node_t");
 	
 	// ROS comms access point 
 	ros::NodeHandle n;
@@ -63,15 +127,21 @@ int main (int argc, char **argv)
 	ros::NodeHandle sub_handle; 
 	ros::Subscriber mysub_object;
 	mysub_object = sub_handle.subscribe<nav_msgs::Odometry>("robot_5/base_pose_ground_truth",1000, groundTruthCallback); 
-
+	
+	ros::NodeHandle velPub_handle;
+	binVelPub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_5/cmd_vel",1000);
 	// loop 10 Hz 
 	ros::Rate loop_rate(10);
 	
-	
-    int counter=0;
+	//currentVelocity.linear.x = 1;
+    //int counter=0;
+	//turnToX();
+	exchange();
 	while (ros::ok()) 
 	{
 		ros::spinOnce();
+		//exchange();
+		binVelPub_object.publish(currentVelocity);
 		loop_rate.sleep();
 
 	} 

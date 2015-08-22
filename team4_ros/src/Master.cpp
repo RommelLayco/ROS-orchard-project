@@ -3,15 +3,31 @@
 #include "std_msgs/String.h" 
 #include "geometry_msgs/Twist.h"
 #include <team4_ros/readyToUse.h>
+#include <team4_ros/binIsFull.h> 
+#include <list> 
 
 ros::Publisher move_pub; 
 int x;
 float z;
+geometry_msgs::Point desiredLocation;
+typedef list<int> LISTINT; 
+LISTINT listOne;
+LISTINT::iterator i; 
 
-void binCallback(const std_msgs::String msg)
-{
-if (msg.data.compare("I AM Full") != 0 )
 
+void binCallback(const team4_ros::binIsFull::ConstPtr& msg) 
+{ 
+	//ROS_INFO("sub echoing pub: %s", msg->data.c_str());
+       
+        ROS_INFO("sub echoing pub:");
+
+		if(msg->isFull){
+   			desiredLocation.x = msg->x;
+   	 		desiredLocation.y = msg->y;
+    		desiredLocation.z = 0; 
+
+		}
+      
 }
 
 void searchNearestCarrier()
@@ -29,9 +45,11 @@ int main (int argc, char **argv)
 	// ROS comms access point 
 	ros::NodeHandle n;
 
-        ros::Subscriber sub = n.subscribe("bin_topic", 1000, binCallback);
+    ros::Subscriber sub = n.subscribe("bin_topic", 1000, binCallback);
 
-    // master registry pub/sub 
+    // publish a message, identify the id of the carrier need to move
+
+	
 
 	// loop 10 Hz 
 	ros::Rate loop_rate(10);

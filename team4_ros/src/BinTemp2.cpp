@@ -16,6 +16,13 @@ int x;
 float z;
 ros::Publisher bin_pub;
 
+// The current angle of the robot
+double currentAngle;
+double desiredAngle = 0;
+
+// counter
+int timeCount = 0; //for rotateAngle function
+
 // Current velocity of the Robot
 geometry_msgs::Twist currentVelocity;
 
@@ -46,15 +53,46 @@ void groundTruthCallback(const nav_msgs::Odometry msg)
 	
 }
 
+bool rotateAngle(double angle2Turn, int angularSpd)
+{
+   //Calculate the angle to rotate
+   
+    currentVelocity.linear.x = 0;
+    int timeLimit = angle2Turn/6.28 * 20;
+
+    if (timeCount < timeLimit)
+    {
+        currentVelocity.angular.z = angularSpd;
+        timeCount++;
+        return false;
+    } 
+    else
+    {
+        ROS_INFO("Time Count will be RESET NOW");
+
+        currentVelocity.angular.z = 0;
+        timeCount = 0;
+        return true;
+    } 
+
+}
+
+
+void exchange()
+{
+        currentVelocity.linear.x = 1;
+        currentVelocity.angular.z = 2;	
+}
+
 int main (int argc, char **argv) 
 { 
 	// command line ROS arguments/ name remapping 
-	ros::init(argc, argv, "bin_node");
+	ros::init(argc, argv, "bin_node_t2");
 	
 	// ROS comms access point 
 	ros::NodeHandle n;
 	// master registry pub/sub 
-	bin_pub = n.advertise<team4_ros::binIsFull>("bin_topic",10);
+	bin_pub = n.advertise<team4_ros::binIsFull>("bin_topic_t2",10);
   
 
     // master registry pub/sub 
@@ -62,7 +100,10 @@ int main (int argc, char **argv)
         
 	ros::NodeHandle sub_handle; 
 	ros::Subscriber mysub_object;
-	mysub_object = sub_handle.subscribe<nav_msgs::Odometry>("robot_4/base_pose_ground_truth",1000, groundTruthCallback); 
+	//mysub_object = sub_handle.subscribe<nav_msgs::Odometry>("robot_4/base_pose_ground_truth",1000, groundTruthCallback); 
+
+	ros::NodeHandle velPub_handle;
+	ros::Publisher binVelPub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_4/cmd_vel",1000);
 
 	// loop 10 Hz 
 	ros::Rate loop_rate(10);
@@ -71,7 +112,9 @@ int main (int argc, char **argv)
     int counter=0;
 	while (ros::ok()) 
 	{
+		exchange();
 		ros::spinOnce();
+		binVelPub_object.publish(currentVelocity);
 		loop_rate.sleep();
 
 	} 

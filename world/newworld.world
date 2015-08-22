@@ -57,9 +57,11 @@ picker( pose [ -1.750 20.000 0.000 90.000] name "picker1" )
 
 dog( pose [8.743 13.106 0.000 0.000] name "dog")
 person1( pose [-4.825 4.342 0.000 -50.628] name "person1" )
-bin( pose [ -1.750 20.000 1.010 90.000] name "bin1")
-bin( pose [ -1.750 1.4.000 1.010 0.000] name "bin2")
+
+bin( pose [ -1.750 23.000 1.010 90.000] name "bin1")
+bin( pose [ -1.750 1.400 1.010 90.000] name "bin2")
 bin( pose [ -1.750 0.000 1.010 90.000] name "bin3")
+
 tractorWithWorker( pose [ -8.000 -4.800 0.000 90.000 ] name "tractorWithWorker")
 
 #picker( pose [ -1.755 -0.270 0.000 90.000] name "picker1" )
