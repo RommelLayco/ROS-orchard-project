@@ -10,6 +10,7 @@
 #include "math.h"
 #include <unistd.h>
 #include <team4_ros/binIsFull.h> 
+#include <team4_ros/findPicker.h> 
 //#include <team4_ros/readyToUse.h>
 
 
@@ -36,6 +37,19 @@ bool canMove=false;
 geometry_msgs::Point desiredLocation;
 
 
+void masterCallback(const team4_ros::findPicker::ConstPtr& msg) 
+{ 
+	//ROS_INFO("sub echoing pub: %s", msg->data.c_str());
+       
+        ROS_INFO("sub echoing pub:");
+   		desiredLocation.x = msg->x;
+   	 		desiredLocation.y = msg->y;
+    		desiredLocation.z = 0; 
+			canMove=true;
+		
+      
+}
+
 void binCallback(const team4_ros::binIsFull::ConstPtr& msg) 
 { 
 	//ROS_INFO("sub echoing pub: %s", msg->data.c_str());
@@ -50,6 +64,7 @@ void binCallback(const team4_ros::binIsFull::ConstPtr& msg)
 		}
       
 }
+
 
 
 void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
@@ -115,8 +130,8 @@ void updateCurrentVelocity() {
     directionVector.y = desiredLocation.y - currentLocation.position.y;
     directionVector.z = desiredLocation.z - currentLocation.position.z;
 
-    //ROS_INFO("X distance: [%f]", currentLocation.position.x);
-    //ROS_INFO("Y distance: [%f]", currentLocation.position.y);
+    ROS_INFO("X distance: [%f]", currentLocation.position.x);
+    ROS_INFO("Y distance: [%f]", currentLocation.position.y);
 
     // Check if we are at the desired location
     if (fabs(directionVector.x) <= distanceThreshold && fabs(directionVector.y) <= distanceThreshold)
@@ -203,12 +218,14 @@ int main (int argc, char **argv)
 	ros::NodeHandle n;	
 	ros::Publisher carrier_pub;
 
-    ros::Subscriber sub = n.subscribe("robot_7/base_scan", 1000, sensorCallback);
+        ros::Subscriber sub = n.subscribe("robot_7/base_scan", 1000, sensorCallback);
 
-    //team4_ros::readyToUse mypub_msg;
+        //team4_ros::readyToUse mypub_msg;
 
-	ros::Subscriber sub_bin = sub_handle.subscribe("bin_topic",10,binCallback);  
+	//ros::Subscriber sub_bin = sub_handle.subscribe("bin_topic",10,binCallback);  
 
+	ros::Subscriber sub_master = sub_handle.subscribe("choosen_carrier",10,masterCallback);
+	
 	while (ros::ok()) 
 	{ 
 		loop_rate.sleep();

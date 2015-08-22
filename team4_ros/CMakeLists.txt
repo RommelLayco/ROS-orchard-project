@@ -49,6 +49,7 @@ add_message_files(
  FILES 
  binIsFull.msg
  readyToUse.msg
+ findPicker.msg
 )
 #   FILES
 #   Message1.msg
@@ -124,6 +125,10 @@ add_dependencies(PickerNode ${catkin_EXPORTED_TARGETS})
 add_executable(CarrierNode src/Carrier.cpp)
 target_link_libraries(CarrierNode ${catkin_LIBRARIES})
 add_dependencies(CarrierNode ${catkin_EXPORTED_TARGETS})
+
+add_executable(master_node src/Master.cpp)
+target_link_libraries(master_node ${catkin_LIBRARIES})
+add_dependencies(master_node ${catkin_EXPORTED_TARGETS})
 
 add_executable(SwingRobotNode src/SwingRobot.cpp)
 target_link_libraries(SwingRobotNode ${catkin_LIBRARIES})

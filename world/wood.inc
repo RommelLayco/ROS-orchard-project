@@ -30,10 +30,9 @@ define canopy model
         )
 
 
-
 model
 (
-size [5.08 0.08 0.04 ]
+size [6.08 0.08 0.04 ]
 pose [0.0 0.0 1.9 0.0]
 color "burlywood"
 )
