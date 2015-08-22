@@ -483,6 +483,30 @@ def add_bin(r_spacing,t_spacing):
 	f.close()	
 
 
+def add_person(r_spacing):
+	
+	f = open('o1.world','a')
+
+	f.write("\n")
+
+	current_x = r_spacing * 7 + 5
+	current_y = -5
+
+	name = "\"person1\""
+
+	line = "person1( pose [ " 
+	line = line + str(current_x) + " "
+	line = line + str(current_y) + " "
+	line = line + "0 90 ] name " + name + " )\n"
+
+	f.write(line)
+
+
+	f.close()
+
+
+
+
 
 
 """----------------------------------------------Print file Location ---------------------------------------"""
@@ -558,6 +582,12 @@ def binArea(r_spacing, t_spacing):
 		line = str(x) + " " + str(y) +"\n"
 		f.write(line)
 		x += 1
+
+	final_x = -10
+	final_y = 13 * t_spacing + 2
+
+	l = str(final_x) + " " +str(final_y) + "\n"
+	f.write(l)
 	
 	f.close()
 
@@ -605,6 +635,10 @@ addPicker(r_spacing)
 
 #add the dog
 add_dog()
+
+
+# add person
+add_person(r_spacing)
 
 # add bin	
 add_bin(r_spacing,t_spacing)

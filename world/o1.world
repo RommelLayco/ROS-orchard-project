@@ -50,6 +50,8 @@ picker( pose [ 32.0 -2 0 90 ] name "picker7" )
 
 dog( pose [ -4 -8 0 90 ] name "dog" )
 
+person1( pose [ 40.0 -5 0 90 ] name "person1" )
+
 bin( pose [ 20.0 73.0 0 90 ] name "bin1" )
 bin( pose [ 21.0 73.0 0 90 ] name "bin2" )
 bin( pose [ 22.0 73.0 0 90 ] name "bin3" )
