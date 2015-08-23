@@ -50,7 +50,9 @@ add_message_files(
  binIsFull.msg
  readyToUse.msg
  findPicker.msg
-readyToExchange.msg
+ readyToExchange.msg
+ arrived.msg
+ finishRotate.msg
 )
 #   FILES
 #   Message1.msg
