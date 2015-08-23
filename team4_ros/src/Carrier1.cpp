@@ -42,11 +42,12 @@ void masterCallback(const team4_ros::findPicker::ConstPtr& msg)
 { 
 	//ROS_INFO("sub echoing pub: %s", msg->data.c_str());
        
-        ROS_INFO("sub echoing pub:");
-   		desiredLocation.x = msg->x;
+        ROS_INFO("Get message from master:");
+			if(msg->id==id){
+   			desiredLocation.x = msg->x;
    	 		desiredLocation.y = msg->y;
     		desiredLocation.z = 0; 
-			canMove=true;
+			canMove=true;}
 		
       
 }
@@ -72,7 +73,7 @@ void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
 {
     int i = 0;
     bool isNear = false;
-    ROS_INFO("I am carrier");
+    ROS_INFO("I am carrier1");
     for (i; i < 60; i++) {
         if (msg->ranges[i] < 1)
         {
@@ -131,8 +132,8 @@ void updateCurrentVelocity() {
     directionVector.y = desiredLocation.y - currentLocation.position.y;
     directionVector.z = desiredLocation.z - currentLocation.position.z;
 
-    ROS_INFO("X distance: [%f]", currentLocation.position.x);
-    ROS_INFO("Y distance: [%f]", currentLocation.position.y);
+    ROS_INFO("X distance: [%f]", directionVector.x);
+    ROS_INFO("Y distance: [%f]", directionVector.y);
 
     // Check if we are at the desired location
     if (fabs(directionVector.x) <= distanceThreshold && fabs(directionVector.y) <= distanceThreshold)
@@ -207,7 +208,7 @@ int main (int argc, char **argv)
 
 	// master registry pub and sub
 	//ros::Publisher mypub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_0/cmd_vel",1000);
-        mypub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_7/cmd_vel",1000);
+        mypub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_8/cmd_vel",1000);
 	ros::Subscriber mysub_object;
 	
 	// loop 25 
@@ -219,7 +220,7 @@ int main (int argc, char **argv)
 	ros::NodeHandle n;	
 	ros::Publisher carrier_pub;
 
-        ros::Subscriber sub = n.subscribe("robot_7/base_scan", 1000, sensorCallback);
+        ros::Subscriber sub = n.subscribe("robot_8/base_scan", 1000, sensorCallback);
 
         //team4_ros::readyToUse mypub_msg;
 

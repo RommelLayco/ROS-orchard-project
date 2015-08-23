@@ -42,28 +42,22 @@ void masterCallback(const team4_ros::findPicker::ConstPtr& msg)
 { 
 	//ROS_INFO("sub echoing pub: %s", msg->data.c_str());
        
-        ROS_INFO("sub echoing pub:");
-   		desiredLocation.x = msg->x;
+        ROS_INFO("Get message from master:");
+			if(msg->id==id){
+   			desiredLocation.x = msg->x;
    	 		desiredLocation.y = msg->y;
     		desiredLocation.z = 0; 
-			canMove=true;
+			canMove=true;}
 		
       
 }
 
-void binCallback(const team4_ros::binIsFull::ConstPtr& msg) 
-{ 
-	//ROS_INFO("sub echoing pub: %s", msg->data.c_str());
-       
-        ROS_INFO("sub echoing pub:");
+void goToDriveway(){
 
-		if(msg->isFull){
-   		desiredLocation.x = msg->x;
-   	 		desiredLocation.y = msg->y;
-    		desiredLocation.z = 0; 
-			canMove=true;
-		}
-      
+desiredLocation.x=0;
+desiredLocation.y=0;	
+
+
 }
 
 
@@ -72,7 +66,7 @@ void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
 {
     int i = 0;
     bool isNear = false;
-    ROS_INFO("I am carrier");
+    ROS_INFO("I am carrier0");
     for (i; i < 60; i++) {
         if (msg->ranges[i] < 1)
         {
@@ -131,8 +125,8 @@ void updateCurrentVelocity() {
     directionVector.y = desiredLocation.y - currentLocation.position.y;
     directionVector.z = desiredLocation.z - currentLocation.position.z;
 
-    ROS_INFO("X distance: [%f]", currentLocation.position.x);
-    ROS_INFO("Y distance: [%f]", currentLocation.position.y);
+    ROS_INFO("X distance: [%f]", directionVector.x);
+    ROS_INFO("Y distance: [%f]", directionVector.y);
 
     // Check if we are at the desired location
     if (fabs(directionVector.x) <= distanceThreshold && fabs(directionVector.y) <= distanceThreshold)
@@ -220,10 +214,7 @@ int main (int argc, char **argv)
 	ros::Publisher carrier_pub;
 
         ros::Subscriber sub = n.subscribe("robot_7/base_scan", 1000, sensorCallback);
-
-        //team4_ros::readyToUse mypub_msg;
-
-	//ros::Subscriber sub_bin = sub_handle.subscribe("bin_topic",10,binCallback);  
+ 
 
 	ros::Subscriber sub_master = sub_handle.subscribe("choosen_carrier",10,masterCallback);
 	

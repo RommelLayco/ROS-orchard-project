@@ -15,6 +15,7 @@
 int x;
 float z;
 ros::Publisher bin_pub;
+bool isSent=false;
 
 void groundTruthCallback(const nav_msgs::Odometry msg) 
 {     
@@ -39,7 +40,10 @@ void groundTruthCallback(const nav_msgs::Odometry msg)
 				mypub_msg.isFull = true; 
                 mypub_msg.x= currentLocation.position.x;
                 mypub_msg.y= currentLocation.position.y;
-				bin_pub.publish(mypub_msg); 
+				if(!isSent){
+				bin_pub.publish(mypub_msg);
+				isSent=true;
+				} 
 	}
 	
 }

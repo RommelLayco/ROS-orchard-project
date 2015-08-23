@@ -71,8 +71,8 @@ bin( pose [ -1.750 1.400 1.010 90.000] name "bin2")
 bin( pose [ -1.750 0.000 1.010 90.000] name "bin3")
 
 
-picker( pose [ -1.755 -0.270 0.000 90.000] name "picker1" )
-picker( pose [ -6.379 -2.979 0.000 -53.239] name "picker2" )
+carrier( pose [ -1.755 10 0.000 90.000] name "carrier1" )
+carrier( pose [ -6.379 -10 0.000 -53.239] name "carrier2" )
 
 carrier( pose [ -5.539 -1.892 0.000 0.000] name "carrier1")
 worker( pose [1.803 1.126 0.000 0.000] name "worker")
