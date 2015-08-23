@@ -35,7 +35,7 @@ define worker actor
 	# Torso
 	model
 	(
-		size [0.25 0.5 0.55]
+		size [0.25 0.4 0.55]
 		pose [0.0 0.0 0.648 0.0] 
 		color "white"
 	)
@@ -197,32 +197,32 @@ define worker actor
 	# Left sleeve
 	model
 	(
-		size [0.12 0.12 0.6]
-		pose [0.0 0.31 0.598 0.0]
+		size [0.1 0.1 0.6]
+		pose [0.0 0.26 0.598 0.0]
 		color "white"
 	)
 
 	# Right sleeve
 	model
 	(
-		size [0.12 0.12 0.6]
-		pose [0.0 -0.31 0.598 0.0]
+		size [0.1 0.1 0.6]
+		pose [0.0 -0.26 0.598 0.0]
 		color "white"
 	)
 
 	# Left arm
 	model
 	(
-		size [0.1 0.1 0.05]
-		pose [0.0 0.31 0.548 0.0]
+		size [0.08 0.08 0.05]
+		pose [0.0 0.26 0.548 0.0]
 		color "PeachPuff1"
 	)
 
 	# Right arm
 	model
 	(
-		size [0.1 0.1 0.05]
-		pose [0.0 -0.31 0.548 0.0]
+		size [0.08 0.08 0.05]
+		pose [0.0 -0.26 0.548 0.0]
 		color "PeachPuff1"
 	)
 

@@ -53,6 +53,7 @@ bool isDynamic;
 //int from 0-60 to detect the object is on left or right
 int sensorPoint;
 
+
 void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
 {
     int i = 0;
@@ -67,7 +68,6 @@ void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
             //start collison detection, init two counters to 1.
             ::sensorPoint=i;
             mycounter=1;
-            sensorCounter=1;
             break;
         }
         if (isNear == false)
@@ -114,18 +114,16 @@ void binCallback(const team4_ros::binIsFull::ConstPtr& msg)
 void updateCurrentVelocity() {
 
     if (nearCollision == true)
-    {   //this part is not used.
-        if(isDynamic){
-            int c=0;
-            while(c<50){
-                currentVelocity.linear.x = 0;
+    {   
+        if(sensorCounter>=0 && sensorCounter<=10){
+            currentVelocity.linear.x = 0;
                 currentVelocity.angular.z = 0;
                 ROS_INFO("I'm in front of a dynamic object,I will wait");
-                c++;
-            }
-            isDynamic=false;
+                mypub_object.publish(currentVelocity); 
+                sensorCounter++;
+                return;
         }
-        else{
+        
             ROS_INFO("It's a static obj,I will move");
             
             if(::sensorPoint>30){
@@ -146,7 +144,7 @@ void updateCurrentVelocity() {
                mypub_object.publish(currentVelocity); 
            
                 
-       }
+       
 
    }
     // Let collision resolution take place before we attempt to move towards the goal
@@ -154,10 +152,10 @@ void updateCurrentVelocity() {
    return;
 }
 // keep the speed for collision detection.
- if(mycounter>=1 && mycounter<20){
+ if(mycounter>10 && mycounter<30){
     mycounter++;
     return;
-   }else if(mycounter>=20 && mycounter<=40){
+   }else if(mycounter>=30 && mycounter<=50){
     if(sensorPoint>30){
         //if it first goes to the right,it should goes back to left.
         //number 40,20 can be changed to get better performance
@@ -174,14 +172,14 @@ void updateCurrentVelocity() {
     }
     mycounter++;
     return;
-   }else if(mycounter>40){
+   }else if(mycounter>50){
     //stop collison detection,goes back to normal
     mycounter=0;
    }
 
     // Find the correct 
 
-
+sensorCounter=0;
 geometry_msgs::Point desiredLocation = desiredLocations[pathIndex];
     // This is the maximum distance a robot can be from it's
     // desired poisition and still be considered to have reached it
