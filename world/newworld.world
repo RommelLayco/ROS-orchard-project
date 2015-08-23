@@ -10,6 +10,11 @@ include "worker.inc"
 include "masterNode.inc"
 include "weedGroups.inc"
 include "tallTreeWall.inc"
+<<<<<<< HEAD
+=======
+include "visitor.inc"
+include "bigBin.inc"
+>>>>>>> 7fbb45318f84c06b9c23e538c0acd0eaec6a9e0f
 
 # milliseconds per update step 
 interval_sim 100 
@@ -63,14 +68,17 @@ bin( pose [ -1.750 20.000 1.010 90.000] name "bin1")
 bin( pose [ -1.750 1.4.000 1.010 0.000] name "bin2")
 bin( pose [ -1.750 0.000 1.010 90.000] name "bin3")
 tractorWithWorker( pose [ -8.000 30.000 0.000 90.000 ] name "tractorWithWorker")
-
-
-
 carrier( pose [ -1.755 10 0.000 90.000] name "carrier1" )
 carrier( pose [ -6.379 -10 0.000 -53.239] name "carrier2" )
 
 worker( pose [1.803 1.126 0.000 0.000] name "worker")
 masterNode( pose [6.328 1.278 2.800 0.000] name "master")
+<<<<<<< HEAD
 
 # bigBin( pose [ -20 20 0 0 ] name "bigBin")
+=======
+visitor(pose [2.000 4.000 0.000 90.000] name "visitor")
+worker( pose [-1.803 7.126 0.000 0.000] name "worker2")
+bigBin( pose [ -20 20 0 0 ] name "bigBin")
+>>>>>>> 7fbb45318f84c06b9c23e538c0acd0eaec6a9e0f
 
