@@ -441,10 +441,8 @@ int main (int argc, char **argv)
       
 
         mypub_object.publish(currentVelocity); 
-	if(startVib){
-	int c=0;
-	while()
-	}
+	
+	
 
         ros::spinOnce();
         loop_rate.sleep();
