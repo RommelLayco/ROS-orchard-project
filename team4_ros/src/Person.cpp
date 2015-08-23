@@ -27,7 +27,11 @@ double desiredAngle = 0;
 int timeCount = 0; //for rotateAngle function
 int counter = 0;    // for sensor call back function
 int aroundCounter = 0; // for goARound function
-
+//counter for overrall collison avoid
+int mycounter;
+//a sub counter to let picker go back
+int sensorCounter;
+int updateCounter = 0;
 // Boolean for the direction of the 
 bool VibrateX=false;
 
@@ -40,7 +44,11 @@ bool nearCollision;
 // Index that points to current position in path index
 int pathIndex;
 
+//int from 0-110 to detect the object is on left or right
+int sensorPoint;
+
 geometry_msgs::Point desiredLocations[2];
+
 void generateRandomDesiredLocations(){
     // set up for random number generation
     srand (time(NULL));
@@ -72,119 +80,57 @@ negative 2 will be clockwise.
 Eg, turning right 90degrees--- angle2Turn= 1.57, angularSpd = 2
 turning left 180degrees --- angle2Turn = 3.14, angularSpd = -2
 */
+
 bool rotateAngle(double angle2Turn, int angularSpd)
 {
    //Calculate the angle to rotate
-   
+    double destinationAngle = 0;
     currentVelocity.linear.x = 0;
-    int timeLimit = angle2Turn/6.28 * 20;
-/*
-    ROS_INFO("angle2Turn: [%f]", angle2Turn);
-    ROS_INFO("desiredAngle: [%f]", desiredAngle);
+    //int timeLimit = angle2Turn/6.28 * 20;
+    ros::Rate loop_rate(10);
 
-    ROS_INFO("currentAngle: [%f]", currentAngle);
-    ROS_INFO("timeLimit : [%i]", timeLimit);
-*/
 
-    if (timeCount < timeLimit)
+    if (angularSpd > 0) //spin anticlockwise
     {
+        destinationAngle = currentAngle + angle2Turn;
+        /*
+        *   Eg: current Angle = 6, turn 1.57 anticlockwise.
+        *   6 + 1.57 = 7.57.  7.57 - 6.28 = 1.29
+        *   Stop spinning when current angle is closed to 1.29.
+        */
+        if (destinationAngle > 6.28)
+        {
+            destinationAngle = destinationAngle - 6.28;
+        }
+    }
+    else //spin clockwise
+    {
+        //vice versa from above
+        destinationAngle = currentAngle - angle2Turn;
+        if (destinationAngle < 0)
+        {
+            destinationAngle = destinationAngle + 6.28;
+        }
+    }
+
+    while(true)
+    {
+
+        if(fabs(currentAngle-destinationAngle)<0.1){break;}
+
+        ros::spinOnce();
+        ROS_INFO("Current Angle: %f",currentAngle);
+        //ROS_INFO("Desired Angle: %f",desiredAngle);
         currentVelocity.angular.z = angularSpd;
-        timeCount++;
-        return false;
-    } 
-    else
-    {
-        ROS_INFO("Time Count will be RESET NOW");
-
-        currentVelocity.angular.z = 0;
-        timeCount = 0;
-        return true;
-    } 
-/*
-     // If the difference between current angle and desired angle is less than 0.5 stop spining
-        if (abs(difference) > 0.5)
-        {
-            ROS_INFO("currentAngle is : %f",currentAngle); 
-            ROS_INFO("desiredAngle is : %f",desiredAngle); 
-            // Spin
-            currentVelocity.linear.x = 0;
-            currentVelocity.angular.z = 1;
-            
-        } else
-        {
-            // Go forward
-            currentVelocity.linear.x = 1;
-            currentVelocity.angular.z = 0;
-        }
-      */
-
-
-
-}
-
-void goAround(bool turnRight){
-            bool success = false;
-
-    //Turn Right first
-    if(turnRight){
-        ROS_INFO("Time Count: [%i]", aroundCounter);
-
-        ROS_INFO("Turn Right");
-        //first rotate Left
-        if(aroundCounter == 0){
-            success = rotateAngle(1.57,22);
-            aroundCounter++;
-        }       
-
-        if(!success){
-            return;
-        }
-        //move forward 1 metre
-        if (aroundCounter < 10)
-        {
-            ROS_INFO("moving forward");
-
-            currentVelocity.angular.z = 0;
-            currentVelocity.linear.x = 1;
-            aroundCounter++;
-        }else
-        {
-            aroundCounter = 0;
-            return;
-        }
-        //then rotate left
-        rotateAngle(1.57, 2);
-    }
-    //Turn Left first
-    else{
-        ROS_INFO("Turn Left");
-        ROS_INFO("Time Count: [%i]", aroundCounter);
-        //first rotate Left
-        if(aroundCounter == 0){
-            success = rotateAngle(1.57,-2);
-            aroundCounter++;
-        }       
-
-        if(!success){
-            return;
-        }
-        //move forward 1 metre
-        if (aroundCounter < 10)
-        {
-                        ROS_INFO("moving forward");
-
-            currentVelocity.angular.z = 0;
-            currentVelocity.linear.x = 1;
-            aroundCounter++;
-        }else
-        {
-            aroundCounter = 0;
-            return;
-        }
-        //then rotate Right
-        rotateAngle(1.57, -2);
+        mypub_object.publish(currentVelocity);
+        
+        loop_rate.sleep();
+        ROS_INFO("destinationAngle: %f",destinationAngle);
     }
 
+
+    currentVelocity.angular.z = 0;
+    return true;
 
 }
 
@@ -193,77 +139,23 @@ void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
 {
     int i = 0;
     bool isNear = false;
-    //counter to 15 to give time to move back
-    if(nearCollision){
-        counter++;
-
-        //after 15, reinvoke the sensor function
-        if (counter > 15){
-            counter = 0;
-            nearCollision = false;
-        }
-        return;
-    }
     for (i; i < 110; i++) {
-        if (msg->ranges[i] < 1.1)
+        if (msg->ranges[i] < 1.5)
         {
             isNear = true;
             nearCollision = true;
-          
-            //ROS_INFO("This thing is cool!"); 
-
-
-            //Find the angle of the obstacle to the person
-
-            double obstacleAngle = 0;
-            if(currentAngle < 3.14){
-                obstacleAngle = double(i)/110 * 3.14;
-            }
-            else{
-                obstacleAngle = double(i)/110 * 3.14 + 3.14;
-            }
-
-
-            if (desiredAngle - obstacleAngle > 0.5)
-            {
-                //move back and spin anticlockwise
-                //currentVelocity.linear.x = -0.2;
-                //currentVelocity.angular.z = 2;
-                ROS_INFO("On my RIGHT");
-                rotateAngle(1.57,2);
-               //goAround(false);
-
-
-            }
-            else if(desiredAngle - obstacleAngle < 0.5 && desiredAngle - obstacleAngle >-0.5){
-
-                //move back faster, obstacle at middle.
-                //currentVelocity.linear.x = -0.5;
-                //currentVelocity.angular.z = 0.8;
-                ROS_INFO("At middle");
-               // currentVelocity.linear.x = -0.5;
-               // rotateAngle(1.57, -2);
-                if (rotateAngle(1.57,2))
-                {
-                    currentVelocity.linear.x = -0.2;
-                }
-
-            }
-            else{
-                //move back and spin clockwise
-                //currentVelocity.linear.x = -0.2;
-                //currentVelocity.angular.z = -2;
-                ROS_INFO("On my LEFT");
-                //goAround(true);
-                rotateAngle(1.57, -2);
-            }
-
+            ::sensorPoint=i;
+            mycounter=1;
+            sensorCounter=1;
+            break;
         }
-
-
-        mypub_object.publish(currentVelocity);
-
+        if (isNear == false)
+        {
+            nearCollision = false;
+             
+        }
     }
+  
 }
 
 
@@ -292,10 +184,89 @@ void updateCurrentVelocity() {
 
     if (nearCollision == true)
     {
-   // Vibrate();
+        // Vibrate();
         // Let collision resolution take place before we attempt to move towards the goal
+        if(::sensorPoint>55){
+               
+            ROS_INFO("It's on my left,turn right,clock(Z<0) first then anti"); 
+                    
+            if (::sensorPoint < 75)
+            {
+                ROS_INFO("One Left middle");
+                currentVelocity.linear.x = 0;
+                currentVelocity.angular.z=-2;
+            }
+            else
+            {
+                currentVelocity.linear.x = 0.6;
+                currentVelocity.angular.z=-1;
+            }
+
+            
+                    
+            mypub_object.publish(currentVelocity); 
+                
+                
+        }else if(::sensorPoint<=55){
+
+            ROS_INFO("It's on my right,turn left,anti(Z>0) first then clock"); 
+             
+             if (::sensorPoint > 40)
+            {
+                ROS_INFO("On right middle");
+                currentVelocity.linear.x = 0;
+                currentVelocity.angular.z= 2;
+            }
+            else
+            {
+                currentVelocity.linear.x = 0.6;
+                currentVelocity.angular.z= 1;
+            }
+
+            mypub_object.publish(currentVelocity); 
+        }
+        mycounter++;
         return;
+        
     }
+
+
+    // keep the speed for collision detection.
+    if(mycounter>=1 && mycounter<8){
+
+        mycounter++;
+        return;
+
+    }
+    else if(mycounter>=8 && mycounter<=16)
+    {
+        if(sensorPoint>55)
+        {
+            //if it first goes to the right,it should goes back to left.
+            //number 40,20 can be changed to get better performance
+            ROS_INFO("goes back,turn anti Z>0");
+            currentVelocity.linear.x = 0.6;
+            currentVelocity.angular.z=1;
+            mypub_object.publish(currentVelocity); 
+
+        }
+        else
+        {
+            ROS_INFO("goes back,turn clock Z<0");
+            currentVelocity.linear.x = 0.6;
+            currentVelocity.angular.z=-1;
+            mypub_object.publish(currentVelocity); 
+        }
+        mycounter++;
+        return;
+       }
+       else if(mycounter>16)
+       {
+        //stop collison detection,goes back to normal
+        mycounter=0;
+       }
+
+
 
     // Find the correct angle
 
@@ -312,6 +283,21 @@ void updateCurrentVelocity() {
     ROS_INFO("X distance: [%f]", directionVector.x);
     ROS_INFO("Y distance: [%f]", directionVector.y);
 
+    if(updateCounter > 50){
+        generateRandomDesiredLocations();
+        ROS_INFO("CHANGE DESTINATION");
+        updateCounter=0;
+    }
+    else{
+        ROS_INFO("updateCounter: [%i]", updateCounter);
+        updateCounter++;
+    }
+    if (abs(directionVector.x) <= distanceThreshold && abs(directionVector.y) <= distanceThreshold)
+    {
+        generateRandomDesiredLocations();
+        ROS_INFO("CHANGE DESTINATION");
+    }
+    /*
     // Check if we are at the desired location
     if (abs(directionVector.x) <= distanceThreshold && abs(directionVector.y) <= distanceThreshold)
     {
@@ -338,7 +324,7 @@ void updateCurrentVelocity() {
         
         return;
     }
-    
+    */
     // Calculate the desired angle
     desiredAngle = atan2(directionVector.y, directionVector.x) + 3.14;
 
@@ -353,6 +339,7 @@ void updateCurrentVelocity() {
         currentVelocity.angular.z = 0;
         move = true; //Ok to move
     }
+    //rotateAngle(1.57, 2);
 
 
     if(!move) //NOT OK to move
@@ -372,6 +359,7 @@ void updateCurrentVelocity() {
         currentVelocity.linear.x = 1;
         currentVelocity.angular.z = 0;
     }
+    
 }
 
 
@@ -426,6 +414,11 @@ int main (int argc, char **argv)
     ros::NodeHandle n;
 
     ros::Subscriber sub = n.subscribe("robot_2/base_scan", 1000, sensorCallback);
+
+    sensorCounter=0;
+    mycounter=0;
+    
+
 
             
     while (ros::ok()) 
