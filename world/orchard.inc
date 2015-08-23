@@ -2,7 +2,6 @@ include "tree.inc"
 include "wood.inc"
 
 tree( pose [ 0 0 0 0 ] )
-<<<<<<< HEAD
 tree( pose [ 0 8.0 0 0 ] )
 tree( pose [ 0 16.0 0 0 ] )
 tree( pose [ 0 24.0 0 0 ] )
@@ -480,5 +479,4 @@ canopy( pose [ 42.0 60.0 0 0 ] )
 canopy( pose [ 42.0 66.0 0 0 ] )
 canopy( pose [ 42.0 72.0 0 0 ] )
 canopy( pose [ 42.0 78.0 0 0 ] )
->>>>>>> d006f50c5c8de153e985040bd431fcc0fc943a7b
 
