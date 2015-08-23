@@ -49,6 +49,8 @@ add_message_files(
  FILES 
  binIsFull.msg
  readyToUse.msg
+ findPicker.msg
+readyToExchange.msg
 )
 #   FILES
 #   Message1.msg
@@ -125,6 +127,14 @@ add_executable(CarrierNode src/Carrier.cpp)
 target_link_libraries(CarrierNode ${catkin_LIBRARIES})
 add_dependencies(CarrierNode ${catkin_EXPORTED_TARGETS})
 
+add_executable(CarrierNode1 src/Carrier1.cpp)
+target_link_libraries(CarrierNode1 ${catkin_LIBRARIES})
+add_dependencies(CarrierNode1 ${catkin_EXPORTED_TARGETS})
+
+add_executable(master_node src/Master.cpp)
+target_link_libraries(master_node ${catkin_LIBRARIES})
+add_dependencies(master_node ${catkin_EXPORTED_TARGETS})
+
 add_executable(SwingRobotNode src/SwingRobot.cpp)
 target_link_libraries(SwingRobotNode ${catkin_LIBRARIES})
 add_dependencies(SwingRobotNode ${catkin_EXPORTED_TARGETS})
@@ -159,7 +169,8 @@ add_executable(sensor_node src/mypub.cpp)
 
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
-# add_dependencies(team4_ros_node team4_ros_generate_messages_cpp)
+#add_dependencies(team4_ros_node team4_ros_generate_messages_cpp)
+
 
 ## Specify libraries to link a library or executable target against
  target_link_libraries(sensor_node
