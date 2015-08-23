@@ -1,1 +1,2 @@
-bool readyToExchange
+float32 readyToExchange
+float32 readyToExchange2
