@@ -29,7 +29,7 @@ ros::Publisher mypub_object;
 // Speed and angular velocity when sensor detects something
 int x;
 float z;
-int id=0;
+int id=1;
 
 // Set by sensorCallback when robot is near an obstacle
 bool nearCollision;
@@ -199,7 +199,7 @@ int main (int argc, char **argv)
     nearCollision = false;    
 
 	// command line ROS arguments/ name remapping 
-	ros::init(argc, argv, "CarrierNode"); 
+	ros::init(argc, argv, "CarrierNode1"); 
 
 	// ROS node hander
 	ros::NodeHandle velPub_handle;
@@ -213,7 +213,7 @@ int main (int argc, char **argv)
 	// loop 25 
 	ros::Rate loop_rate(10);
 
-	mysub_object = sub_handle.subscribe<nav_msgs::Odometry>("robot_7/base_pose_ground_truth",1000, groundTruthCallback); 
+	mysub_object = sub_handle.subscribe<nav_msgs::Odometry>("robot_8/base_pose_ground_truth",1000, groundTruthCallback); 
 	
 	// ROS comms access point 
 	ros::NodeHandle n;	
