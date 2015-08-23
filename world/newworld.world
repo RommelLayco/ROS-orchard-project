@@ -10,7 +10,6 @@ include "worker.inc"
 include "masterNode.inc"
 include "weedGroups.inc"
 include "tallTreeWall.inc"
-include "bigBin.inc"
 
 # milliseconds per update step 
 interval_sim 100 
@@ -73,5 +72,5 @@ carrier( pose [ -6.379 -10 0.000 -53.239] name "carrier2" )
 worker( pose [1.803 1.126 0.000 0.000] name "worker")
 masterNode( pose [6.328 1.278 2.800 0.000] name "master")
 
-bigBin( pose [ -20 20 0 0 ] name "bigBin")
+# bigBin( pose [ -20 20 0 0 ] name "bigBin")
 

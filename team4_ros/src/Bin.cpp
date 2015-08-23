@@ -25,7 +25,7 @@ void groundTruthCallback(const nav_msgs::Odometry msg)
 	
 	geometry_msgs::Point directionVector; // Vector from currentLocation to desiredLocation
     directionVector.x = (-1.75) - currentLocation.position.x;
-    directionVector.y = 31 - currentLocation.position.y;
+    directionVector.y = 25 - currentLocation.position.y;
     directionVector.z = 0;
 
 	//ROS_INFO("Bin x distance: [%f]", directionVector.x);
