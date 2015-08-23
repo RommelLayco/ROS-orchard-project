@@ -51,6 +51,8 @@ add_message_files(
  readyToUse.msg
  findPicker.msg
 readyToExchange.msg
+finishRotate.msg
+arrived.msg
 )
 #   FILES
 #   Message1.msg
