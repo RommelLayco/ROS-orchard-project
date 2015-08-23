@@ -11,7 +11,10 @@
 #include "math.h"
 #include <unistd.h>
 #include <time.h> 
+#include <fstream>
+	
 
+using namespace std;
 // Current velocity of the Robot
 geometry_msgs::Twist currentVelocity;
 
@@ -20,12 +23,12 @@ geometry_msgs::Pose currentLocation;
 
 // The current angle of the robot
 double currentAngle;
-double desiredAngle = 0;
+double desiredAngle;
 
 
 // counter
-
-int counter = 0;
+int timeCount = 0;	//for rotatAngle function
+int counter = 0;	//for sensorCallback function
 
 
 // Pub object
@@ -34,37 +37,65 @@ ros::Publisher mypub_object;
 // Speed and angular velocity when sensor detects something
 int x;
 float z;
-
+//counter for desiredAngles
+int i;
 // Set by sensorCallback when robot is near an obstacle
 bool nearCollision;
 
 // Index that points to current position in path index
 int pathIndex;
 
-geometry_msgs::Point desiredLocations[2];
+geometry_msgs::Point desiredLocations[4];
+
+float desiredAngles[4] = {0.00, -1.57, -3.14, -4.71 };
 void generateDesiredLocations(){
     // set up for random number generation
     srand (time(NULL));
+	 
+	const int ROWS = 4;
+	const int COLS = 2;
+	const int BUFFSIZE = 80;
+	 
+	//Read position values from tractorLocations
+	float positions[ROWS][COLS];
+	char buff[BUFFSIZE]; // a buffer to temporarily park the data
+	ifstream infile("../../locations/tractorLocations");
+	stringstream ss;
+	for( int row = 0; row < ROWS; ++row ) {
+		// read a full line of input into the buffer (newline is
+		//  automatically discarded)
+		infile.getline( buff,  BUFFSIZE );
+	    // copy the entire line into the stringstream
+	    ss << buff;
+	    for( int col = 0; col < COLS; ++col ) {	     
+      	  ss.getline( buff, 6, ' ' );	    
+	      positions[row][col] = atof( buff );
+	    }
+	    
+	    ss << "";
+
+	    ss.clear();
+  	}
 
     // Setup points on robot's path
     geometry_msgs::Point desiredLocation1;
-    desiredLocation1.x = -8;
-    desiredLocation1.y = 36;
+    desiredLocation1.x = positions[0][0];
+    desiredLocation1.y = positions[0][1];
     desiredLocation1.z = 0;
 
     geometry_msgs::Point desiredLocation2;
-    desiredLocation2.x = 8;
-    desiredLocation2.y = 36;
+    desiredLocation2.x = positions[1][0];
+    desiredLocation2.y = positions[1][1];;
     desiredLocation2.z = 0;
 
 	geometry_msgs::Point desiredLocation3;
-    desiredLocation3.x = 8;
-    desiredLocation3.y = -36;
+    desiredLocation3.x = positions[2][0];;
+    desiredLocation3.y = positions[2][1];;
     desiredLocation3.z = 0;
 
 	geometry_msgs::Point desiredLocation4;
-    desiredLocation4.x = -8;
-    desiredLocation4.y = -36;
+    desiredLocation4.x = positions[3][0];
+    desiredLocation4.y = positions[3][1];
     desiredLocation4.z = 0;
 
     desiredLocations[0] = desiredLocation1;
@@ -144,38 +175,34 @@ void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
 */
 
 
-
-void rotateAngle(double desiredAngle)
+void rotateAngle(double desiredAngle, double angularSpd)
 {
-   //Calculate the angle to rotate
-    double difference = currentAngle - desiredAngle;
-    //Do not rotate if already at desired angle
-    if (difference == 0.0){
-        return;
-    }
-
-     // If the difference between current angle and desired angle is less than 0.5 stop spining
-        if (abs(difference) > 0.5)
-        {
-            ROS_INFO("currentAngle is : %f",currentAngle); 
-            ROS_INFO("desiredAngle is : %f",desiredAngle); 
-            // Spin
-            currentVelocity.linear.x = 0;
-            currentVelocity.angular.z = 1;
-            
-        } else
-        {
-            // Go forward
-            currentVelocity.linear.x = 1;
-            currentVelocity.angular.z = 0;
-        }
-        
-
+	//Calculate the angle to rotate
+	currentVelocity.linear.x = 0;
+	//int timeLimit = angle2Turn/6.28 * 20;
+	ros::Rate loop_rate(100);	
+	while(true)
+	{
+		//int d=currentAngle-desiredAngle;
+		if(fabs(currentAngle-desiredAngle)<0.01){break;}
+		ros::spinOnce();
+		ROS_INFO("Current Angle: %f",currentAngle);
+	
+		currentVelocity.angular.z = angularSpd;
+		mypub_object.publish(currentVelocity);
+		loop_rate.sleep();
+		ROS_INFO("Desired Angle: %f",desiredAngle);
+		//timeCount++;
+		//return false;
+	}
+	ROS_INFO("Time Count will be RESET NOW");
+	currentVelocity.angular.z = 0;
+	//timeCount = 0;
+	//return true;
 }
 
-
 void updateCurrentVelocity() {
-
+ROS_INFO("currentAngle is : %f",currentAngle); 
 	/*
     if (nearCollision == true)
     {    
@@ -195,8 +222,8 @@ void updateCurrentVelocity() {
     directionVector.y = desiredLocation.y - currentLocation.position.y;
     directionVector.z = desiredLocation.z - currentLocation.position.z;
 
-    ROS_INFO("X distance: [%f]", directionVector.x);
-    ROS_INFO("Y distance: [%f]", directionVector.y);
+   // ROS_INFO("X distance: [%f]", directionVector.x);
+   // ROS_INFO("Y distance: [%f]", directionVector.y);
 
     // Check if we are at the desired location
     if (abs(directionVector.x) <= distanceThreshold && abs(directionVector.y) <= distanceThreshold)
@@ -207,25 +234,28 @@ void updateCurrentVelocity() {
         ROS_INFO("I have reached my destination!");
         currentVelocity.linear.x = 0;
         currentVelocity.angular.z = 0.0;
-        if (pathIndex < sizeof(desiredLocations) / sizeof(*desiredLocations) - 1)
+        if (pathIndex < (sizeof(desiredLocations) / sizeof(*desiredLocations)) )
         {
             pathIndex++;
+			ROS_INFO("Path Index: %d",pathIndex);
+	    	//rotate 90 degrees right	
+			
+	    	rotateAngle(desiredAngles[i],-0.1);
+				
+			i++;
         }
         else
         {
             // Reset index
             ROS_INFO("Reached final destination, going back to the start");                       
             pathIndex = 0;
+			i =0;
         }
         
         return;
-    }
-    
-    // Calculate the desired angle
-    desiredAngle = atan2(directionVector.y, directionVector.x) + 3.14;
-
-    rotateAngle(desiredAngle);
- 
+    }else{currentVelocity.linear.x =1;}
+	
+	
 }
 
 
@@ -241,7 +271,7 @@ void groundTruthCallback(const nav_msgs::Odometry msg)
     
     double roll, pitch, yaw;
     tf::Matrix3x3(tf::Quaternion(x, y, z, w)).getRPY(roll, pitch, yaw);
-    currentAngle = yaw + 3.14;
+    currentAngle = yaw;
     //ROS_INFO("Yaw is : %f",yaw); 
     
 }
@@ -265,14 +295,14 @@ int main (int argc, char **argv)
 
     // master registry pub and sub
     //ros::Publisher mypub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_0/cmd_vel",1000);
-        mypub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_4/cmd_vel",1000);
+        mypub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_6/cmd_vel",1000);
         //ros::Publisher mypub_bark = bark_handle.advertise<std_msgs::String>("person_topic",1000);
     ros::Subscriber mysub_object;
     
     // loop 10 
     ros::Rate loop_rate(10);
 
-    mysub_object = sub_handle.subscribe<nav_msgs::Odometry>("robot_4/base_pose_ground_truth",1000, groundTruthCallback);
+    mysub_object = sub_handle.subscribe<nav_msgs::Odometry>("robot_6/base_pose_ground_truth",1000, groundTruthCallback);
 
         // ROS comms access point 
     ros::NodeHandle n;
