@@ -18,12 +18,14 @@ float z;
 ros::Publisher bin_pub;
 ros::Publisher binVelPub_object;
 ros::Publisher exchange_object;
+team4_ros::readyToExchange exchange_msg; 
 
 // The current angle of the robot
 double currentAngle;
 double desiredAngle = 0;
 
-bool readyToEx;
+bool readyToEx=false;
+bool opreadyToEx=false;
 
 // counter
 int timeCount = 0; //for rotateAngle function
@@ -111,32 +113,50 @@ void rotateAngle(double angle2Turn, int angularSpd)
 void exchangeCallback(const team4_ros::readyToExchange::ConstPtr& msg) 
 { 
 	ROS_INFO("sub echoing pub");
-	bool ready=msg->readyToExchange;
-	if (ready){readyToEx=true;}
-	else{readyToEx=false;}	
+	float ready=msg->readyToExchange2;
+	ros::Rate loop_rate(10);
+	if(ready==1){opreadyToEx=true;}
+	if (opreadyToEx && readyToEx){
+		//readyToEx=true;
+		ROS_INFO("Yes");
+		currentVelocity.linear.x = 1;
+        	currentVelocity.angular.z = 2;
+		int counter=0;
+		while(counter<160){
+		ros::spinOnce();
+		binVelPub_object.publish(currentVelocity);	
+		loop_rate.sleep();
+		counter++;}
+		currentVelocity.linear.x = 0;
+        	currentVelocity.angular.z = 0;
+	}
+	//else{readyToEx=false;}	
 }
 
 void exchange()
 {
 	//if (currentAngle==3.14 || currentAngle==0){
 	rotateAngle(0.1,1);
-	team4_ros::readyToExchange exchange_msg; 
-	exchange_msg.readyToExchange = true;  
+
+	exchange_msg.readyToExchange = 1;  
 	exchange_object.publish(exchange_msg);
-	ros::NodeHandle ex_handle;
-	ros::Subscriber ex_object;
-	//ros::Subscriber ex_object = ex_handle.subscribe("exchange_topic",100,exchangeCallback); 
 	ROS_INFO("sub ec");
+	readyToEx=true;
 	//}else{
 	//rotateAngle()
 	//}
-	while(true){
+	//while(true){
 	//exchange_object.publish(exchange_msg);
-	//ex_object = ex_handle.subscribe("exchange_topic",100,exchangeCallback); 
-        currentVelocity.linear.x = 1;
-        currentVelocity.angular.z = 2;	
-	if(readyToEx){break;}
-	}
+        //currentVelocity.linear.x = 1;
+        //currentVelocity.angular.z = 2;	
+	//if(readyToEx){break;}
+	//}
+
+
+	//while(true){
+	//exchange_object.publish(exchange_msg);
+	//binVelPub_object.publish(currentVelocity);
+	//}
 }
 
 int main (int argc, char **argv) 
@@ -160,10 +180,13 @@ int main (int argc, char **argv)
 	ros::NodeHandle velPub_handle;
 	binVelPub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_4/cmd_vel",1000);
 	ros::NodeHandle exn;
-	exchange_object = exn.advertise<team4_ros::readyToExchange>("exchange_topic2",100); 
+	exchange_object = exn.advertise<team4_ros::readyToExchange>("exchange_topic",1000);
 
-	//ros::NodeHandle ex_handle;
-	//ros::Subscriber ex_object = ex_handle.subscribe("exchange_topic",100,exchangeCallback); 
+	//exchange_msg.readyToExchange2 = false;  
+	//exchange_object.publish(exchange_msg); 
+
+	ros::NodeHandle ex_handle;
+	ros::Subscriber ex_object = ex_handle.subscribe("exchange_topic",1000,exchangeCallback); 
 
 	// loop 10 Hz 
 	ros::Rate loop_rate(10);
