@@ -50,6 +50,7 @@ add_message_files(
  binIsFull.msg
  readyToUse.msg
  findPicker.msg
+readyToExchange.msg
 )
 #   FILES
 #   Message1.msg
@@ -125,6 +126,10 @@ add_dependencies(PickerNode ${catkin_EXPORTED_TARGETS})
 add_executable(CarrierNode src/Carrier.cpp)
 target_link_libraries(CarrierNode ${catkin_LIBRARIES})
 add_dependencies(CarrierNode ${catkin_EXPORTED_TARGETS})
+
+add_executable(CarrierNode1 src/Carrier1.cpp)
+target_link_libraries(CarrierNode1 ${catkin_LIBRARIES})
+add_dependencies(CarrierNode1 ${catkin_EXPORTED_TARGETS})
 
 add_executable(master_node src/Master.cpp)
 target_link_libraries(master_node ${catkin_LIBRARIES})

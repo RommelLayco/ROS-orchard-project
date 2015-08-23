@@ -20,19 +20,48 @@ int x;
 float z;
 geometry_msgs::Point desiredLocation;
 int readyToUseCarrier[2];
+
+struct Location{
+double x;
+double y;
+};
+
+Location locationList[2];
 ros::Publisher publishTheChoosenCarrier;
 geometry_msgs::Point desiredLocations[2];
+// Store the location of carrier 0
+
+ 
+
+void groundTruthCallback0(const nav_msgs::Odometry msg) 
+{     
+    //Update Current Position
+    geometry_msgs::Pose currentLocation = msg.pose.pose;
+	Location location;
+   	location.x = currentLocation.position.x;
+   	location.y = currentLocation.position.y;
+	locationList[0]=location;
+    ROS_INFO("0 distance: [%f]", currentLocation.position.y);
+	
+    
+	
+}
 
 void groundTruthCallback1(const nav_msgs::Odometry msg) 
 {     
     //Update Current Position
-    currentLocation = msg.pose.pose;
-    double x = currentLocation.position.x;
-    double y = currentLocation.position.y;
-
+    geometry_msgs::Pose currentLocation = msg.pose.pose;
+	Location location;
+   	location.x = currentLocation.position.x;
+   	location.y = currentLocation.position.y;
+	locationList[1]=location;
+	ROS_INFO("1 distance: [%f]", currentLocation.position.y);
     
 	
 }
+
+
+
 
 
 void binCallback(const team4_ros::binIsFull::ConstPtr& msg) 
@@ -46,9 +75,25 @@ void binCallback(const team4_ros::binIsFull::ConstPtr& msg)
    	 		desiredLocation.y = msg->y;
     		desiredLocation.z = 0; 
 
+			geometry_msgs::Point directionVector; // Vector from currentLocation to desiredLocation
+    		
+			int id=0;
+			double distance=0;
+			for(int i=1; i<2 ; i++){
+			directionVector.x = desiredLocation.x - locationList[i].x;
+			directionVector.y = desiredLocation.y - locationList[i].y;
+			
+				if ((directionVector.x*directionVector.x+directionVector.y*directionVector.y)>distance){			
+				distance=directionVector.x*directionVector.x+directionVector.y*directionVector.y;
+				id=i;
+				}
+
+			}
+
 		        team4_ros::findPicker mypub_msg; 
                 mypub_msg.x= msg->x;
                 mypub_msg.y= msg->y;
+				mypub_msg.id= id;
 				publishTheChoosenCarrier.publish(mypub_msg);
 
 		
@@ -82,7 +127,7 @@ int main (int argc, char **argv)
 	
 	// subscribe the groundtruth of all of the carriers
 	ros::Subscriber mysub_object0 = n.subscribe<nav_msgs::Odometry>("robot_7/base_pose_ground_truth",1000, groundTruthCallback0);
-	ros::Subscriber mysub_object1 = n.subscribe<nav_msgs::Odometry>("robot_7/base_pose_ground_truth",1000, groundTruthCallback1);
+	ros::Subscriber mysub_object1 = n.subscribe<nav_msgs::Odometry>("robot_8/base_pose_ground_truth",1000, groundTruthCallback1);
 
 
 	// loop 10 Hz 
