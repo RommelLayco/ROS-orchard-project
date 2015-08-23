@@ -11,7 +11,10 @@
 #include "math.h"
 #include <unistd.h>
 #include <time.h> 
+#include <fstream>
+	
 
+using namespace std;
 // Current velocity of the Robot
 geometry_msgs::Twist currentVelocity;
 
@@ -48,26 +51,51 @@ float desiredAngles[4] = {0.00, -1.57, -3.14, -4.71 };
 void generateDesiredLocations(){
     // set up for random number generation
     srand (time(NULL));
+	 
+	const int ROWS = 4;
+	const int COLS = 2;
+	const int BUFFSIZE = 80;
+	 
+	//Read position values from tractorLocations
+	float positions[ROWS][COLS];
+	char buff[BUFFSIZE]; // a buffer to temporarily park the data
+	ifstream infile("../../locations/tractorLocations");
+	stringstream ss;
+	for( int row = 0; row < ROWS; ++row ) {
+		// read a full line of input into the buffer (newline is
+		//  automatically discarded)
+		infile.getline( buff,  BUFFSIZE );
+	    // copy the entire line into the stringstream
+	    ss << buff;
+	    for( int col = 0; col < COLS; ++col ) {	     
+      	  ss.getline( buff, 6, ' ' );	    
+	      positions[row][col] = atof( buff );
+	    }
+	    
+	    ss << "";
+
+	    ss.clear();
+  	}
 
     // Setup points on robot's path
     geometry_msgs::Point desiredLocation1;
-    desiredLocation1.x = -8;
-    desiredLocation1.y = 36;
+    desiredLocation1.x = positions[0][0];
+    desiredLocation1.y = positions[0][1];
     desiredLocation1.z = 0;
 
     geometry_msgs::Point desiredLocation2;
-    desiredLocation2.x = 8;
-    desiredLocation2.y = 36;
+    desiredLocation2.x = positions[1][0];
+    desiredLocation2.y = positions[1][1];;
     desiredLocation2.z = 0;
 
 	geometry_msgs::Point desiredLocation3;
-    desiredLocation3.x = 8;
-    desiredLocation3.y = -36;
+    desiredLocation3.x = positions[2][0];;
+    desiredLocation3.y = positions[2][1];;
     desiredLocation3.z = 0;
 
 	geometry_msgs::Point desiredLocation4;
-    desiredLocation4.x = -8;
-    desiredLocation4.y = -36;
+    desiredLocation4.x = positions[3][0];
+    desiredLocation4.y = positions[3][1];
     desiredLocation4.z = 0;
 
     desiredLocations[0] = desiredLocation1;
@@ -147,7 +175,7 @@ void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
 */
 
 
-void rotateAngle(double desiredAngle, int angularSpd)
+void rotateAngle(double desiredAngle, double angularSpd)
 {
 	//Calculate the angle to rotate
 	currentVelocity.linear.x = 0;
@@ -159,7 +187,7 @@ void rotateAngle(double desiredAngle, int angularSpd)
 		if(fabs(currentAngle-desiredAngle)<0.01){break;}
 		ros::spinOnce();
 		ROS_INFO("Current Angle: %f",currentAngle);
-		//ROS_INFO("Desired Angle: %f",desiredAngle);
+	
 		currentVelocity.angular.z = angularSpd;
 		mypub_object.publish(currentVelocity);
 		loop_rate.sleep();
@@ -209,12 +237,10 @@ ROS_INFO("currentAngle is : %f",currentAngle);
         if (pathIndex < (sizeof(desiredLocations) / sizeof(*desiredLocations)) )
         {
             pathIndex++;
+			ROS_INFO("Path Index: %d",pathIndex);
+	    	//rotate 90 degrees right	
 			
-    		
-			
-			// rotate 90 degrees right	
-				
-			rotateAngle(desiredAngles[i],-2);
+	    	rotateAngle(desiredAngles[i],-0.1);
 				
 			i++;
         }
@@ -228,34 +254,7 @@ ROS_INFO("currentAngle is : %f",currentAngle);
         
         return;
     }else{currentVelocity.linear.x =1;}
-	/*
-	double difference = currentAngle - desiredAngle;
-	bool move = false;
-	//Do not rotate if already at desired angle
-	if (abs(difference) <0.5){
-		currentVelocity.angular.z = 0;
-		move = true;
-	}
-	if (!move)
-	{	
-		if (difference < 0)
-		{
-			ROS_INFO("difference : [%f]", difference);
-			move = rotateAngle(fabs(difference),2);
-		}
-		else
-		{
-			move = rotateAngle(difference, -2);
-		}
-	}
-	else{
-		currentVelocity.linear.x = 1;
-		currentVelocity.angular.z = 0;
-	}*/
-
-    
-    // Calculate the desired angle
-    //desiredAngle = atan2(directionVector.y, directionVector.x) + 3.14;
+	
 	
 }
 

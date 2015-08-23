@@ -34,10 +34,6 @@ bool VibrateX=false;
 // Pub object
 ros::Publisher mypub_object;
 
-// Speed and angular velocity when sensor detects something
-int x;
-float z;
-
 // Set by sensorCallback when robot is near an obstacle
 bool nearCollision;
 
@@ -69,7 +65,13 @@ void generateRandomDesiredLocations(){
 
 }
 
-
+/*
+angle2Turn is the angle willing to turn in radians, for example, turn 90degrees will be 1.57 radians.
+angularSpd should set at 2 to reach max turning speed. positive 2 will be spinning anticlockwise, 
+negative 2 will be clockwise.
+Eg, turning right 90degrees--- angle2Turn= 1.57, angularSpd = 2
+turning left 180degrees --- angle2Turn = 3.14, angularSpd = -2
+*/
 bool rotateAngle(double angle2Turn, int angularSpd)
 {
    //Calculate the angle to rotate
@@ -228,7 +230,8 @@ void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
                 //currentVelocity.linear.x = -0.2;
                 //currentVelocity.angular.z = 2;
                 ROS_INFO("On my RIGHT");
-               goAround(false);
+                rotateAngle(1.57,2);
+               //goAround(false);
 
 
             }
@@ -251,8 +254,8 @@ void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
                 //currentVelocity.linear.x = -0.2;
                 //currentVelocity.angular.z = -2;
                 ROS_INFO("On my LEFT");
-                goAround(true);
-
+                //goAround(true);
+                rotateAngle(1.57, -2);
             }
 
         }
@@ -346,23 +349,25 @@ void updateCurrentVelocity() {
 
     //Do not rotate if already at desired angle
     if (abs(difference) <0.5){
+
         currentVelocity.angular.z = 0;
-        move = true;
+        move = true; //Ok to move
     }
 
-    if (!move)
+
+    if(!move) //NOT OK to move
     {
-        if (difference < 0)
+
+        if (difference < 0) // negative rotate anticlockwise
             {
-                ROS_INFO("difference : [%f]", difference);
                 move = rotateAngle(fabs(difference),2);
             }
-            else
+            else //positive rotate clockwise
             {
                 move = rotateAngle(difference, -2);
             }    
     }
-    else{
+    else{ //OK to move straight.
 
         currentVelocity.linear.x = 1;
         currentVelocity.angular.z = 0;
@@ -425,13 +430,12 @@ int main (int argc, char **argv)
             
     while (ros::ok()) 
     { 
-
         updateCurrentVelocity(); 
         // refer to advertise msg type 
         loop_rate.sleep();
+      
 
         mypub_object.publish(currentVelocity); 
-        z=0;
 
         ros::spinOnce();
         loop_rate.sleep();

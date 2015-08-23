@@ -16,6 +16,13 @@ int x;
 float z;
 ros::Publisher bin_pub;
 
+// The current angle of the robot
+double currentAngle;
+double desiredAngle = 0;
+
+// counter
+int timeCount = 0; //for rotateAngle function
+
 // Current velocity of the Robot
 geometry_msgs::Twist currentVelocity;
 
@@ -45,6 +52,31 @@ void groundTruthCallback(const nav_msgs::Odometry msg)
 	}
 	
 }
+
+bool rotateAngle(double angle2Turn, int angularSpd)
+{
+   //Calculate the angle to rotate
+   
+    currentVelocity.linear.x = 0;
+    int timeLimit = angle2Turn/6.28 * 20;
+
+    if (timeCount < timeLimit)
+    {
+        currentVelocity.angular.z = angularSpd;
+        timeCount++;
+        return false;
+    } 
+    else
+    {
+        ROS_INFO("Time Count will be RESET NOW");
+
+        currentVelocity.angular.z = 0;
+        timeCount = 0;
+        return true;
+    } 
+
+}
+
 
 void exchange()
 {

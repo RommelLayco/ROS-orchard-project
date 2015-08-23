@@ -234,6 +234,7 @@ def add_Instances_to_world():
 	f.write('include "walls.inc"\n') # add walls
 	f.write('include "bin.inc"\n') # add bin
 	f.write('include "tractorWithWorker.inc"\n') # add tractor model
+	f.write('include "worker.inc"\n') # add worker model
 	f.write('include "weedLocation.inc"\n\n')#weed model
 
 
@@ -526,7 +527,26 @@ def add_tractor(t_spacing):
 
 	f.close()
 
+def add_trainedPerson(r_spacing,t_spacing):
 
+	f = open('o1.world','a')
+
+	f.write("\n")
+
+	current_x = r_spacing * 7 + 5
+	current_y = t_spacing *13 + 5
+
+	name = "\"worker\""
+
+	line = "worker( pose [ " 
+	line = line + str(current_x) + " "
+	line = line + str(current_y) + " "
+	line = line + "0 270 ] name " + name + " )\n"
+
+	f.write(line)
+
+
+	f.close()
 
 
 
@@ -660,6 +680,9 @@ add_dog()
 
 # add person
 add_person(r_spacing)
+
+# add trained person
+add_trainedPerson(r_spacing,t_spacing)
 
 # add tractor
 add_tractor(t_spacing)
