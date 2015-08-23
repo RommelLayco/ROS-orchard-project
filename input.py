@@ -621,8 +621,8 @@ def pickerLocations(r_spacing, t_spacing):
 
 
 	for i in range(0,7):
-		line = str(current_x) + " " + str(current_y) + " "
-		line = line + str(current_x) + " " + str(final_y) + "\n"
+		line = str(current_x) + " " + str(final_y) + "\n"
+		line = line + str(current_x) + " " + str(current_y) + " \n"
 		f.write(line)
 
 		#change x positions
