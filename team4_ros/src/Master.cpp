@@ -41,7 +41,6 @@ void groundTruthCallback0(const nav_msgs::Odometry msg)
    	location.x = currentLocation.position.x;
    	location.y = currentLocation.position.y;
 	locationList[0]=location;
-    ROS_INFO("0 distance: [%f]", currentLocation.position.y);
 	
     
 	
@@ -55,7 +54,6 @@ void groundTruthCallback1(const nav_msgs::Odometry msg)
    	location.x = currentLocation.position.x;
    	location.y = currentLocation.position.y;
 	locationList[1]=location;
-	ROS_INFO("1 distance: [%f]", currentLocation.position.y);
     
 	
 }
@@ -66,9 +64,6 @@ void groundTruthCallback1(const nav_msgs::Odometry msg)
 
 void binCallback(const team4_ros::binIsFull::ConstPtr& msg) 
 { 
-	//ROS_INFO("sub echoing pub: %s", msg->data.c_str());
-       
-        ROS_INFO("sub echoing pub:");
 
 		if(msg->isFull){
    			desiredLocation.x = msg->x;
@@ -78,15 +73,21 @@ void binCallback(const team4_ros::binIsFull::ConstPtr& msg)
 			geometry_msgs::Point directionVector; // Vector from currentLocation to desiredLocation
     		
 			int id=0;
-			double distance=0;
-			for(int i=1; i<2 ; i++){
+			double distance=9999;
+			for(int i=0; i<2 ; i++){
+			if(readyToUseCarrier[i]>0){
+
 			directionVector.x = desiredLocation.x - locationList[i].x;
 			directionVector.y = desiredLocation.y - locationList[i].y;
 			
-				if ((directionVector.x*directionVector.x+directionVector.y*directionVector.y)>distance){			
+				if ((directionVector.x*directionVector.x+directionVector.y*directionVector.y)<distance){			
 				distance=directionVector.x*directionVector.x+directionVector.y*directionVector.y;
+				ROS_INFO("distance: [%f]", distance);
+				
 				id=i;
+				ROS_INFO("distance: [%d]", id);
 				}
+			}
 
 			}
 
@@ -94,6 +95,8 @@ void binCallback(const team4_ros::binIsFull::ConstPtr& msg)
                 mypub_msg.x= msg->x;
                 mypub_msg.y= msg->y;
 				mypub_msg.id= id;
+				readyToUseCarrier[id]=0;
+				
 				publishTheChoosenCarrier.publish(mypub_msg);
 
 		
@@ -136,7 +139,7 @@ int main (int argc, char **argv)
 	x = 1;
 	z = 0;
 
-	readyToUseCarrier[0]=0;
+	readyToUseCarrier[0]=1;
 	readyToUseCarrier[1]=1;
 	
     int counter=0;
