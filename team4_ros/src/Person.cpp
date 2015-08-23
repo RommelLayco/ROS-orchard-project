@@ -1,4 +1,4 @@
-//counter variable in sensorCallback#include "ros/ros.h"
+#include "ros/ros.h"
 #include <stdlib.h>
 #include "std_msgs/Empty.h"
 #include "std_msgs/String.h"

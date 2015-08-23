@@ -20,6 +20,7 @@ int x;
 float z;
 geometry_msgs::Point desiredLocation;
 int readyToUseCarrier[2];
+geometry_msgs::Twist currentVelocity;
 
 struct Location{
 double x;
@@ -104,11 +105,6 @@ void binCallback(const team4_ros::binIsFull::ConstPtr& msg)
       
 }
 
-void searchNearestCarrier()
-{
-	
-
-}
 
 
 int main (int argc, char **argv) 
@@ -132,6 +128,8 @@ int main (int argc, char **argv)
 	ros::Subscriber mysub_object0 = n.subscribe<nav_msgs::Odometry>("robot_7/base_pose_ground_truth",1000, groundTruthCallback0);
 	ros::Subscriber mysub_object1 = n.subscribe<nav_msgs::Odometry>("robot_8/base_pose_ground_truth",1000, groundTruthCallback1);
 
+	// publish message to the master robot
+	ros::Publisher masterPub = n.advertise<geometry_msgs::Twist>("robot_10/cmd_vel",1000);
 
 	// loop 10 Hz 
 	ros::Rate loop_rate(10);
@@ -145,13 +143,12 @@ int main (int argc, char **argv)
     int counter=0;
 	while (ros::ok()) 
 	{
+
+		currentVelocity.linear.x = 1;
+        currentVelocity.angular.z = 0.1;
+		masterPub.publish(currentVelocity);
 		ros::spinOnce();
 		loop_rate.sleep();
-		
-
-
-				
-
 	} 
 
 	return 0; 
