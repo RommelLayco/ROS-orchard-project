@@ -1,6 +1,13 @@
+#ifndef ROBOT_CPP
+#define ROBOT_CPP
+
 #include "Robot.h"
 #include "Util.cpp"
+#include <iostream>
+#include <fstream>
+#include <math.h>
 
+using namespace std;
 
 // Contructor
 Robot::Robot(double x_position, double y_position, double theta_orientation, int sensor_range, int sensor_angle)
@@ -30,6 +37,17 @@ Robot::Robot(double x_position, double y_position, double theta_orientation, int
 
 }
 
+double Robot::getXPos()
+{
+    return current_x;
+}
+
+double Robot::getYPos()
+{
+    return current_y;
+}
+
+
 /* Add goal to end of entity's goal list */
 void Robot::addGoal(geometry_msgs::Point goal)
 {
@@ -39,6 +57,11 @@ void Robot::addGoal(geometry_msgs::Point goal)
 void Robot::addSpeedListener(SpeedListener* listener)
 {
     speedListeners.push_back(listener);
+}
+
+void Robot::addPositionListener(PositionListener* listener)
+{
+    positionListeners.push_back(listener);
 }
 
 /* Returns the state of the entity */
@@ -64,21 +87,21 @@ void Robot::sensorCallback(const sensor_msgs::LaserScan::ConstPtr& sensorMsg)
         {
             isNear = true;
             current_state = CollisionResolution; // Entity is now in CollisionResolution state
-
+            CollisionType type = getCollisionType(i, sensorRange, sensorMsg->ranges[i]);
             if (i < left_vals)
             {
                 // Collision is on right
-                rightCollisionDetected();
+                rightCollisionDetected(type);
                 break;
             } else if (i >= left_vals && i < right_vals)
             {
                 // Collision is in front
-                centerCollisionDetected();
+                centerCollisionDetected(type);
                 break;
             } else
             {
                 // Collision is on left
-                leftCollisionDetected();
+                leftCollisionDetected(type);
                 break;
             }
 
@@ -95,22 +118,68 @@ void Robot::sensorCallback(const sensor_msgs::LaserScan::ConstPtr& sensorMsg)
 }
 
 
-void Robot::leftCollisionDetected()
+CollisionType Robot::getCollisionType(int i, int sensorRange, double distance)
+{
+    CollisionType type;
+    for (int i = 0; i < positionListeners.size(); i++)
+    {
+        type = positionListeners[i]->getCollisionType( getCollisionPosition(i, sensorRange, distance) );
+    }
+    return type;
+}
+
+geometry_msgs::Point Robot::getCollisionPosition(int index, int sampleSize, double distance)
+{
+    int angleOffset = (180 - sampleSize) / 2;
+    int trueAngle = angleOffset + index;
+    double x = distance * cos(trueAngle) + current_x;
+    double y = distance * sin(trueAngle) + current_y;
+    geometry_msgs::Point point;
+    point.x = x;
+    point.y = y;
+    return point;
+}
+
+void Robot::leftCollisionDetected(CollisionType type)
 {
     // Spin to the right
+    if (type = Static)
+    {
+        ROS_INFO("Static Collision");
+    }
+    else
+    {
+        ROS_INFO("Dynamic Collision");
+    }
     linear_velocity_x = 4 * top_linear_speed;
     angular_velocity = -4 * top_angular_speed;
 }
 
-void Robot::rightCollisionDetected()
+void Robot::rightCollisionDetected(CollisionType type)
 {
     // Spin to the left
+    if (type = Static)
+    {
+        ROS_INFO("Static Collision");
+    }
+    else
+    {
+        ROS_INFO("Dynamic Collision");
+    }
     linear_velocity_x = 4 * top_linear_speed;
     angular_velocity = 4 * top_angular_speed;
 }
 
-void Robot::centerCollisionDetected()
+void Robot::centerCollisionDetected(CollisionType type)
 {
+    if (type = Static)
+    {
+        ROS_INFO("Static Collision");
+    }
+    else
+    {
+        ROS_INFO("Dynamic Collision");
+    }
     // Move backwards and spin right
     linear_velocity_x = 4 * top_linear_speed;
     angular_velocity = -4 * top_angular_speed;
@@ -152,6 +221,7 @@ void Robot::updateVelocity()
         {
             goalIndex++;
             ROS_INFO("Reached destination");
+            writeToFile("Reached destination");
         }
         else
         {
@@ -166,9 +236,21 @@ void Robot::updateVelocity()
     double desiredAngle = atan2(directionVector.y, directionVector.x);
     rotateToGoal(desiredAngle);
 
+    
+
+
     notifySpeedListeners();
 }
 
+
+void Robot::writeToFile(std::string message){
+
+    ofstream myfile;
+    myfile.open ("info/example.txt",std::ios_base::app);
+    myfile << message << "\n";
+    myfile.close();
+
+}
 
 /* This method is invoked by ROS when position data for this entity is available */
 void Robot::positionCallback(const nav_msgs::Odometry positionMsg)
@@ -246,4 +328,4 @@ void Robot::rotateToGoal(double desiredAngle)
     }
 }
 
-
+#endif

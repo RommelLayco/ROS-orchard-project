@@ -1,5 +1,8 @@
 #include "../include/team4_ros/Picker.h"
 
+#include <iostream>
+#include <fstream>
+
 Picker::Picker()
 {
     //ctor##########
