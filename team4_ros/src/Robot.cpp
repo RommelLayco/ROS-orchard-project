@@ -1,6 +1,11 @@
 #include "Robot.h"
 #include "Util.cpp"
 
+#include <iostream>
+#include <fstream>
+
+using namespace std;
+
 
 // Contructor
 Robot::Robot(double x_position, double y_position, double theta_orientation, int sensor_range, int sensor_angle)
@@ -152,6 +157,7 @@ void Robot::updateVelocity()
         {
             goalIndex++;
             ROS_INFO("Reached destination");
+            writeToFile("Reached destination");
         }
         else
         {
@@ -166,9 +172,21 @@ void Robot::updateVelocity()
     double desiredAngle = atan2(directionVector.y, directionVector.x);
     rotateToGoal(desiredAngle);
 
+    
+
+
     notifySpeedListeners();
 }
 
+
+void Robot::writeToFile(std::string message){
+
+    ofstream myfile;
+    myfile.open ("info/example.txt",std::ios_base::app);
+    myfile << message << "\n";
+    myfile.close();
+
+}
 
 /* This method is invoked by ROS when position data for this entity is available */
 void Robot::positionCallback(const nav_msgs::Odometry positionMsg)

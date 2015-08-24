@@ -29,6 +29,8 @@ class Robot
         void addGoal(geometry_msgs::Point goal);
         robotState getState();
 
+        void writeToFile(std::string message);
+
 
    protected:
         void notifySpeedListeners(); // Send position message to all listeners
