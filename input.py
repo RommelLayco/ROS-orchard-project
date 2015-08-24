@@ -243,7 +243,6 @@ def add_Instances_to_world():
 	f.write('include "wood.inc"\n') # change canopy base on size
 	f.write('include "carrier.inc"\n') #canopy model
 	f.write('include "walls.inc"\n') # add walls
-	f.write('include "bin.inc"\n') # add bin
 	f.write('include "tractorWithWorker.inc"\n') # add tractor model
 	f.write('include "worker.inc"\n') #add worker model
 	f.write('include "masterNode.inc"\n') #add master node model
@@ -571,7 +570,7 @@ def add_masterNode():
 	current_x = 6.328
 	current_y = 1.278 
 
-	name = "master"
+	name = "\"master\""
 
 	line = "masterNode( pose [ " 
 	line = line + str(current_x) + " "
