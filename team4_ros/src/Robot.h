@@ -12,6 +12,9 @@
 #include <unistd.h>
 #include <vector>
 #include "SpeedListener.h"
+#include "Robot.h"
+#include "PositionListener.h"
+#include "Util.cpp"
 
 /* Represents the three possible states an entity can be in */
 enum robotState {CollisionResolution, Moving, Orienting};
@@ -24,10 +27,13 @@ class Robot
         Robot(double x, double y, double z, int sensor_range, int sensor_angle);
         void updateVelocity();
         void addSpeedListener(SpeedListener* listener);
+        void addPositionListener(PositionListener* listener);
         void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& sensorMsg);
         void positionCallback(const nav_msgs::Odometry PositionMsg);
         void addGoal(geometry_msgs::Point goal);
         robotState getState();
+        double getXPos();
+        double getYPos();
 
         void writeToFile(std::string message);
 
@@ -36,6 +42,11 @@ class Robot
         void notifySpeedListeners(); // Send position message to all listeners
 
         std::vector<SpeedListener*> speedListeners; // Must be a pointer because SpeedListener is an abstract type
+        std::vector<PositionListener*> positionListeners;
+
+        geometry_msgs::Point getCollisionPosition(int index, int sampleSize, double distance);
+
+        CollisionType getCollisionType(int i, int sensorRange, double distance);
 
         // List of entity's goals
         std::vector<geometry_msgs::Point> goals;
@@ -77,9 +88,9 @@ class Robot
         void rotateToGoal(double desiredAngle);
     
         // These methods should be overridden in subclasses to provide more specific behavior
-        virtual void leftCollisionDetected();
-        virtual void rightCollisionDetected();
-        virtual void centerCollisionDetected();
+        virtual void leftCollisionDetected(CollisionType type);
+        virtual void rightCollisionDetected(CollisionType type);
+        virtual void centerCollisionDetected(CollisionType type);
         // Subclass should overide this to define behavior when last goal is reached
         virtual void reachedLastGoal();
         

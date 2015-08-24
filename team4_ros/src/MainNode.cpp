@@ -6,6 +6,7 @@
 #include "Person.cpp"
 #include "Dog.cpp"
 #include "Util.cpp"
+#include "PositionListener.h"
 
 class myClass: public SpeedListener {
     private:
@@ -24,6 +25,33 @@ void myClass::speedUpdate(geometry_msgs::Twist speedMsg)
 {
     publisher.publish(speedMsg);
 }
+
+
+PositionListener::PositionListener(std::vector<Robot*> entities)
+{
+    entityList = entities;
+}
+
+CollisionType PositionListener::getCollisionType(geometry_msgs::Point objectLocation)
+{
+    double tolerance = 1;
+
+    for (int i = 0; i < entityList.size(); i++)
+    {
+        double x = entityList[i]->getXPos();
+        double y = entityList[i]->getYPos();
+        
+        if (fabs(x - objectLocation.x) <= tolerance && fabs(y - objectLocation.y))
+        {
+            // There is a dynamic entity near where the collision happened
+            return Dynamic;
+        }
+    }
+    
+    return Static;
+}
+
+
 
 
 int main(int argc, char **argv)
@@ -84,6 +112,15 @@ int main(int argc, char **argv)
     entityList.push_back(&myPerson);
 
     //myPerson.addGoal(desiredLocation1);
+    
+    PositionListener* posLis = new PositionListener(entityList);
+    
+    for (int i = 0; i < entityList.size(); i++)
+    {
+       entityList[i]->addPositionListener(posLis);
+    }
+    
+    
 
 
     while (ros::ok()) 
