@@ -54,6 +54,8 @@ xterm -hold -e rosrun team4_ros PickerNode&
 xterm -hold -e rosrun team4_ros CarrierNode&
 xterm -hold -e rosrun team4_ros CarrierNode1&
 xterm -hold -e rosrun team4_ros master_node&
+xterm -hold -e rosrun team4_ros Visitor&
+xterm -hold -e rosrun team4_ros Guider&
 
 
 cd $DIR/world

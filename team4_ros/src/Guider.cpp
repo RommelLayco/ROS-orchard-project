@@ -27,37 +27,26 @@ ros::Publisher mypub_object;
 // Speed and angular velocity when sensor detects something
 int x;
 float z;
-bool canMove=false;
 
 // Set by sensorCallback when robot is near an obstacle
 bool nearCollision;
+bool isFindVisitor=false;
+
+bool VibrateX=false;
+bool needVibrate=false;
+int counter=0;
 
 // Index that points to current position in path index
-int pathIndex;
+
+ros::Publisher pubToVisitor;
 
 geometry_msgs::Point desiredLocation;
-
-
-void guiderCallback(const team4_ros::findVisitor::ConstPtr& msg){
-
-	if(msg->isFind){
-
-	canMove=true;
-	}
-
-	else{
-	canMove=false;	
-}
-
-
-
-}
 
 void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
 {
     int i = 0;
     bool isNear = false;
-    ROS_INFO("i AM VISITOR");
+    ROS_INFO("i AM GUIDER:");
     for (i; i < 60; i++) {
         if (msg->ranges[i] < 1)
         {
@@ -99,6 +88,42 @@ void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
 }
 
 
+
+
+void Vibrate() 
+{     
+    //Update Current Position
+    
+    if (VibrateX == false){
+	//currentVelocity.linear.y = 3;
+    currentVelocity.angular.z = 0.95;
+	VibrateX = true;
+	}
+	else {
+	currentVelocity.linear.x = 0;
+        currentVelocity.angular.z = -1.0;
+
+        VibrateX = false;
+	}
+	if(counter>5){
+	counter=0;
+	needVibrate=false;
+	return;	
+	
+	}
+	counter=counter+1;
+}
+
+void publishMessageToVisitor(){
+	
+		team4_ros::findVisitor mypub_msg; 
+		mypub_msg.isFind=isFindVisitor;
+		pubToVisitor.publish(mypub_msg);
+		
+		
+}
+
+
 void updateCurrentVelocity() {
 
     if (nearCollision == true)
@@ -111,7 +136,7 @@ void updateCurrentVelocity() {
 
     // This is the maximum distance a robot can be from it's
     // desired poisition and still be considered to have reached it
-    float distanceThreshold = 0.5;
+    float distanceThreshold = 2;
 
     geometry_msgs::Point directionVector; // Vector from currentLocation to desiredLocation
     directionVector.x = desiredLocation.x - currentLocation.position.x;
@@ -125,14 +150,19 @@ void updateCurrentVelocity() {
         // Robot has reached it's desired location
         // For now, make robot stop. In future, robot should now try to move
         // to the next location on it's path.
-        ROS_INFO("I have reached my destination!");
         currentVelocity.linear.x = 0;
         currentVelocity.angular.z = 0.0;
 		ROS_INFO("Reached destination");
+		needVibrate=true;
+		isFindVisitor=true;
+		
+
         
         return;
     }
-    
+
+	
+    isFindVisitor=false;
     // Calculate the desired angle
     double desiredAngle = atan2(directionVector.y, directionVector.x);
     // If the desired angle is 0
@@ -173,6 +203,14 @@ void groundTruthCallback(const nav_msgs::Odometry msg)
 	
 }
 
+void visitorGroundTruthCallback(const nav_msgs::Odometry msg) 
+{     
+    //Update Current Position
+    desiredLocation.x = msg.pose.pose.position.x; 
+	desiredLocation.y = msg.pose.pose.position.y; 
+	
+}
+
 
 
 int main (int argc, char **argv) 
@@ -181,40 +219,44 @@ int main (int argc, char **argv)
     nearCollision = false;    
 
 	// command line ROS arguments/ name remapping 
-	ros::init(argc, argv, "Visitor"); 
+	ros::init(argc, argv, "Guider"); 
 
 	// ROS node hander
 	ros::NodeHandle n; 
 
 	// master registry pub and sub
-	//ros::Publisher mypub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_0/cmd_vel",1000);
-    mypub_object = n.advertise<geometry_msgs::Twist>("robot_11/cmd_vel",1000);
+    mypub_object = n.advertise<geometry_msgs::Twist>("robot_12/cmd_vel",1000);
+
+	pubToVisitor =n.advertise<team4_ros::findVisitor>("findVisitorTopic",1000);
 	
 	// loop 25 
 	ros::Rate loop_rate(10);
 
-	ros::Subscriber mysub_object = n.subscribe<nav_msgs::Odometry>("robot_11/base_pose_ground_truth",1000, groundTruthCallback); 
+	ros::Subscriber mysub_object = n.subscribe<nav_msgs::Odometry>("robot_12/base_pose_ground_truth",1000, groundTruthCallback); 
+	ros::Subscriber visitorSub = n.subscribe<nav_msgs::Odometry>("robot_11/base_pose_ground_truth",1000, visitorGroundTruthCallback); 
 	
 	// ROS comms access point 
 
-    ros::Subscriber sub = n.subscribe("robot_11/base_scan", 1000, sensorCallback);
+    ros::Subscriber sub = n.subscribe("robot_12/base_scan", 1000, sensorCallback);
 
-	
-	ros::Subscriber guiderSub=n.subscribe("findVisitorTopic", 1000, guiderCallback);
-	
-	// Desired location
-	desiredLocation.x=10;
-	desiredLocation.y=10;
 
 	while (ros::ok()) 
 	{ 
 		loop_rate.sleep();
 
-		updateCurrentVelocity(); 
-		// refer to advertise msg type 
-		if(canMove){
-		mypub_object.publish(currentVelocity); 
+
+		if(needVibrate){
+		Vibrate();
 		}
+		else {
+		updateCurrentVelocity(); 
+		}
+	
+		publishMessageToVisitor();
+		// refer to advertise msg type 
+
+			
+		mypub_object.publish(currentVelocity); 
 		z=0;
 
 		ros::spinOnce();
