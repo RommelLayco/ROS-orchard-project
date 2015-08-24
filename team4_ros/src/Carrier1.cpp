@@ -11,6 +11,7 @@
 #include <unistd.h>
 #include <team4_ros/binIsFull.h> 
 #include <team4_ros/findPicker.h> 
+#include <team4_ros/arrived.h>
 //#include <team4_ros/readyToUse.h>
 
 
@@ -45,7 +46,13 @@ bool isDynamic;
 //int from 0-60 to detect the object is on left or right
 int sensorPoint;
 
+//publisher for arrived
+ros::Publisher arrivedPub;
+//bool for arrived msg
+bool isSent=false;
 
+//bool for publishing arrived msg
+bool canPublish=false;
 
 void masterCallback(const team4_ros::findPicker::ConstPtr& msg) 
 { 
@@ -54,8 +61,9 @@ void masterCallback(const team4_ros::findPicker::ConstPtr& msg)
         ROS_INFO("Get message from master:");
 			if(msg->id==id){
    			desiredLocation.x = msg->x;
-   	 		desiredLocation.y = msg->y;
+   	 		desiredLocation.y = msg->y+2;
     		desiredLocation.z = 0; 
+            canPublish=true;
 			canMove=true;}
 		
       
@@ -72,19 +80,20 @@ void binCallback(const team4_ros::binIsFull::ConstPtr& msg)
    	 		desiredLocation.y = msg->y;
     		desiredLocation.z = 0; 
 			canMove=true;
+
 		}
       
 }
 
-//void finishRotateCallBack(const team4_ros::finishRotate::ConstPtr& msg){
-//		if(msg->isFull){
-//		ROS_INFO("Finish rotating");
-//   		desiredLocation.x = 10;
-//   	 		desiredLocation.y = 10;
-//    		desiredLocation.z = 0; 
-//			canMove=true;
-//		}
-//} 
+void finishRotateCallback(const team4_ros::binIsFull::ConstPtr& msg){
+		if(msg->isFull){
+		ROS_INFO("Finish rotating");
+   		desiredLocation.x = 10;
+   	 		desiredLocation.y = 10;
+    		desiredLocation.z = 0; 
+			canMove=true;
+		}
+} 
 
 void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
 {
@@ -92,7 +101,7 @@ void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
     bool isNear = false;
     ROS_INFO("I am carrier1");
     for (i; i < 60; i++) {
-         if (msg->ranges[i] <1.5)
+         if (msg->ranges[i] <1)
         {
             isNear = true;
             isDynamic=false;
@@ -203,7 +212,21 @@ sensorCounter=0;
         // to the next location on it's path.
         ROS_INFO("I have reached my destination!");
         currentVelocity.linear.x = 0;
-        currentVelocity.angular.z = 0.0;    
+        currentVelocity.angular.z = 0.0;
+
+        //if arrived publish the arrvied_msg
+        team4_ros::arrived arrived_msg;
+       // arrived_msg.isFull=true;
+        arrived_msg.x=1;
+        if(canPublish){
+        ROS_INFO("arrived msg published");
+        arrivedPub.publish(arrived_msg);
+        canPublish=false;
+    }
+           
+
+
+
         return;
     }
     
@@ -293,10 +316,14 @@ int main (int argc, char **argv)
 		ros::NodeHandle finish_handle;
         
         // tell master you want to sub to topic 
-	//ros::Subscriber finish_object = finish_handle.subscribe("finishRotate_topic",100,finishRotateCallback); 
+	ros::Subscriber finish_object = finish_handle.subscribe("finishRotate_topic",100,finishRotateCallback); 
     sensorCounter=0;
     mycounter=0;
     
+    //create arrived message
+    ros::NodeHandle arrivedHandle;
+    arrivedPub=arrivedHandle.advertise<team4_ros::arrived>("arrived_topic",1000);
+
 	
 	while (ros::ok()) 
 	{ 

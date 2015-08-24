@@ -12,6 +12,7 @@
 #include "std_msgs/String.h"
 #include <team4_ros/binIsFull.h> 
 #include <team4_ros/readyToExchange.h>
+#include <team4_ros/arrived.h>
 
 int x;
 float z;
@@ -128,6 +129,9 @@ void exchangeCallback(const team4_ros::readyToExchange::ConstPtr& msg)
 		//team4_ros::finishRotate finish_msg; 
 		//finish_msg.isFull = true;  
 		//finish_object.publish(finish_msg); 
+		team4_ros::binIsFull finish_msg; 
+		finish_msg.isFull = true;  
+		finish_object.publish(finish_msg); 
 	}
 	//else{readyToEx=false;}	
 }
@@ -142,6 +146,11 @@ void exchange()
 	ROS_INFO("sub ec");
 	readyToEx=true;
 
+}
+void arrivedCallBack(const team4_ros::arrived::ConstPtr& msg){
+	if(msg->x==1){
+		exchange();
+	}
 }
 
 int main (int argc, char **argv) 
@@ -168,8 +177,11 @@ int main (int argc, char **argv)
 
 	ros::NodeHandle finish_handle; 
 
+	ros::NodeHandle arrivedHandle;
+    ros::Subscriber arrivedSubscriber=arrivedHandle.subscribe("arrived_topic",1000,arrivedCallBack);
+
 	// master registry pub/sub 
-        //finish_object = finish_handle.advertise<team4_ros::finishRotate>("finishRotate_topic",100); 
+        finish_object = finish_handle.advertise<team4_ros::binIsFull>("finishRotate_topic",100); 
 
 	// loop 10 Hz 
 	ros::Rate loop_rate(10);

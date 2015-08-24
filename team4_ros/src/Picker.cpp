@@ -258,7 +258,7 @@ int main (int argc, char **argv)
 	mypub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_0/cmd_vel",1000);
 
 	// control bin
-	ros::Publisher binVelPub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_3/cmd_vel",1000);
+	ros::Publisher binVelPub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_5/cmd_vel",1000);
 	
 	// Subscribe the ground truth of robot 0
 	ros::NodeHandle sub_handle; 
