@@ -42,6 +42,7 @@ model
 	size [20.000 80.000 0.0100 0]
 	bitmap "floorplan.png"
 	color "DarkOliveGreen4"
+	gui_move 0
 )
 
 #driveway
