@@ -22,7 +22,7 @@ define carrier actor
 		pose [0 0 0 0.0]
 		color "orange"
 	)
-	#Carrier Logo "CA"
+	#Carrier Logo "CA" at front
 	#C LETTER
 	model
 	(
@@ -65,6 +65,51 @@ define carrier actor
 	(
 		size [0.01 0.01 0.3]
 		pose [0.5 0.17 0.06 0.0]
+		color "black"
+	)
+
+	#CA logo at back
+	model
+	(
+		size [0.01 0.1 0.05]
+		pose [-0.5 0.10 0.3 0.0]
+		color "black"
+	)
+	model
+	(
+		size [0.01 0.01 0.24]
+		pose [-0.5 0.15 0.06 0.0]
+		color "black"
+	)
+	model
+	(
+		size [0.01 0.1 0.05]
+		pose [-0.5 0.10 0.06 0.0]
+		color "black"
+	)
+	#A LETTER
+	model
+	(
+		size [0.01 0.1 0.05]
+		pose [-0.5 -0.09 0.3 0.0]
+		color "black"
+	)
+	model
+	(
+		size [0.01 0.1 0.05]
+		pose [-0.5 -0.09 0.15 0.0]
+		color "black"
+	)
+	model
+	(
+		size [0.01 0.01 0.3]
+		pose [-0.5 -0.13 0.06 0.0]
+		color "black"
+	)
+	model
+	(
+		size [0.01 0.01 0.3]
+		pose [-0.5 -0.03 0.06 0.0]
 		color "black"
 	)
 
