@@ -246,6 +246,7 @@ def add_Instances_to_world():
 	f.write('include "tractorWithWorker.inc"\n') # add tractor model
 	f.write('include "worker.inc"\n') #add worker model
 	f.write('include "masterNode.inc"\n') #add master node model
+	f.write('include "bigBin.inc"\n') # add big bin
 	f.write('include "weedLocation.inc"\n\n')#weed model
 
 
@@ -581,6 +582,28 @@ def add_masterNode():
 
 	f.close()
 
+def add_bigBin(t_spacing):
+
+	# place the big bin just before the driveway starts
+	f = open('o1.world','a')
+
+	f.write("\n")
+
+	current_y = 13 * t_spacing + 8.5	
+	current_x = -7.8
+
+	name = "\"Big bin\""
+
+	line = "bigBin( pose [ " 
+	line = line + str(current_x) + " "
+	line = line + str(current_y) + " "
+	line = line + "0 0 ] name " + name + " )\n"
+
+	f.write(line)
+
+	f.close()
+
+
 
 
 """----------------------------------------------Print file Location ---------------------------------------"""
@@ -730,6 +753,9 @@ add_bin(r_spacing,t_spacing)
 
 #add master node
 add_masterNode()
+
+# add big bin
+add_bigBin(t_spacing)
 
 '''------------------------------------ Destination locations for actors to read -----------------------------------'''
 dogLocation(r_spacing,t_spacing)

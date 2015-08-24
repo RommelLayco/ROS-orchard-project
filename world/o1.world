@@ -9,6 +9,7 @@ include "walls.inc"
 include "tractorWithWorker.inc"
 include "worker.inc"
 include "masterNode.inc"
+include "bigBin.inc"
 include "weedLocation.inc"
 
 interval_sim 100
@@ -70,3 +71,5 @@ bin( pose [ 28.0 73.0 0 90 ] name "bin9" )
 bin( pose [ 29.0 73.0 0 90 ] name "bin10" )
 
 masterNode( pose [ 6.328 1.278 2.800 0.000 ] name "master" )
+
+bigBin( pose [ -7.8 73.5 0 0 ] name "Big bin" )
