@@ -28,9 +28,10 @@ mv pickerLocations ../locations
 mv tractorLocations ../locations
 mv dogLocation ../locations
 mv binArea ../locations
+mv bigBinLocation ../locations
 
 #-------------------------------------------------------------
-#reset log files
+#reset info files
 cd $DIR/setup
 python3 createNewInfoFiles.py
 
