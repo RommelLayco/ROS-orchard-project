@@ -246,6 +246,7 @@ def add_Instances_to_world():
 	f.write('include "bin.inc"\n') # add bin
 	f.write('include "tractorWithWorker.inc"\n') # add tractor model
 	f.write('include "worker.inc"\n') #add worker model
+	f.write('include "masterNode.inc"\n') #add master node model
 	f.write('include "weedLocation.inc"\n\n')#weed model
 
 
@@ -559,7 +560,27 @@ def add_trainedPerson(r_spacing,t_spacing):
 
 	f.close()	
 
+def add_masterNode():
 
+	# just position master node at 0,0 and above 
+
+	f = open('o1.world','a')
+
+	f.write("\n")
+
+	current_x = 6.328
+	current_y = 1.278 
+
+	name = "master"
+
+	line = "masterNode( pose [ " 
+	line = line + str(current_x) + " "
+	line = line + str(current_y) + " "
+	line = line + "2.800 0.000 ] name " + name + " )\n"
+	
+	f.write(line)
+
+	f.close()
 
 
 
@@ -706,6 +727,10 @@ add_tractor(t_spacing)
 
 # add bin	
 add_bin(r_spacing,t_spacing)
+
+
+#add master node
+add_masterNode()
 
 '''------------------------------------ Destination locations for actors to read -----------------------------------'''
 dogLocation(r_spacing,t_spacing)
