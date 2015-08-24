@@ -6,6 +6,7 @@ define weed model
 	size [0.08 0.08 0.25 0]
 	pose [0 0 0 0]
 	color "green"
+	gui_move 0
 
 	#leaves base
 	model

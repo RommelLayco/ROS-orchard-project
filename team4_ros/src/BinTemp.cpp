@@ -12,12 +12,14 @@
 #include "std_msgs/String.h"
 #include <team4_ros/binIsFull.h> 
 #include <team4_ros/readyToExchange.h>
+#include <team4_ros/arrived.h>
 
 int x;
 float z;
 ros::Publisher bin_pub;
 ros::Publisher binVelPub_object;
 ros::Publisher exchange_object;
+ros::Publisher finish_object;
 team4_ros::readyToExchange exchange_msg; 
 
 // The current angle of the robot
@@ -35,7 +37,7 @@ geometry_msgs::Twist currentVelocity;
 
 // Current location of the robot
 geometry_msgs::Pose currentLocation;
-
+bool isSent=false;
 void groundTruthCallback(const nav_msgs::Odometry msg) 
 {     
     //Update Current Position
@@ -59,11 +61,15 @@ void groundTruthCallback(const nav_msgs::Odometry msg)
    // ROS_INFO("Bin Y distance: [%f]", directionVector.y);
 
 	if(directionVector.y<0.3 && directionVector.y>-0.3){
-                team4_ros::binIsFull mypub_msg; 
-		mypub_msg.isFull = true; 
+                  team4_ros::binIsFull mypub_msg; 
+                //mypub_msg.my_counter=0;
+				mypub_msg.isFull = true; 
                 mypub_msg.x= currentLocation.position.x;
                 mypub_msg.y= currentLocation.position.y;
-		bin_pub.publish(mypub_msg); 
+				if(!isSent){
+				bin_pub.publish(mypub_msg);
+				isSent=true;
+				} 
 	}
 	
 }
@@ -127,6 +133,10 @@ void exchangeCallback(const team4_ros::readyToExchange::ConstPtr& msg)
 		counter++;}
 		currentVelocity.linear.x = 0;
         	currentVelocity.angular.z = 0;	
+        	//rotate is finished ,botify picker
+        	team4_ros::binIsFull finish_msg; 
+		finish_msg.x = 1;  
+		finish_object.publish(finish_msg); 
 	}
 	else{ROS_INFO("NO");}	
 }
@@ -156,6 +166,12 @@ void exchange()
 	//}
 }
 
+void arrivedCallBack(const team4_ros::arrived::ConstPtr& msg){
+	if(msg->x==1){
+		ROS_INFO("arrvied_msg received");
+		exchange();
+	}
+}
 int main (int argc, char **argv) 
 { 
 	// command line ROS arguments/ name remapping 
@@ -191,12 +207,20 @@ int main (int argc, char **argv)
 	//currentVelocity.linear.x = 1;
     //int counter=0;
 	//turnToX();
-	exchange();
+	//exchange();
+
+	//subscriber for receiving arrived msg from carrier
+	ros::NodeHandle arrivedHandle;
+    ros::Subscriber arrivedSubscriber=arrivedHandle.subscribe("arrived_topic",1000,arrivedCallBack);
+
+    //finish handle for finishing rotate
+    ros::NodeHandle finish_handle; 
+    finish_object = finish_handle.advertise<team4_ros::binIsFull>("finishRotatePicker_topic",100); 
 	while (ros::ok()) 
 	{
 		ros::spinOnce();
 		//exchange();
-		binVelPub_object.publish(currentVelocity);
+		//binVelPub_object.publish(currentVelocity);
 		loop_rate.sleep();
 
 	} 

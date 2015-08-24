@@ -11,6 +11,7 @@
 #include <unistd.h>
 #include <team4_ros/binIsFull.h> 
 #include <team4_ros/findPicker.h> 
+#include <team4_ros/arrived.h>
 //#include <team4_ros/readyToUse.h>
 
 
@@ -36,7 +37,22 @@ bool nearCollision;
 bool canMove=false;
 
 geometry_msgs::Point desiredLocation;
+//counter for overrall collison avoid
+int mycounter;
+//a sub counter to let picker go back
+int sensorCounter;
+//currently not used, should be used to detect the object is dynamic or static
+bool isDynamic;
+//int from 0-60 to detect the object is on left or right
+int sensorPoint;
 
+//publisher for arrived
+ros::Publisher arrivedPub;
+//bool for arrived msg
+bool isSent=false;
+
+//bool for publishing arrived msg
+bool canPublish=false;
 
 void masterCallback(const team4_ros::findPicker::ConstPtr& msg) 
 { 
@@ -45,8 +61,9 @@ void masterCallback(const team4_ros::findPicker::ConstPtr& msg)
         ROS_INFO("Get message from master:");
 			if(msg->id==id){
    			desiredLocation.x = msg->x;
-   	 		desiredLocation.y = msg->y;
+   	 		desiredLocation.y = msg->y+2;
     		desiredLocation.z = 0; 
+            canPublish=true;
 			canMove=true;}
 		
       
@@ -63,11 +80,20 @@ void binCallback(const team4_ros::binIsFull::ConstPtr& msg)
    	 		desiredLocation.y = msg->y;
     		desiredLocation.z = 0; 
 			canMove=true;
+
 		}
       
 }
 
-
+void finishRotateCallback(const team4_ros::binIsFull::ConstPtr& msg){
+		if(msg->isFull){
+		ROS_INFO("Finish rotating");
+   		desiredLocation.x = 10;
+   	 	desiredLocation.y = 10;
+    		desiredLocation.z = 0; 
+			canMove=true;
+		}
+} 
 
 void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
 {
@@ -75,39 +101,21 @@ void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
     bool isNear = false;
     ROS_INFO("I am carrier1");
     for (i; i < 60; i++) {
-        if (msg->ranges[i] < 1)
+         if (msg->ranges[i] <1)
         {
             isNear = true;
+            isDynamic=false;
             nearCollision = true;
             ROS_INFO("I'm near something! [%f]", msg->ranges[i]);
-
-            if (i < 20)
-            {
-                // Spin to the left
-                ROS_INFO("Spinning left");
-                currentVelocity.linear.x = 0.5;
-                currentVelocity.angular.z = 1;
-            } else if (i >= 20 && i < 40)
-            {
-                // Move backwards and spin right
-                ROS_INFO("Moving backwards and spinning right");
-                currentVelocity.linear.x = -0.5;
-                currentVelocity.angular.z = -0.5;
-            } else
-            {
-                // Spin to the right
-                ROS_INFO("Spinning right");
-                currentVelocity.linear.x = 0.5;
-                currentVelocity.angular.z = -1;
-            }
-
+            //start collison detection, init two counters to 1.
+            ::sensorPoint=i;
+            mycounter=1;
+            break;
         }
 
         if (isNear == false)
         {
             nearCollision = false;
-            //currentVelocity.linear.x = 0;
-            //currentVelocity.angular.z = 0.0;
         }
         
 
@@ -118,11 +126,72 @@ void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
 void updateCurrentVelocity() {
 
     if (nearCollision == true)
-    {
-        // Let collision resolution take place before we attempt to move towards the goal
-        return;
-    }
+    {   
+        if(sensorCounter>=0 && sensorCounter<=10){
+            currentVelocity.linear.x = 0;
+                currentVelocity.angular.z = 0;
+                ROS_INFO("I'm in front of a dynamic object,I will wait");
+                mypub_object.publish(currentVelocity); 
+                sensorCounter++;
+                return;
+        }
+        
+            ROS_INFO("It's a static obj,I will move");
+            
+            if(::sensorPoint>30){
+                ROS_INFO("It's on my left,turn right,clock(Z<0) first then anti"); 
+                    
 
+                    currentVelocity.linear.x = 0.5;
+                    currentVelocity.angular.z=-0.4;
+                    
+                    mypub_object.publish(currentVelocity); 
+                
+                
+            }else if(::sensorPoint<=30){
+             ROS_INFO("It's on my right,turn left,anti(Z>0) first then clock"); 
+             
+               currentVelocity.linear.x = 0.5;
+               currentVelocity.angular.z=0.4;
+               mypub_object.publish(currentVelocity); 
+           
+                
+       
+
+   }
+       // Let collision resolution take place before we attempt to move towards the goal
+   mycounter++;
+   return;
+}
+// keep the speed for collision detection.
+ if(mycounter>=1 && mycounter<10){
+    mycounter++;
+    return;
+   }else if(mycounter>=10 && mycounter<=40){
+    if(sensorPoint>30){
+        //if it first goes to the right,it should goes back to left.
+        //number 40,20 can be changed to get better performance
+        ROS_INFO("goes back,turn anti Z>0");
+        currentVelocity.linear.x = 0.3;
+        currentVelocity.angular.z=0.5;
+        mypub_object.publish(currentVelocity); 
+
+    }else{
+        ROS_INFO("goes back,turn clock Z<0");
+         currentVelocity.linear.x = 0.3;
+        currentVelocity.angular.z=-0.5;
+        mypub_object.publish(currentVelocity); 
+    }
+    mycounter++;
+    return;
+   }else if(mycounter>40){
+    //stop collison detection,goes back to normal
+    mycounter=0;
+   }
+
+    // Find the correct 
+
+sensorCounter=0;
     // This is the maximum distance a robot can be from it's
     // desired poisition and still be considered to have reached it
     float distanceThreshold = 2;
@@ -144,7 +213,20 @@ void updateCurrentVelocity() {
         ROS_INFO("I have reached my destination!");
         currentVelocity.linear.x = 0;
         currentVelocity.angular.z = 0.0;
-        
+
+        //if arrived publish the arrvied_msg
+        team4_ros::arrived arrived_msg;
+       // arrived_msg.isFull=true;
+        arrived_msg.x=1;
+        if(canPublish){
+        ROS_INFO("arrived msg published");
+        arrivedPub.publish(arrived_msg);
+        canPublish=false;
+    }
+           
+
+
+
         return;
     }
     
@@ -195,7 +277,8 @@ void groundTruthCallback(const nav_msgs::Odometry msg)
 
 int main (int argc, char **argv) 
 {
-
+    
+  
 
     nearCollision = false;    
 
@@ -209,12 +292,14 @@ int main (int argc, char **argv)
 	// master registry pub and sub
 	//ros::Publisher mypub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_0/cmd_vel",1000);
         mypub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_8/cmd_vel",1000);
+	ros::Publisher binVelPub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_4/cmd_vel",1000);
+
 	ros::Subscriber mysub_object;
 	
 	// loop 25 
 	ros::Rate loop_rate(10);
 
-	mysub_object = sub_handle.subscribe<nav_msgs::Odometry>("robot_8/base_pose_ground_truth",1000, groundTruthCallback); 
+	mysub_object = sub_handle.subscribe<nav_msgs::Odometry>("robot_8/base_pose_ground_truth",1000, groundTruthCallback); \
 	
 	// ROS comms access point 
 	ros::NodeHandle n;	
@@ -227,12 +312,26 @@ int main (int argc, char **argv)
 	//ros::Subscriber sub_bin = sub_handle.subscribe("bin_topic",10,binCallback);  
 
 	ros::Subscriber sub_master = sub_handle.subscribe("choosen_carrier",10,masterCallback);
+
+		ros::NodeHandle finish_handle;
+        
+        // tell master you want to sub to topic 
+	ros::Subscriber finish_object = finish_handle.subscribe("finishRotate_topic",100,finishRotateCallback); 
+    sensorCounter=0;
+    mycounter=0;
+    
+    //create arrived message
+    ros::NodeHandle arrivedHandle;
+    arrivedPub=arrivedHandle.advertise<team4_ros::arrived>("arrived_topic",1000);
+
 	
 	while (ros::ok()) 
 	{ 
 		loop_rate.sleep();
 
 		updateCurrentVelocity(); 
+      //  mypub_object.publish(currentVelocity); 
+        
 		// refer to advertise msg type 
                 //if(currentVelocity.linear.x == 0 && currentVelocity.angular.z == 0){
 			//mypub_msg.isReady = true; 
@@ -241,9 +340,11 @@ int main (int argc, char **argv)
 	//	}
 		//carrier_pub.publish(mypub_msg);
 
-		if(canMove){ 
-		mypub_object.publish(currentVelocity); 
-		}
+            if(canMove){
+                mypub_object.publish(currentVelocity);
+		binVelPub_object.publish(currentVelocity); 
+                
+            }
 		z=0;
 
 		ros::spinOnce();

@@ -38,35 +38,33 @@ velocity_enable 1
 model
 (
 size [20.000 20.000 0.100 0]
-pose [ -20.000 72.0 0.000 0.000]
+pose [ -20.000 59.0 0.000 0.000]
 bitmap "driveway.png"
 )
 
-picker( pose [ 2.5 -2 0 90 ] name "picker1" )
-picker( pose [ 8.5 -2 0 90 ] name "picker2" )
-picker( pose [ 14.5 -2 0 90 ] name "picker3" )
-picker( pose [ 20.5 -2 0 90 ] name "picker4" )
-picker( pose [ 26.5 -2 0 90 ] name "picker5" )
-picker( pose [ 32.5 -2 0 90 ] name "picker6" )
-picker( pose [ 38.5 -2 0 90 ] name "picker7" )
+picker( pose [ 2.0 -2 0 90 ] name "picker1" )
+picker( pose [ 7.0 -2 0 90 ] name "picker2" )
+picker( pose [ 12.0 -2 0 90 ] name "picker3" )
+picker( pose [ 17.0 -2 0 90 ] name "picker4" )
+picker( pose [ 22.0 -2 0 90 ] name "picker5" )
+picker( pose [ 27.0 -2 0 90 ] name "picker6" )
+picker( pose [ 32.0 -2 0 90 ] name "picker7" )
 
 dog( pose [ -4 -8 0 90 ] name "dog" )
 
-person1( pose [ 47.0 -5 0 90 ] name "person1" )
-
+person1( pose [ 40.0 -5 0 90 ] name "person1" )
 
 worker( pose [ 40.0 70.0 0 270 ] name "worker" )
 
 tractorWithWorker( pose [ -9 68.0 0 0 ] name "tractorWithWorker" )
 
-
-bin( pose [ 24.0 86.0 0 90 ] name "bin1" )
-bin( pose [ 25.0 86.0 0 90 ] name "bin2" )
-bin( pose [ 26.0 86.0 0 90 ] name "bin3" )
-bin( pose [ 27.0 86.0 0 90 ] name "bin4" )
-bin( pose [ 28.0 86.0 0 90 ] name "bin5" )
-bin( pose [ 29.0 86.0 0 90 ] name "bin6" )
-bin( pose [ 30.0 86.0 0 90 ] name "bin7" )
-bin( pose [ 31.0 86.0 0 90 ] name "bin8" )
-bin( pose [ 32.0 86.0 0 90 ] name "bin9" )
-bin( pose [ 33.0 86.0 0 90 ] name "bin10" )
+bin( pose [ 20.0 73.0 0 90 ] name "bin1" )
+bin( pose [ 21.0 73.0 0 90 ] name "bin2" )
+bin( pose [ 22.0 73.0 0 90 ] name "bin3" )
+bin( pose [ 23.0 73.0 0 90 ] name "bin4" )
+bin( pose [ 24.0 73.0 0 90 ] name "bin5" )
+bin( pose [ 25.0 73.0 0 90 ] name "bin6" )
+bin( pose [ 26.0 73.0 0 90 ] name "bin7" )
+bin( pose [ 27.0 73.0 0 90 ] name "bin8" )
+bin( pose [ 28.0 73.0 0 90 ] name "bin9" )
+bin( pose [ 29.0 73.0 0 90 ] name "bin10" )

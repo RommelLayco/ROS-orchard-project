@@ -12,12 +12,14 @@
 #include "std_msgs/String.h"
 #include <team4_ros/binIsFull.h> 
 #include <team4_ros/readyToExchange.h>
+#include <team4_ros/arrived.h>
 
 int x;
 float z;
 ros::Publisher bin_pub;
 ros::Publisher binVelPub_object;
 ros::Publisher exchange_object;
+ros::Publisher finish_object;
 team4_ros::readyToExchange exchange_msg; 
 
 // The current angle of the robot
@@ -26,6 +28,7 @@ double desiredAngle = 0;
 
 bool readyToEx=false;
 bool opreadyToEx=false;
+
 
 // counter
 int timeCount = 0; //for rotateAngle function
@@ -101,14 +104,6 @@ void rotateAngle(double angle2Turn, int angularSpd)
 
 }
 
-//void turnToX()
-//{
-//	while (rotateAngle(4.71,2)){
-//		ROS_INFO("Time");
-//		binVelPub_object.publish(currentVelocity);
-//	}
-//}
-
 
 void exchangeCallback(const team4_ros::readyToExchange::ConstPtr& msg) 
 { 
@@ -129,6 +124,14 @@ void exchangeCallback(const team4_ros::readyToExchange::ConstPtr& msg)
 		counter++;}
 		currentVelocity.linear.x = 0;
         	currentVelocity.angular.z = 0;
+		opreadyToEx=false;
+		readyToEx=false;
+		//team4_ros::finishRotate finish_msg; 
+		//finish_msg.isFull = true;  
+		//finish_object.publish(finish_msg); 
+		team4_ros::binIsFull finish_msg; 
+		finish_msg.isFull = true;  
+		finish_object.publish(finish_msg); 
 	}
 	//else{readyToEx=false;}	
 }
@@ -142,21 +145,12 @@ void exchange()
 	exchange_object.publish(exchange_msg);
 	ROS_INFO("sub ec");
 	readyToEx=true;
-	//}else{
-	//rotateAngle()
-	//}
-	//while(true){
-	//exchange_object.publish(exchange_msg);
-        //currentVelocity.linear.x = 1;
-        //currentVelocity.angular.z = 2;	
-	//if(readyToEx){break;}
-	//}
 
-
-	//while(true){
-	//exchange_object.publish(exchange_msg);
-	//binVelPub_object.publish(currentVelocity);
-	//}
+}
+void arrivedCallBack(const team4_ros::arrived::ConstPtr& msg){
+	if(msg->x==1){
+		exchange();
+	}
 }
 
 int main (int argc, char **argv) 
@@ -168,10 +162,6 @@ int main (int argc, char **argv)
 	ros::NodeHandle n;
 	// master registry pub/sub 
 	bin_pub = n.advertise<team4_ros::binIsFull>("bin_topic",10);
-  
-
-    // master registry pub/sub 
-	//bin_pub = n.advertise<std_msgs::String>("bin_topic",100);
         
 	ros::NodeHandle sub_handle; 
 	ros::Subscriber mysub_object;
@@ -182,24 +172,26 @@ int main (int argc, char **argv)
 	ros::NodeHandle exn;
 	exchange_object = exn.advertise<team4_ros::readyToExchange>("exchange_topic",1000);
 
-	//exchange_msg.readyToExchange2 = false;  
-	//exchange_object.publish(exchange_msg); 
-
 	ros::NodeHandle ex_handle;
 	ros::Subscriber ex_object = ex_handle.subscribe("exchange_topic",1000,exchangeCallback); 
+
+	ros::NodeHandle finish_handle; 
+
+	ros::NodeHandle arrivedHandle;
+    ros::Subscriber arrivedSubscriber=arrivedHandle.subscribe("arrived_topic",1000,arrivedCallBack);
+
+	// master registry pub/sub 
+        finish_object = finish_handle.advertise<team4_ros::binIsFull>("finishRotate_topic",100); 
 
 	// loop 10 Hz 
 	ros::Rate loop_rate(10);
 	
-	//currentVelocity.linear.x = 1;
-    //int counter=0;
-	//turnToX();
-	exchange();
 	while (ros::ok()) 
 	{
 		ros::spinOnce();
-		//exchange();
-		binVelPub_object.publish(currentVelocity);
+	
+		//binVelPub_object.publish(currentVelocity);
+		//if(finishRotation){exchange();}
 		loop_rate.sleep();
 
 	} 

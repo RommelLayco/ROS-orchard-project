@@ -22,6 +22,54 @@ define picker actor
 		pose [0 0 0 0.0]
 		color "pink"
 	)
+
+	#Picker Logo "PI"
+	#P LETTER
+	model
+	(
+		size [0.01 0.1 0.01]
+		pose [0.5 -0.10 0.3 0.0]
+		color "black"
+	)
+	model
+	(
+		size [0.01 0.1 0.01]
+		pose [0.5 -0.10 0.2 0.0]
+		color "black"
+	)
+	model
+	(
+		size [0.01 0.01 0.2]
+		pose [0.5 -0.15 0.08 0.0]
+		color "black"
+	)
+	model
+	(
+		size [0.01 0.01 0.1]
+		pose [0.5 -0.05 0.2 0.0]
+		color "black"
+	)
+	#I LETTER
+	model
+	(
+		size [0.01 0.1 0.01]
+		pose [0.5 0.08 0.3 0.0]
+		color "black"
+	)
+	model
+	(
+		size [0.01 0.1 0.01]
+		pose [0.5 0.08 0.1 0.0]
+		color "black"
+	)
+	model
+	(
+		size [0.01 0.01 0.2]
+		pose [0.5 0.08 0.11 0.0]
+		color "black"
+	)
+
+
 	
 	pickerLaser(pose [ 0.0 0.0 0.5 0.0 ])
 	

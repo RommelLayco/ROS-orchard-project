@@ -118,7 +118,11 @@ void binCallback(const team4_ros::binIsFull::ConstPtr& msg)
 		}
       
 }
-
+void finishRotateCallBack(const team4_ros::binIsFull::ConstPtr& msg){
+    if(msg->x==1){
+        //go back to normal behaviour.
+    }
+}
 
 void updateCurrentVelocity() {
 
@@ -258,7 +262,7 @@ int main (int argc, char **argv)
 	mypub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_0/cmd_vel",1000);
 
 	// control bin
-	ros::Publisher binVelPub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_3/cmd_vel",1000);
+	ros::Publisher binVelPub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_5/cmd_vel",1000);
 	
 	// Subscribe the ground truth of robot 0
 	ros::NodeHandle sub_handle; 
@@ -274,8 +278,9 @@ int main (int argc, char **argv)
 	// loop 25 
 	ros::Rate loop_rate(10);
 
-
-
+    
+    ros::NodeHandle finishRotateHandle;
+    ros::Subscriber finishRotateSub=finishRotateHandle.subscribe("finishRotatePicker_topic",1000,finishRotateCallBack);
 
 	while (ros::ok()) 
 	{ 

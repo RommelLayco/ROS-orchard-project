@@ -10,7 +10,12 @@ include "worker.inc"
 include "masterNode.inc"
 include "weedGroups.inc"
 include "tallTreeWall.inc"
+<<<<<<< HEAD
 
+=======
+include "visitor.inc"
+include "bigBin.inc"
+>>>>>>> 4b05aa4e5b33ff5e4e6fa5a397c55bce365415f3
 
 # milliseconds per update step 
 interval_sim 100 
@@ -41,6 +46,7 @@ model
 	size [20.000 80.000 0.0100 0]
 	bitmap "floorplan.png"
 	color "DarkOliveGreen4"
+	gui_move 0
 )
 
 #driveway
@@ -60,14 +66,16 @@ dog( pose [8.743 13.106 0.000 0.000] name "dog")
 person1( pose [-4.825 4.342 0.000 -50.628] name "person1" )
 
 
-bin( pose [ -1.750 20.000 1.010 90.000] name "bin1")
-bin( pose [ -1.750 1.4.000 1.010 0.000] name "bin2")
-bin( pose [ -1.750 0.000 1.010 90.000] name "bin3")
+bin( pose [ -1.750 0.000 1.010 90.000] name "bin1")
+bin( pose [ -1.379 35.000 1.010 -53.239] name "bin2")
+bin( pose [ -1.750 20.000 1.010 90.000] name "bin3")
 tractorWithWorker( pose [ -8.000 30.000 0.000 90.000 ] name "tractorWithWorker")
 carrier( pose [ -1.755 10 0.000 90.000] name "carrier1" )
-carrier( pose [ -6.379 -10 0.000 -53.239] name "carrier2" )
+carrier( pose [ -1.379 35 0.000 -53.239] name "carrier2" )
 
 worker( pose [1.803 1.126 0.000 0.000] name "worker")
 masterNode( pose [6.328 1.278 2.800 0.000] name "master")
-worker( pose [-1.755 -5 0.000 0.000] name "worker")
-person1( pose [-1.7 -17 0.000 -50.628] name "person1" )
+visitor(pose [2.000 4.000 0.000 90.000] name "visitor")
+worker( pose [-1.803 7.126 0.000 0.000] name "worker2")
+bigBin( pose [ -20 20 0 0 ] name "bigBin")
+
