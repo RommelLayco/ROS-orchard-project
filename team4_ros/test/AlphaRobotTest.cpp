@@ -3,6 +3,7 @@
 #define protected public
 #include "../src/Robot.h"
 #include "../src/Robot.cpp"
+#include "../src/PositionListener.cpp"
 #include <iostream>
 #include <fstream>
 
@@ -24,7 +25,7 @@ TEST(testBasicRobot, testInitialState)
 {
 
     // Create a robot
-    Robot testRobot = Robot(1, 2, 3, 2, 120);
+    Robot testRobot = Robot(2, 120);
     // Set loop rate to 10 Hz
     ros::Rate loop_rate(10);
     ASSERT_EQ(Orienting, testRobot.getState());
@@ -38,13 +39,13 @@ TEST(testBasicRobot, testInitialPosition)
 {
     
     // Create a robot
-    Robot *testRobot = new Robot(1, 2, 3, 2, 120);
+    Robot *testRobot = new Robot(2, 120);
     // Set loop rate to 10 Hz
     ros::Rate loop_rate(10);
 
-    ASSERT_EQ(1, testRobot->current_x);
-    ASSERT_EQ(2, testRobot->current_y);
-    ASSERT_EQ(3, testRobot->current_theta);
+    ASSERT_EQ(0, testRobot->current_x);
+    ASSERT_EQ(0, testRobot->current_y);
+    ASSERT_EQ(0, testRobot->current_theta);
 }
 
 /**
@@ -53,7 +54,7 @@ This test checks the initial velocity of the robot at its initialisation
 TEST(testBasicRobot, testInitalVelocity)
 {
     
-    Robot *testRobot = new Robot(1, 2, 3, 2, 120);
+    Robot *testRobot = new Robot(2, 120);
     // Set loop rate to 10 Hz
     ros::Rate loop_rate(10);
 
@@ -68,7 +69,7 @@ Then it tests that the class correctly receives messages on a topic from stage/o
 **/
 TEST(testBasicRobot, testPositionCallback){
     
-    Robot *testRobot = new Robot(1, 2, 3, 2, 120);
+    Robot *testRobot = new Robot(2, 120);
     // Set loop rate to 10 Hz
     ros::Rate loop_rate(10);
 
@@ -102,10 +103,10 @@ are as expected when the left side collision is detected.
 TEST(testBasicRobot, testLeftCollison)
 {
     
-	Robot *testRobot = new Robot(1, 2, 3, 2, 120);
+	Robot *testRobot = new Robot(2, 120);
     // Set loop rate to 10 Hz
     ros::Rate loop_rate(10);
-	testRobot->leftCollisionDetected();
+	testRobot->leftCollisionDetected(Static);
 
 	ASSERT_EQ(4, testRobot->linear_velocity_x);
 	ASSERT_EQ(-2, testRobot->angular_velocity);
@@ -118,10 +119,10 @@ are as expected when the right side collision is detected.
 TEST(testBasicRobot, testRightCollision)
 {
     
-	Robot *testRobot = new Robot(1, 2, 3, 2, 120);
+	Robot *testRobot = new Robot(2, 120);
     // Set loop rate to 10 Hz
     ros::Rate loop_rate(10);
-	testRobot->rightCollisionDetected();
+	testRobot->rightCollisionDetected(Static);
 
 	ASSERT_EQ(4, testRobot->linear_velocity_x);
 	ASSERT_EQ(2, testRobot->angular_velocity);
@@ -134,10 +135,10 @@ are as expected when the center side collision is detected.
 TEST(testBasicRobot, testCenterCollision)
 {
     
-	Robot *testRobot = new Robot(1, 2, 3, 2, 120);
+	Robot *testRobot = new Robot(2, 120);
     // Set loop rate to 10 Hz
     ros::Rate loop_rate(10);
-	testRobot->centerCollisionDetected();
+	testRobot->centerCollisionDetected(Static);
 
 	ASSERT_EQ(4, testRobot->linear_velocity_x);
 	ASSERT_EQ(-2, testRobot->angular_velocity);
@@ -151,7 +152,7 @@ it need to stop
 TEST(testBasicRobot, testReachedLastGoal)
 {
     
-	Robot *testRobot = new Robot(1, 2, 3, 2, 120);
+	Robot *testRobot = new Robot(2, 120);
     // Set loop rate to 10 Hz
     ros::Rate loop_rate(10);
 	testRobot->goalIndex = 0;
@@ -167,7 +168,7 @@ change
 TEST(testBasicRobot, testNoGoals)
 {
     
-    Robot *testRobot = new Robot(0, 0, 0, 2, 120);
+    Robot *testRobot = new Robot(2, 120);
     // Set loop rate to 10 Hz
     ros::Rate loop_rate(10);
     double x_vel = testRobot->linear_velocity_x;
@@ -181,7 +182,7 @@ TEST(testBasicRobot, testNoGoals)
 
 /* tests list of sensor values set to 0 and check that there is no collision*/
 TEST(testBasicRobot, testSensorData){
-    Robot *testRobot = new Robot(0, 0, 0, 2, 120);
+    Robot *testRobot = new Robot(2, 120);
     ros::Rate loop_rate(10);
 
     double ranges[180] = {20};
