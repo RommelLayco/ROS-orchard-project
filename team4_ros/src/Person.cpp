@@ -24,7 +24,7 @@ double desiredAngle = 0;
 
 
 // counter
-int timeCount = 0; //for rotateAngle function
+int vibrateCount = 0; //for vibrate function
 int counter = 0;    // for sensor call back function
 int aroundCounter = 0; // for goARound function
 //counter for overrall collison avoid
@@ -134,6 +134,30 @@ bool rotateAngle(double angle2Turn, int angularSpd)
 
 }
 
+void Vibrate() 
+{     
+
+    if (vibrateCount > 30)
+    {
+        vibrateCount = 0;
+        return;
+    }
+    //Update Current Position
+    
+    if (VibrateX == false){
+    //currentVelocity.linear.y = 3;
+    currentVelocity.angular.z = 0.95;
+    VibrateX = true;
+    }
+    else {
+    currentVelocity.linear.x = 0;
+        currentVelocity.angular.z = -1.0;
+
+        VibrateX = false;
+    }
+    vibrateCount++;
+
+}
 
 void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
 {
@@ -147,6 +171,7 @@ void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
             ::sensorPoint=i;
             mycounter=1;
             sensorCounter=1;
+            Vibrate();
             break;
         }
         if (isNear == false)
@@ -161,31 +186,22 @@ void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
 
 
 
-void Vibrate() 
-{     
-    //Update Current Position
-    
-    if (VibrateX == false){
-    //currentVelocity.linear.y = 3;
-    currentVelocity.angular.z = 0.95;
-    VibrateX = true;
-    }
-    else {
-    currentVelocity.linear.x = 0;
-        currentVelocity.angular.z = -1.0;
 
-        VibrateX = false;
-    }
-}
 
 
 void updateCurrentVelocity() {
 
+    
 
     if (nearCollision == true)
     {
-        // Vibrate();
-        // Let collision resolution take place before we attempt to move towards the goal
+        if (vibrateCount < 30)
+        {
+            ROS_INFO("Vibrate");
+            ROS_INFO("counter: [%i]", vibrateCount);
+            return;
+        }
+                // Let collision resolution take place before we attempt to move towards the goal
         if(::sensorPoint>55){
                
             ROS_INFO("It's on my left,turn right,clock(Z<0) first then anti"); 
