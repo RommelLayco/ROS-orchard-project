@@ -6,16 +6,16 @@
 class Dog: public Robot
 {
     public:
-        Dog(double x, double y, double z, int sensor_range, int sensor_angle) : Robot(x, y, z, sensor_range, sensor_angle)
+        Dog(int sensor_range, int sensor_angle) : Robot(sensor_range, sensor_angle)
         {
             // Setup bark publisher
             barkPub = publisherHandle.advertise<std_msgs::String>("dog_topic", 1000);
         }
     protected:
         ros::Publisher barkPub;
-        virtual void leftCollisionDetected();
-        virtual void rightCollisionDetected();
-        virtual void centerCollisionDetected();
+        virtual void leftCollisionDetected(CollisionType type);
+        virtual void rightCollisionDetected(CollisionType type);
+        virtual void centerCollisionDetected(CollisionType type);
         void generateRandomDesiredLocations();
         /*virtual void reachedLastGoal();*/
         void bark();
@@ -29,26 +29,23 @@ void Dog::bark()
     barkPub.publish(barkMsg);
 }
 
-void Dog::leftCollisionDetected()
+void Dog::leftCollisionDetected(CollisionType type)
 {
     // Spin to the right
-    ROS_INFO("Dog Left collision");
     linear_velocity_x = 4 * top_linear_speed;
     angular_velocity = -4 * top_angular_speed;
 }
 
-void Dog::rightCollisionDetected()
+void Dog::rightCollisionDetected(CollisionType type)
 {
-    ROS_INFO("Dog Right collision");
     // Spin to the left
     linear_velocity_x = 4 * top_linear_speed;
     angular_velocity = 4 * top_angular_speed;
 }
 
-void Dog::centerCollisionDetected()
+void Dog::centerCollisionDetected(CollisionType type)
 {
-        ROS_INFO("Dog Center collision");
-    // Move backwards and spin right
+    // Move forwards and spin right
     linear_velocity_x = 4 * top_linear_speed;
     angular_velocity = -4 * top_angular_speed;
 }

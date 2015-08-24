@@ -32,16 +32,16 @@ PositionListener::PositionListener(std::vector<Robot*> entities)
     entityList = entities;
 }
 
-CollisionType PositionListener::getCollisionType(geometry_msgs::Point objectLocation)
+CollisionType PositionListener::getCollisionType(geometry_msgs::Point objectLocation, Robot* entity)
 {
-    double tolerance = 1;
+    double tolerance = 1.5;
 
     for (int i = 0; i < entityList.size(); i++)
     {
         double x = entityList[i]->getXPos();
         double y = entityList[i]->getYPos();
         
-        if (fabs(x - objectLocation.x) <= tolerance && fabs(y - objectLocation.y))
+        if (fabs(x - objectLocation.x) <= tolerance && fabs(y - objectLocation.y) <= tolerance && entityList[i] != entity)
         {
             // There is a dynamic entity near where the collision happened
             return Dynamic;
@@ -80,7 +80,7 @@ int main(int argc, char **argv)
     for (int i = 0; i < 13; i+=2)
     {
         // Create robot object
-        Robot *myRobot = new Robot(0, 0, 0, 2, 120);
+        Robot *myRobot = new Robot(2, 120);
         entityList.push_back(myRobot);
         // Add some goals to robot
         ROS_INFO("X: %f", picker_points[i].x);
@@ -97,7 +97,7 @@ int main(int argc, char **argv)
     std::vector<geometry_msgs::Point> trees = Util::readFile(filename.c_str());
 
     // Instantiate a dog
-    Dog myDog = Dog(0, 0, 0, 1, 220);
+    Dog myDog = Dog(1, 220);
     entityList.push_back(&myDog);
 
     // Add some goals to dog
@@ -108,11 +108,10 @@ int main(int argc, char **argv)
 
 
     // Instantiate a person
-    Person myPerson = Person(1, 2, 3, 2, 110);
+    Person myPerson = Person(2, 110);
     entityList.push_back(&myPerson);
 
-    //myPerson.addGoal(desiredLocation1);
-    
+
     PositionListener* posLis = new PositionListener(entityList);
     
     for (int i = 0; i < entityList.size(); i++)

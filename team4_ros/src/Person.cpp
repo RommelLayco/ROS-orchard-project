@@ -5,7 +5,7 @@
 class Person: public Robot
 {
     public:
-        Person(double x, double y, double z, int sensor_range, int sensor_angle) : Robot(x, y, z, sensor_range, sensor_angle) {}
+        Person(int sensor_range, int sensor_angle) : Robot(sensor_range, sensor_angle) {}
     protected:
         /*virtual void leftCollisionDetected();
         virtual void rightCollisionDetected();

@@ -10,11 +10,12 @@
 using namespace std;
 
 // Contructor
-Robot::Robot(double x_position, double y_position, double theta_orientation, int sensor_range, int sensor_angle)
+Robot::Robot(int sensor_range, int sensor_angle)
 {
-    current_x = x_position;
-    current_y = y_position;
-    current_theta = theta_orientation;
+    // Initialise state to default
+    current_x = 0;
+    current_y = 0;
+    current_theta = 0;
     linear_velocity_x = 0;
     linear_velocity_y = 0;
     angular_velocity = 0;
@@ -48,7 +49,6 @@ double Robot::getYPos()
 }
 
 
-/* Add goal to end of entity's goal list */
 void Robot::addGoal(geometry_msgs::Point goal)
 {
     goals.push_back(goal);
@@ -64,13 +64,11 @@ void Robot::addPositionListener(PositionListener* listener)
     positionListeners.push_back(listener);
 }
 
-/* Returns the state of the entity */
 robotState Robot::getState()
 {
     return this->current_state;
 }
 
-/* This method is invoked by ROS when sensor data is available for this entity */
 void Robot::sensorCallback(const sensor_msgs::LaserScan::ConstPtr& sensorMsg)
 {// Handle sensor data
     int left_vals = sensorAngle / 3;
@@ -78,7 +76,6 @@ void Robot::sensorCallback(const sensor_msgs::LaserScan::ConstPtr& sensorMsg)
 
     int i = 0;
     bool isNear = false;
-    //ROS_INFO("Sensor:");
     // Loop through sensor data array
     for (i; i < sensorAngle; i++) {
         // If an object is detected within sensorRange,
@@ -118,12 +115,12 @@ void Robot::sensorCallback(const sensor_msgs::LaserScan::ConstPtr& sensorMsg)
 }
 
 
-CollisionType Robot::getCollisionType(int i, int sensorRange, double distance)
+CollisionType Robot::getCollisionType(int sensorIndex, int sensorRange, double distance)
 {
     CollisionType type;
     for (int i = 0; i < positionListeners.size(); i++)
     {
-        type = positionListeners[i]->getCollisionType( getCollisionPosition(i, sensorRange, distance) );
+        type = positionListeners[i]->getCollisionType( getCollisionPosition(i, sensorRange, distance), this );
     }
     return type;
 }
@@ -142,51 +139,53 @@ geometry_msgs::Point Robot::getCollisionPosition(int index, int sampleSize, doub
 
 void Robot::leftCollisionDetected(CollisionType type)
 {
-    // Spin to the right
-    if (type = Static)
+    if (type == Dynamic)
     {
-        ROS_INFO("Static Collision");
+        // Stop moving, wait for obstacle to move
+        linear_velocity_x = 0;
+        angular_velocity = 0;
     }
     else
     {
-        ROS_INFO("Dynamic Collision");
+        // Spin to the right
+        linear_velocity_x = 4 * top_linear_speed;
+        angular_velocity = -4 * top_angular_speed;
     }
-    linear_velocity_x = 4 * top_linear_speed;
-    angular_velocity = -4 * top_angular_speed;
 }
 
 void Robot::rightCollisionDetected(CollisionType type)
 {
-    // Spin to the left
-    if (type = Static)
+    if (type == Dynamic)
     {
-        ROS_INFO("Static Collision");
+        // Stop moving, wait for obstacle to move
+        linear_velocity_x = 0;
+        angular_velocity = 0;
     }
     else
     {
-        ROS_INFO("Dynamic Collision");
+        // Spin to the left
+        linear_velocity_x = 4 * top_linear_speed;
+        angular_velocity = 4 * top_angular_speed;
     }
-    linear_velocity_x = 4 * top_linear_speed;
-    angular_velocity = 4 * top_angular_speed;
 }
 
 void Robot::centerCollisionDetected(CollisionType type)
 {
-    if (type = Static)
+    if (type == Dynamic)
     {
-        ROS_INFO("Static Collision");
+        // Stop moving, wait for obstacle to move
+        linear_velocity_x = 0;
+        angular_velocity = 0;
     }
     else
     {
-        ROS_INFO("Dynamic Collision");
+        // Move backwards and spin right
+        linear_velocity_x = 4 * top_linear_speed;
+        angular_velocity = -4 * top_angular_speed;
     }
-    // Move backwards and spin right
-    linear_velocity_x = 4 * top_linear_speed;
-    angular_velocity = -4 * top_angular_speed;
 }
 
 
-/* This method is invoked by MainNode in a loop to progress the simulation */
 void Robot::updateVelocity()
 {
     if (current_state == CollisionResolution)
@@ -205,7 +204,6 @@ void Robot::updateVelocity()
     geometry_msgs::Point desiredLocation = goals[goalIndex];
     // This is the maximum distance a robot can be from it's
     // desired poisition and still be considered to have reached it
-    //float distanceThreshold = 0.5;
     float distanceThreshold = 1.0;
     geometry_msgs::Point directionVector; // Vector from currentLocation to desiredLocation
     directionVector.x = desiredLocation.x - current_x;
@@ -236,9 +234,6 @@ void Robot::updateVelocity()
     double desiredAngle = atan2(directionVector.y, directionVector.x);
     rotateToGoal(desiredAngle);
 
-    
-
-
     notifySpeedListeners();
 }
 
@@ -252,7 +247,6 @@ void Robot::writeToFile(std::string message){
 
 }
 
-/* This method is invoked by ROS when position data for this entity is available */
 void Robot::positionCallback(const nav_msgs::Odometry positionMsg)
 {// Handle position data
 
@@ -270,7 +264,6 @@ void Robot::positionCallback(const nav_msgs::Odometry positionMsg)
     current_theta = yaw;
 
 }
-
 
 void Robot::notifySpeedListeners()
 {// Send current speed to listeners
@@ -291,8 +284,6 @@ void Robot::notifySpeedListeners()
     
 }
 
-/* Invoked in updateVelocity() when the entity has reached it's last goal.
-This method should be overridden in subclasses to provide more specific behavior */
 void Robot::reachedLastGoal()
 {
     // Reset index
@@ -301,7 +292,6 @@ void Robot::reachedLastGoal()
     //goalIndex++;
 }
 
-/* Called from updateVelocity() when entity needs to realign itself so it is facing it's goal */
 void Robot::rotateToGoal(double desiredAngle)
 {
     if (fabs(current_theta - desiredAngle) > 0.1)

@@ -24,29 +24,80 @@ enum robotState {CollisionResolution, Moving, Orienting};
 class Robot
 {
     public:
-        Robot(double x, double y, double z, int sensor_range, int sensor_angle);
+        Robot(int sensor_range, int sensor_angle);
+
+       /**
+        * This method is invoked by MainNode in a loop to progress the simulation.
+        * It is here that the entity performs calculations to determine its correct
+        * speed and orientation.
+        */
         void updateVelocity();
+
+       /**
+        * Subscribes a speed listener to this entity, so that the listener will recieve
+        * updates on the entity's speed.
+        *
+        * @param listener  the address of the SpeedListener to add as subscriber
+        */
         void addSpeedListener(SpeedListener* listener);
+
+       /**
+        * Subscribes a position listener to this entity. When the entity detects a collision,
+        * it will callback to position listeners with its position in order to determine what
+        * it is colliding with.
+        *
+        * @param listener  the address of the PositionListener to add
+        */
         void addPositionListener(PositionListener* listener);
+
+       /**
+        * This method is invoked by ROS when sensor data is available for this entity.
+        *
+        * @param sensorMsg  sensor data
+        */
         void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& sensorMsg);
+
+       /**
+        * This method is invoked by ROS when position data for this entity is available.
+        *
+        * @param sensorMsg  sensor data
+        */
         void positionCallback(const nav_msgs::Odometry PositionMsg);
+
+       /**
+        * Add a goal (as x, y coordinates) that the entity should navigate to.
+        *
+        * @param goal  goal to append to entity's list
+        */
         void addGoal(geometry_msgs::Point goal);
+
+       /**
+        * Get the current state of the entity.
+        *
+        * @return  enum representing the current state of the entity
+        */
         robotState getState();
+
+       /**
+        * @return  x coordinate of entity
+        */
         double getXPos();
+
+       /**
+        * @return  y coordinate of entity
+        */
         double getYPos();
 
+       /**
+        * Write a string to a file. Used for debugging.
+        * @param message  string that should be written out to a file
+        */
         void writeToFile(std::string message);
 
 
    protected:
-        void notifySpeedListeners(); // Send position message to all listeners
-
         std::vector<SpeedListener*> speedListeners; // Must be a pointer because SpeedListener is an abstract type
         std::vector<PositionListener*> positionListeners;
-
-        geometry_msgs::Point getCollisionPosition(int index, int sampleSize, double distance);
-
-        CollisionType getCollisionType(int i, int sensorRange, double distance);
 
         // List of entity's goals
         std::vector<geometry_msgs::Point> goals;
@@ -68,14 +119,6 @@ class Robot
         double current_x;
         double current_y;
         double current_theta;
-
-        int pathIndex;
-        geometry_msgs::Point desiredLocations[2];
-
-        // Properties of the physical robot
-        double length;
-        double width;
-        double height;
         double top_linear_speed = 1.0;
         double top_angular_speed = 0.5;
         int sensorAngle; // This must correspond to sensor value defined in the world file
@@ -84,16 +127,71 @@ class Robot
         // The state lets us know what speed to give to the robot
         robotState current_state;
 
-        // Method that is called from updateVelocity() when entity wishes to rotate towards it's current goal
+
+       /**
+        * Send a position message to all speed listeners.
+        */
+        void notifySpeedListeners();
+
+       /**
+        * Called when entity detects it is about to collide with something.
+        * This method asks the main node to determine whether the collision is 
+        * with a static object e.g a tree or a dynamic object e.g a Person or picker.
+        *
+        * @param sensorIndex  the index in the sensor array where the collision was detected
+        * @param sampleSize   the total number of samples in the sensor data
+        * @param distance     the distance from the entity the collision was detected
+        * @return             type of object colliding with (Static or Dynamic)
+        */
+        CollisionType getCollisionType(int sensorIndex, int sensorRange, double distance);
+
+       /**
+        * Method that is called from updateVelocity() when entity wishes to rotate towards it's current goal.
+        *
+        * @param the angle in radians that the entity should rotate through
+        */
         void rotateToGoal(double desiredAngle);
-    
-        // These methods should be overridden in subclasses to provide more specific behavior
+
+       /**
+        * Called from sensorCallback() when entity detects a collision on its left.
+        * Should be overridden in subclasses to provide more specific behavior.
+        *
+        * @param CollisionType  the type of collision (Static or Dynamic)
+        */
         virtual void leftCollisionDetected(CollisionType type);
+
+       /**
+        * Called from sensorCallback() when entity detects a collision on its right.
+        * Should be overridden in subclasses to provide more specific behavior.
+        *
+        * @param CollisionType  the type of collision (Static or Dynamic)
+        */
         virtual void rightCollisionDetected(CollisionType type);
+
+       /**
+        * Called from sensorCallback() when entity detects a collision directly in front of it.
+        * Should be overridden in subclasses to provide more specific behavior.
+        *
+        * @param CollisionType  the type of collision (Static or Dynamic)
+        */
         virtual void centerCollisionDetected(CollisionType type);
-        // Subclass should overide this to define behavior when last goal is reached
+
+       /**
+        * Called from updateVelocity() when entity reaches its final goal.
+        * Should be overridden in subclasses to provide more specific behavior.
+        */
         virtual void reachedLastGoal();
-        
+
+       /**
+        * Called from sensorCallback() when entity detects a collision directly in front of it.
+        * Should be overridden in subclasses to provide more specific behavior.
+        *
+        * @param index       the index in the sensor array where the collision was detected
+        * @param sampleSize  the total number of samples in the sensor data
+        * @param distance    the distance from the entity the collision was detected
+        * @return            point corresponding to x, y coordinates of collision location
+        */
+        geometry_msgs::Point getCollisionPosition(int index, int sampleSize, double distance);
 
 };
 
