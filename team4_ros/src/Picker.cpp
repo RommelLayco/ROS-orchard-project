@@ -118,7 +118,11 @@ void binCallback(const team4_ros::binIsFull::ConstPtr& msg)
 		}
       
 }
-
+void finishRotateCallBack(const team4_ros::binIsFull::ConstPtr& msg){
+    if(msg->x==1){
+        //go back to normal behaviour.
+    }
+}
 
 void updateCurrentVelocity() {
 
@@ -274,8 +278,9 @@ int main (int argc, char **argv)
 	// loop 25 
 	ros::Rate loop_rate(10);
 
-
-
+    
+    ros::NodeHandle finishRotateHandle;
+    ros::Subscriber finishRotateSub=finishRotateHandle.subscribe("finishRotatePicker_topic",1000,finishRotateCallBack);
 
 	while (ros::ok()) 
 	{ 

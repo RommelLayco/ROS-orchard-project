@@ -19,6 +19,7 @@ float z;
 ros::Publisher bin_pub;
 ros::Publisher binVelPub_object;
 ros::Publisher exchange_object;
+ros::Publisher finish_object;
 team4_ros::readyToExchange exchange_msg; 
 
 // The current angle of the robot
@@ -132,6 +133,10 @@ void exchangeCallback(const team4_ros::readyToExchange::ConstPtr& msg)
 		counter++;}
 		currentVelocity.linear.x = 0;
         	currentVelocity.angular.z = 0;	
+        	//rotate is finished ,botify picker
+        	team4_ros::binIsFull finish_msg; 
+		finish_msg.x = 1;  
+		finish_object.publish(finish_msg); 
 	}
 	else{ROS_INFO("NO");}	
 }
@@ -207,6 +212,10 @@ int main (int argc, char **argv)
 	//subscriber for receiving arrived msg from carrier
 	ros::NodeHandle arrivedHandle;
     ros::Subscriber arrivedSubscriber=arrivedHandle.subscribe("arrived_topic",1000,arrivedCallBack);
+
+    //finish handle for finishing rotate
+    ros::NodeHandle finish_handle; 
+    finish_object = finish_handle.advertise<team4_ros::binIsFull>("finishRotatePicker_topic",100); 
 	while (ros::ok()) 
 	{
 		ros::spinOnce();
