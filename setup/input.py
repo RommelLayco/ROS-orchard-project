@@ -153,7 +153,7 @@ def changeCanopyModel(r_spacing):
 
 
 	#write the base to the file
-	base = "# Base\n size [0 0 0]\ncolor \"green\"\nstack_children 0\ngui_nose 0\nobstacle_return 0\n)\n"
+	base = "# Base\n size [0 0 0]\ncolor \"green\"\nstack_children 0\ngui_nose 0\ngui_move 0\nobstacle_return 0\n)\n"
 	f.write(base)
 
 	f.close()
