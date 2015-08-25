@@ -50,16 +50,20 @@ int main(int argc, char **argv)
     std::string name = GoalsLocation + "pickerLocations";
     std::vector<geometry_msgs::Point> picker_points = Util::readFile(name.c_str());
 
+    int id = 1;
     for (int i = 0; i < 13; i+=2)
     {
+
         // Create robot object
-        Robot *myRobot = new Robot(2, 120);
+        Robot *myRobot = new Robot(2, 120,id,"picker");
         entityList.push_back(myRobot);
         // Add some goals to robot
         ROS_INFO("X: %f", picker_points[i].x);
         ROS_INFO("Y: %f", picker_points[i].y);
         myRobot->addGoal(picker_points[i]);
         myRobot->addGoal(picker_points[i+1]);
+
+        id  = id + 1;
     }
 
     // Set loop rate to 10 Hz
@@ -70,7 +74,7 @@ int main(int argc, char **argv)
     std::vector<geometry_msgs::Point> trees = Util::readFile(filename.c_str());
 
     // Instantiate a dog
-    Dog myDog = Dog(1, 220);
+    Dog myDog = Dog(1, 220,1,"animal");
     entityList.push_back(&myDog);
 
     // Add some goals to dog
@@ -81,7 +85,7 @@ int main(int argc, char **argv)
 
 
     // Instantiate a person
-    Person myPerson = Person(2, 110);
+    Person myPerson = Person(2, 110,1,"human");
     entityList.push_back(&myPerson);
 
 

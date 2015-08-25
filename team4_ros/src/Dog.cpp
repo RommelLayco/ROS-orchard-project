@@ -6,7 +6,7 @@
 class Dog: public Robot
 {
     public:
-        Dog(int sensor_range, int sensor_angle) : Robot(sensor_range, sensor_angle)
+        Dog(int sensor_range, int sensor_angle, int number, std::string type) : Robot(sensor_range, sensor_angle,number,type)
         {
             // Setup bark publisher
             barkPub = publisherHandle.advertise<std_msgs::String>("dog_topic", 1000);

@@ -25,7 +25,7 @@ TEST(testBasicRobot, testInitialState)
 {
 
     // Create a robot
-    Robot testRobot = Robot(2, 120);
+    Robot testRobot = Robot(2, 120,1,"picker");
     // Set loop rate to 10 Hz
     ros::Rate loop_rate(10);
     ASSERT_EQ(Orienting, testRobot.getState());
@@ -39,7 +39,7 @@ TEST(testBasicRobot, testInitialPosition)
 {
     
     // Create a robot
-    Robot *testRobot = new Robot(2, 120);
+    Robot *testRobot = new Robot(2, 120,1,"picker");
     // Set loop rate to 10 Hz
     ros::Rate loop_rate(10);
 
@@ -54,7 +54,7 @@ This test checks the initial velocity of the robot at its initialisation
 TEST(testBasicRobot, testInitalVelocity)
 {
     
-    Robot *testRobot = new Robot(2, 120);
+    Robot *testRobot = new Robot(2, 120,1,"picker");
     // Set loop rate to 10 Hz
     ros::Rate loop_rate(10);
 
@@ -69,7 +69,7 @@ Then it tests that the class correctly receives messages on a topic from stage/o
 **/
 TEST(testBasicRobot, testPositionCallback){
     
-    Robot *testRobot = new Robot(2, 120);
+    Robot *testRobot = new Robot(2, 120,1,"picker");
     // Set loop rate to 10 Hz
     ros::Rate loop_rate(10);
 
@@ -103,7 +103,7 @@ are as expected when the left side collision is detected.
 TEST(testBasicRobot, testLeftCollison)
 {
     
-	Robot *testRobot = new Robot(2, 120);
+	Robot *testRobot = new Robot(2, 120,1,"picker");
     // Set loop rate to 10 Hz
     ros::Rate loop_rate(10);
 	testRobot->leftCollisionDetected(Static);
@@ -119,7 +119,7 @@ are as expected when the right side collision is detected.
 TEST(testBasicRobot, testRightCollision)
 {
     
-	Robot *testRobot = new Robot(2, 120);
+	Robot *testRobot = new Robot(2, 120,1,"picker");
     // Set loop rate to 10 Hz
     ros::Rate loop_rate(10);
 	testRobot->rightCollisionDetected(Static);
@@ -135,7 +135,7 @@ are as expected when the center side collision is detected.
 TEST(testBasicRobot, testCenterCollision)
 {
     
-	Robot *testRobot = new Robot(2, 120);
+	Robot *testRobot = new Robot(2, 120,1,"picker");
     // Set loop rate to 10 Hz
     ros::Rate loop_rate(10);
 	testRobot->centerCollisionDetected(Static);
@@ -152,7 +152,7 @@ it need to stop
 TEST(testBasicRobot, testReachedLastGoal)
 {
     
-	Robot *testRobot = new Robot(2, 120);
+	Robot *testRobot = new Robot(2, 120,1,"picker");
     // Set loop rate to 10 Hz
     ros::Rate loop_rate(10);
 	testRobot->goalIndex = 0;
@@ -168,7 +168,7 @@ change
 TEST(testBasicRobot, testNoGoals)
 {
     
-    Robot *testRobot = new Robot(2, 120);
+    Robot *testRobot = new Robot(2, 120,1,"picker");
     // Set loop rate to 10 Hz
     ros::Rate loop_rate(10);
     double x_vel = testRobot->linear_velocity_x;
@@ -182,7 +182,7 @@ TEST(testBasicRobot, testNoGoals)
 
 /* tests list of sensor values set to 0 and check that there is no collision*/
 TEST(testBasicRobot, testSensorData){
-    Robot *testRobot = new Robot(2, 120);
+    Robot *testRobot = new Robot(2, 120,1,"picker");
     ros::Rate loop_rate(10);
 
     double ranges[180] = {20};
