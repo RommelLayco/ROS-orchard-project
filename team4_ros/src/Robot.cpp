@@ -245,7 +245,7 @@ void Robot::updateVelocity()
 
 void Robot::writeToFile(int id,std::string type,std::string message){
 
-    std::string result = "info/" + type +  std::to_string(id) + ".txt";
+    std::string result = "info/" + type + "/" + type +  std::to_string(id) + ".txt";
 
     ofstream myfile;
     myfile.open (result,std::ios_base::app);

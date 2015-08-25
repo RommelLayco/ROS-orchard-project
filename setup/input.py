@@ -693,6 +693,18 @@ def binArea(r_spacing, t_spacing):
 	
 	f.close()
 
+def bigBinLocation(t_spacing):
+	f = open('bigBinLocation', 'w')
+
+	current_y = 13 * t_spacing + 8.5	
+	current_x = -7.8
+
+	line = str(current_x) + " " + str(current_y)
+	f.write(line)
+
+	f.close()
+
+
 
 
 
@@ -762,6 +774,7 @@ dogLocation(r_spacing,t_spacing)
 tractorLocations(r_spacing,t_spacing)
 pickerLocations(r_spacing, t_spacing)
 binArea(r_spacing, t_spacing)
+bigBinLocation(t_spacing)
 
 
 
