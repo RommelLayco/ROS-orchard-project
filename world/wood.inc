@@ -38,5 +38,6 @@ color "yellow"
 color "green"
 stack_children 0
 gui_nose 0
+gui_move 0
 obstacle_return 0
 )

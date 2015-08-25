@@ -6,11 +6,12 @@
 #include <iostream>
 #include <fstream>
 #include <math.h>
+#include <string>
 
 using namespace std;
 
 // Contructor
-Robot::Robot(int sensor_range, int sensor_angle)
+Robot::Robot(int sensor_range, int sensor_angle, int number, std::string type)
 {
     // Initialise state to default
     current_x = 0;
@@ -28,6 +29,10 @@ Robot::Robot(int sensor_range, int sensor_angle)
     // Get id of node
     int id = Util::getNextId();
     std::string baseString = "robot_" + std::to_string(id);
+
+    // set the id of the robot for writing to file purposes
+    unique_id = number;
+    robotType = type;
 
     // Setup publisher and subscribers
     positionPub = publisherHandle.advertise<geometry_msgs::Twist>(baseString + "/cmd_vel", 1000);
@@ -219,7 +224,7 @@ void Robot::updateVelocity()
         {
             goalIndex++;
             ROS_INFO("Reached destination");
-            writeToFile("Reached destination");
+            writeToFile(unique_id,robotType,"Reached destination");
         }
         else
         {
@@ -238,10 +243,12 @@ void Robot::updateVelocity()
 }
 
 
-void Robot::writeToFile(std::string message){
+void Robot::writeToFile(int id,std::string type,std::string message){
+
+    std::string result = "info/" + type + "/" + type +  std::to_string(id) + ".txt";
 
     ofstream myfile;
-    myfile.open ("info/example.txt",std::ios_base::app);
+    myfile.open (result,std::ios_base::app);
     myfile << message << "\n";
     myfile.close();
 

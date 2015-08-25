@@ -153,7 +153,7 @@ def changeCanopyModel(r_spacing):
 
 
 	#write the base to the file
-	base = "# Base\n size [0 0 0]\ncolor \"green\"\nstack_children 0\ngui_nose 0\nobstacle_return 0\n)\n"
+	base = "# Base\n size [0 0 0]\ncolor \"green\"\nstack_children 0\ngui_nose 0\ngui_move 0\nobstacle_return 0\n)\n"
 	f.write(base)
 
 	f.close()
@@ -693,6 +693,18 @@ def binArea(r_spacing, t_spacing):
 	
 	f.close()
 
+def bigBinLocation(t_spacing):
+	f = open('bigBinLocation', 'w')
+
+	current_y = 13 * t_spacing + 8.5	
+	current_x = -7.8
+
+	line = str(current_x) + " " + str(current_y)
+	f.write(line)
+
+	f.close()
+
+
 
 
 
@@ -762,6 +774,7 @@ dogLocation(r_spacing,t_spacing)
 tractorLocations(r_spacing,t_spacing)
 pickerLocations(r_spacing, t_spacing)
 binArea(r_spacing, t_spacing)
+bigBinLocation(t_spacing)
 
 
 

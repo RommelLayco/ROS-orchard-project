@@ -24,7 +24,7 @@ enum robotState {CollisionResolution, Moving, Orienting};
 class Robot
 {
     public:
-        Robot(int sensor_range, int sensor_angle);
+        Robot(int sensor_range, int sensor_angle, int id, std::string type);
 
        /**
         * This method is invoked by MainNode in a loop to progress the simulation.
@@ -92,7 +92,17 @@ class Robot
         * Write a string to a file. Used for debugging.
         * @param message  string that should be written out to a file
         */
-        void writeToFile(std::string message);
+        void writeToFile(int id,std::string type, std::string message);
+
+
+        /**
+        * this integer is unique for each robit
+        *
+        */  
+        int unique_id;
+
+        /* this string is set via the constructor. It is for making a  file*/
+        std::string robotType;
 
 
    protected:

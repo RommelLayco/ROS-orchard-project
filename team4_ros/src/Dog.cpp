@@ -6,7 +6,7 @@
 class Dog: public Robot
 {
     public:
-        Dog(int sensor_range, int sensor_angle) : Robot(sensor_range, sensor_angle)
+        Dog(int sensor_range, int sensor_angle, int number, std::string type) : Robot(sensor_range, sensor_angle,number,type)
         {
             // Setup bark publisher
             barkPub = publisherHandle.advertise<std_msgs::String>("dog_topic", 1000);
@@ -27,6 +27,8 @@ void Dog::bark()
     std_msgs::String barkMsg;
     barkMsg.data = "I AM BARKING!! Woof Woof!!";
     barkPub.publish(barkMsg);
+
+    writeToFile(unique_id,robotType,"I AM BARKING!! Woof Woof!!");
 }
 
 void Dog::leftCollisionDetected(CollisionType type)
