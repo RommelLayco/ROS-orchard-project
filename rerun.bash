@@ -33,7 +33,8 @@ mv bigBinLocation ../locations
 #-------------------------------------------------------------
 #reset info files
 cd $DIR/setup
-python3 createNewInfoFiles.py
+
+#python3 createNewInfoFiles.py
 
 #run nodes
 cd $DIR

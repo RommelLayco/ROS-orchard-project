@@ -41,5 +41,11 @@ obj/
 info/
 locations/
 
+#ignore generated inc files
+#world/wood.inc
+world/orchard.inc
+world/walls.inc
+world/o1.world
+
 # AUtomatically generated backup files
 *~
