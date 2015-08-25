@@ -37,8 +37,9 @@
 bin/
 obj/
 
-#genrated files in the info dir
+#genrated files in the info and locations dir
 info/
+locations/
 
 # AUtomatically generated backup files
 *~
