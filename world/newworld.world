@@ -10,12 +10,9 @@ include "worker.inc"
 include "masterNode.inc"
 include "weedGroups.inc"
 include "tallTreeWall.inc"
-<<<<<<< HEAD
-
-=======
 include "visitor.inc"
 include "bigBin.inc"
->>>>>>> 4b05aa4e5b33ff5e4e6fa5a397c55bce365415f3
+
 
 # milliseconds per update step 
 interval_sim 100 

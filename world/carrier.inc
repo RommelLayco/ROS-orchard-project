@@ -18,7 +18,7 @@ define carrier actor
 	#body
   	model
 	(
-		size [1 0.6 0.4]
+		size [1 0.6 0.3]
 		pose [0 0 0 0.0]
 		color "orange"
 	)
@@ -27,12 +27,12 @@ define carrier actor
 	model
 	(
 		size [0.01 0.1 0.05]
-		pose [0.5 -0.10 0.3 0.0]
+		pose [0.5 -0.10 0.2 0.0]
 		color "black"
 	)
 	model
 	(
-		size [0.01 0.01 0.24]
+		size [0.01 0.01 0.14]
 		pose [0.5 -0.15 0.06 0.0]
 		color "black"
 	)
@@ -46,24 +46,24 @@ define carrier actor
 	model
 	(
 		size [0.01 0.1 0.05]
-		pose [0.5 0.12 0.3 0.0]
+		pose [0.5 0.12 0.2 0.0]
 		color "black"
 	)
 	model
 	(
 		size [0.01 0.1 0.05]
-		pose [0.5 0.12 0.15 0.0]
+		pose [0.5 0.12 0.1 0.0]
 		color "black"
 	)
 	model
 	(
-		size [0.01 0.01 0.3]
+		size [0.01 0.01 0.2]
 		pose [0.5 0.07 0.06 0.0]
 		color "black"
 	)
 	model
 	(
-		size [0.01 0.01 0.3]
+		size [0.01 0.01 0.2]
 		pose [0.5 0.17 0.06 0.0]
 		color "black"
 	)
@@ -72,12 +72,12 @@ define carrier actor
 	model
 	(
 		size [0.01 0.1 0.05]
-		pose [-0.5 0.10 0.3 0.0]
+		pose [-0.5 0.10 0.2 0.0]
 		color "black"
 	)
 	model
 	(
-		size [0.01 0.01 0.24]
+		size [0.01 0.01 0.14]
 		pose [-0.5 0.15 0.06 0.0]
 		color "black"
 	)
@@ -91,24 +91,24 @@ define carrier actor
 	model
 	(
 		size [0.01 0.1 0.05]
-		pose [-0.5 -0.09 0.3 0.0]
+		pose [-0.5 -0.09 0.2 0.0]
 		color "black"
 	)
 	model
 	(
 		size [0.01 0.1 0.05]
-		pose [-0.5 -0.09 0.15 0.0]
+		pose [-0.5 -0.09 0.1 0.0]
 		color "black"
 	)
 	model
 	(
-		size [0.01 0.01 0.3]
+		size [0.01 0.01 0.2]
 		pose [-0.5 -0.13 0.06 0.0]
 		color "black"
 	)
 	model
 	(
-		size [0.01 0.01 0.3]
+		size [0.01 0.01 0.2]
 		pose [-0.5 -0.03 0.06 0.0]
 		color "black"
 	)
@@ -118,14 +118,14 @@ define carrier actor
 	#right arm
 	model
 	(
-		size [0.15 0.1 0.7]
+		size [0.15 0.1 0.5]
 		pose [0 -0.3 0.3 0]
 		color "white"
 	)
 	#left arm
 	model
 	(
-		size [0.15 0.1 0.7]
+		size [0.15 0.1 0.5]
 		pose [0 0.3 0.3 0]
 		color "white"
         )
@@ -134,13 +134,13 @@ define carrier actor
 	model
 	(
 		size [0.3 0.3 0.3]
-		pose [0 0 0.45 0]
+		pose [0 0 0.35 0]
 		color "white"
 	)
 	model
 	(
 		size [0.3 0.20 0.05]
-		pose [0 0 0.75 0]
+		pose [0 0 0.65 0]
 		color "white"
 	)
 	
@@ -148,7 +148,7 @@ define carrier actor
 	model
 	(
 		size [0.3 0.25 0.05]
-		pose [0 0 0.40 0]
+		pose [0 0 0.30 0]
 		color "white"
 	)
 
@@ -156,13 +156,13 @@ define carrier actor
 	model
 	(
 		size [0.27 0.05 0.2]
-		pose [0 -0.16 0.55 0]
+		pose [0 -0.16 0.45 0]
 		color "white"
 	)
 	model
 	(
 		size [0.2 0.05 0.15]
-		pose [0 -0.2 0.55 0]
+		pose [0 -0.2 0.45 0]
 		color "white"
 	)
 	
@@ -170,13 +170,13 @@ define carrier actor
 	model
 	(
 		size [0.27 0.05 0.2]
-		pose [0 0.16 0.55 0]
+		pose [0 0.16 0.45 0]
 		color "white"
 	)
 	model
 	(
 		size [0.2 0.05 0.15]
-		pose [0 0.2 0.55 0]
+		pose [0 0.2 0.45 0]
 		color "white"
 	)
 
@@ -184,7 +184,7 @@ define carrier actor
 	model
 	(
 		size [0.02 0.02 0.02]
-		pose [0.18 -0.035 0.65 0]
+		pose [0.18 -0.035 0.55 0]
 		color "black"
 	)
 	
@@ -192,7 +192,7 @@ define carrier actor
 	model
 	(
 		size [0.02 0.02 0.02]
-		pose [0.18 0.035 0.65 0]
+		pose [0.18 0.035 0.55 0]
 		color "black"
 	)
 
@@ -200,20 +200,20 @@ define carrier actor
 	model
 	(
 		size [0.02 0.15 0.01]
-		pose [0.18 0 0.53 0]
+		pose [0.18 0 0.43 0]
 		color "black"
 	)
 	
 	model
 	(
 		size [0.01 0.01 0.07]
-		pose [0.18 0.09 0.53 0]
+		pose [0.18 0.09 0.43 0]
 		color "black"
 	)
 	model
 	(
 		size [0.01 0.01 0.07]
-		pose [0.18 -0.09 0.53 0]
+		pose [0.18 -0.09 0.43 0]
 		color "black"
 	)
 
