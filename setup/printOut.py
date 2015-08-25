@@ -82,7 +82,7 @@ def waitToExit(filePath):
 			#only print if something new
 			if pre_last != lastline:
 				l = lastline[-1];
-				print(l)
+				print(l[:-2])
 				pre_last = lastline
 			
 				
