@@ -115,7 +115,7 @@ void exchangeCallback(const team4_ros::readyToExchange::ConstPtr& msg)
 		//readyToEx=true;
 		ROS_INFO("Yes");
 		currentVelocity.linear.x = 1;
-        	currentVelocity.angular.z = 2;
+        	currentVelocity.angular.z = 1;
 		int counter=0;
 		while(counter<160){
 		ros::spinOnce();

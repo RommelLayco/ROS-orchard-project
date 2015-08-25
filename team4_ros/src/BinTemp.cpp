@@ -29,6 +29,10 @@ double desiredAngle = 0;
 bool readyToEx=false;
 bool opreadyToEx=false;
 
+int pathIndex;
+
+geometry_msgs::Point desiredLocations[2];
+
 // counter
 int timeCount = 0; //for rotateAngle function
 
@@ -42,66 +46,84 @@ void groundTruthCallback(const nav_msgs::Odometry msg)
 {     
     //Update Current Position
 	//geometry_msgs::Pose currentLocation;
-    currentLocation = msg.pose.pose;
-    double x = currentLocation.orientation.x;
-    double y = currentLocation.orientation.y;
-    double z = currentLocation.orientation.z;
-    double w = currentLocation.orientation.w;
-    
-    double roll, pitch, yaw;
-    tf::Matrix3x3(tf::Quaternion(x, y, z, w)).getRPY(roll, pitch, yaw);
-	
+	currentLocation = msg.pose.pose;
+	double x = currentLocation.orientation.x;
+	double y = currentLocation.orientation.y;
+	double z = currentLocation.orientation.z;
+	double w = currentLocation.orientation.w;
+
+	double roll, pitch, yaw;
+	tf::Matrix3x3(tf::Quaternion(x, y, z, w)).getRPY(roll, pitch, yaw);
+	geometry_msgs::Point desiredLocation = desiredLocations[pathIndex];
     geometry_msgs::Point directionVector; // Vector from currentLocation to desiredLocation
-    directionVector.x = (-1.75) - currentLocation.position.x;
-    directionVector.y = 31 - currentLocation.position.y;
-    directionVector.z = 0;
+    directionVector.x = desiredLocation.x - currentLocation.position.x;
+    directionVector.y = desiredLocation.y - currentLocation.position.y;
+    directionVector.z = desiredLocation.y-currentLocation.position.z;
     currentAngle = yaw + 3.14;
 
 	//ROS_INFO("Bin x distance: [%f]", directionVector.x);
    // ROS_INFO("Bin Y distance: [%f]", directionVector.y);
 
-	if(directionVector.y<0.3 && directionVector.y>-0.3){
-                  team4_ros::binIsFull mypub_msg; 
+    if(directionVector.y<0.3 && directionVector.y>-0.3){
+    	team4_ros::binIsFull mypub_msg; 
                 //mypub_msg.my_counter=0;
-				mypub_msg.isFull = true; 
-                mypub_msg.x= currentLocation.position.x;
-                mypub_msg.y= currentLocation.position.y;
-				if(!isSent){
-				bin_pub.publish(mypub_msg);
-				isSent=true;
-				} 
-	}
-	
+    	mypub_msg.isFull = true; 
+    	mypub_msg.x= currentLocation.position.x;
+    	mypub_msg.y= currentLocation.position.y;
+    	if(!isSent){
+    		bin_pub.publish(mypub_msg);
+    		ROS_INFO("bin_pub published");
+    		isSent=true;
+    		if (pathIndex < sizeof(desiredLocations) / sizeof(*desiredLocations) - 1)
+    		{
+    			
+    			pathIndex++;
+    			sleep(2);
+    			ROS_INFO("Reached destination");
+    		}
+    		else
+    		{
+            // Reset index
+    			ROS_INFO("Reached final destination");
+
+    			
+    			pathIndex=0;
+
+    		}
+
+    	} 
+    }
+
 }
 
 void rotateAngle(double angle2Turn, int angularSpd)
 {
    //Calculate the angle to rotate
-   
-    currentVelocity.linear.x = 0;
-    int timeLimit = angle2Turn/6.28 * 20;
+
+	currentVelocity.linear.x = 0;
+	int timeLimit = angle2Turn/6.28 * 20;
 	ros::Rate loop_rate(10);
 	desiredAngle=angle2Turn;
         //currentAngle=1.57;
 
-    while(true)
-    {
+	while(true)
+	{
 	//int d=currentAngle-desiredAngle;
-	if(fabs(currentAngle-desiredAngle)<0.05){break;}
-	ros::spinOnce();
-	ROS_INFO("Current Angle: %f",currentAngle);
+		if(fabs(currentAngle-desiredAngle)<0.05){break;}
+		ros::spinOnce();
+		ROS_INFO("Current Angle: %f",currentAngle);
 	//ROS_INFO("Desired Angle: %f",desiredAngle);
-        currentVelocity.angular.z = angularSpd;
-	binVelPub_object.publish(currentVelocity);
-	
-	loop_rate.sleep();
-	ROS_INFO("Desired Angle: %f",desiredAngle);
+		currentVelocity.angular.z = angularSpd;
+		binVelPub_object.publish(currentVelocity);
+
+		loop_rate.sleep();
+		ROS_INFO("Desired Angle: %f",desiredAngle);
         //timeCount++;
         //return false;
-    }
-        ROS_INFO("Time Count will be RESET NOW");
+	}
+	ROS_INFO("Time Count will be RESET NOW");
 
-        currentVelocity.angular.z = 0;
+	currentVelocity.angular.z = 0;
         //timeCount = 0;
         //return true;
 
@@ -123,32 +145,35 @@ void exchangeCallback(const team4_ros::readyToExchange::ConstPtr& msg)
 	if (opreadyToEx && readyToEx){
 		//readyToEx=true;
 		ROS_INFO("Yes");
-		currentVelocity.linear.x = 1;
-        	currentVelocity.angular.z = 2;	
+		currentVelocity.linear.x = 0;
+		currentVelocity.angular.z = 0;	
 		int counter=0;
 		while(counter<160){
-		ros::spinOnce();
-		binVelPub_object.publish(currentVelocity);
-		loop_rate.sleep();
-		counter++;}
-		currentVelocity.linear.x = 0;
-        	currentVelocity.angular.z = 0;	
+			ros::spinOnce();
+			binVelPub_object.publish(currentVelocity);
+			loop_rate.sleep();
+			counter++;}
+			currentVelocity.linear.x = 0;
+			currentVelocity.angular.z = 0;	
         	//rotate is finished ,botify picker
-        	team4_ros::binIsFull finish_msg; 
-		finish_msg.x = 1;  
-		finish_object.publish(finish_msg); 
+			team4_ros::binIsFull finish_msg; 
+			finish_msg.x = 1;  
+			finish_object.publish(finish_msg); 
+		//bin is full =false
+
+
+		}
+		else{ROS_INFO("NO");}	
 	}
-	else{ROS_INFO("NO");}	
-}
-void exchange()
-{
+	void exchange()
+	{
 	//if (currentAngle==3.14 || currentAngle==0){
-	rotateAngle(3.14,1);
+		//rotateAngle(3.14,1);
 	//team4_ros::readyToExchange exchange_msg; 
-	exchange_msg.readyToExchange2 = 1;  
-	exchange_object.publish(exchange_msg);
-	ROS_INFO("sub ec");
-	readyToEx=true;
+		exchange_msg.readyToExchange2 = 1;  
+		exchange_object.publish(exchange_msg);
+		ROS_INFO("sub ec");
+		readyToEx=true;
 
 	//}else{
 	//rotateAngle()
@@ -164,67 +189,87 @@ void exchange()
 	//exchange_object.publish(exchange_msg);
 	//binVelPub_object.publish(currentVelocity);
 	//}
-}
-
-void arrivedCallBack(const team4_ros::arrived::ConstPtr& msg){
-	if(msg->x==1){
-		ROS_INFO("arrvied_msg received");
-		exchange();
 	}
-}
-int main (int argc, char **argv) 
-{ 
+
+	void arrivedCallBack(const team4_ros::arrived::ConstPtr& msg){
+		if(msg->x==1){
+			ROS_INFO("arrvied_msg received");
+			exchange();
+		}
+	}
+	int main (int argc, char **argv) 
+	{ 
 	// command line ROS arguments/ name remapping 
-	ros::init(argc, argv, "bin_node_t");
-	
+		ros::init(argc, argv, "bin_node_t");
+
 	// ROS comms access point 
-	ros::NodeHandle n;
+		ros::NodeHandle n;
 	// master registry pub/sub 
-	bin_pub = n.advertise<team4_ros::binIsFull>("bin_topic",10);
-  
+		bin_pub = n.advertise<team4_ros::binIsFull>("bin_topic",10);
+
 
     // master registry pub/sub 
 	//bin_pub = n.advertise<std_msgs::String>("bin_topic",100);
-        
-	ros::NodeHandle sub_handle; 
-	ros::Subscriber mysub_object;
-	mysub_object = sub_handle.subscribe<nav_msgs::Odometry>("robot_5/base_pose_ground_truth",1000, groundTruthCallback); 
-	
-	ros::NodeHandle velPub_handle;
-	binVelPub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_5/cmd_vel",1000);
-	ros::NodeHandle exn;
-	exchange_object = exn.advertise<team4_ros::readyToExchange>("exchange_topic",1000); 
+
+		ros::NodeHandle sub_handle; 
+		ros::Subscriber mysub_object;
+		mysub_object = sub_handle.subscribe<nav_msgs::Odometry>("robot_5/base_pose_ground_truth",1000, groundTruthCallback); 
+
+		ros::NodeHandle velPub_handle;
+		binVelPub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_5/cmd_vel",1000);
+		ros::NodeHandle exn;
+		exchange_object = exn.advertise<team4_ros::readyToExchange>("exchange_topic",1000); 
 
 	//exchange_msg.readyToExchange2 = false;  
 	//exchange_object.publish(exchange_msg);
 
-	ros::NodeHandle ex_handle;
-	ros::Subscriber ex_object = ex_handle.subscribe("exchange_topic",1000,exchangeCallback); 
+		ros::NodeHandle ex_handle;
+		ros::Subscriber ex_object = ex_handle.subscribe("exchange_topic",1000,exchangeCallback); 
 
 	// loop 10 Hz 
-	ros::Rate loop_rate(10);
-	
+		ros::Rate loop_rate(10);
+
 	//currentVelocity.linear.x = 1;
     //int counter=0;
 	//turnToX();
 	//exchange();
 
 	//subscriber for receiving arrived msg from carrier
-	ros::NodeHandle arrivedHandle;
-    ros::Subscriber arrivedSubscriber=arrivedHandle.subscribe("arrived_topic",1000,arrivedCallBack);
+		ros::NodeHandle arrivedHandle;
+		ros::Subscriber arrivedSubscriber=arrivedHandle.subscribe("arrived_topic",1000,arrivedCallBack);
 
     //finish handle for finishing rotate
-    ros::NodeHandle finish_handle; 
-    finish_object = finish_handle.advertise<team4_ros::binIsFull>("finishRotatePicker_topic",100); 
-	while (ros::ok()) 
-	{
-		ros::spinOnce();
+		ros::NodeHandle finish_handle; 
+		finish_object = finish_handle.advertise<team4_ros::binIsFull>("finishRotatePicker_topic",100); 
+
+		geometry_msgs::Point desiredLocation1;
+    //desiredLocation1.x = -10;
+		desiredLocation1.x = -1.75;
+    //desiredLocation1.y = -21;
+		desiredLocation1.y = 25;
+		desiredLocation1.z = 0;
+
+		geometry_msgs::Point desiredLocation2;
+    //desiredLocation2.x = 10;
+		desiredLocation2.x = -1.75;
+    //desiredLocation2.y = 21;
+		desiredLocation2.y = 32;
+		desiredLocation2.z = 0;
+
+		desiredLocations[0] = desiredLocation2;
+		desiredLocations[1] = desiredLocation1;
+
+		pathIndex = 0;
+
+		while (ros::ok()) 
+		{
+			ros::spinOnce();
 		//exchange();
 		//binVelPub_object.publish(currentVelocity);
-		loop_rate.sleep();
+			loop_rate.sleep();
 
-	} 
+		} 
 
-	return 0; 
-}
+		return 0; 
+	}
 

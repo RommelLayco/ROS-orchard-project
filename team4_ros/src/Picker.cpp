@@ -121,6 +121,7 @@ void binCallback(const team4_ros::binIsFull::ConstPtr& msg)
 void finishRotateCallBack(const team4_ros::binIsFull::ConstPtr& msg){
     if(msg->x==1){
         //go back to normal behaviour.
+        binIsFull=false;
     }
 }
 
@@ -246,8 +247,8 @@ int main (int argc, char **argv)
     desiredLocation2.y = 32;
     desiredLocation2.z = 0;
 
-    desiredLocations[0] = desiredLocation1;
-    desiredLocations[1] = desiredLocation2;
+    desiredLocations[0] = desiredLocation2;
+    desiredLocations[1] = desiredLocation1;
 
     pathIndex = 0;
 
