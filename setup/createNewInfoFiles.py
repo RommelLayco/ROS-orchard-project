@@ -11,7 +11,7 @@ def createPickerFiles():
 	for i in range(1,8):
 		path = filepath + str(i) + '.txt'
 		f = open(path, 'w')
-		f.write("No current information")
+		f.write("No current information\n")
 		f.close()
 
 
@@ -22,7 +22,7 @@ def createCarrierFiles():
 	for i in range(1,4):
 		path = filepath + str(i) + '.txt'
 		f = open(path, 'w')
-		f.write("No current information")
+		f.write("No current information\n")
 		f.close()
 
 def createHumanFiles():
@@ -31,7 +31,7 @@ def createHumanFiles():
 	for i in range(1,3):
 		path = filepath + str(i) + '.txt'
 		f = open(path, 'w')
-		f.write("No current information")
+		f.write("No current information\n")
 		f.close()
 
 def createAnimalFiles():
@@ -40,7 +40,7 @@ def createAnimalFiles():
 	for i in range(1,2):
 		path = filepath + str(i) + '.txt'
 		f = open(path, 'w')
-		f.write("No current information")
+		f.write("No current information\n")
 		f.close()
 
 
