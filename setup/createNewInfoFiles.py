@@ -6,7 +6,7 @@
 #the debugger reads from a new file
 
 def createPickerFiles():
-	filepath = '../info/Pickers/picker'
+	filepath = '../info/pickers/picker'
 
 	for i in range(1,8):
 		path = filepath + str(i) + '.txt'
@@ -17,7 +17,7 @@ def createPickerFiles():
 
 
 def createCarrierFiles():
-	filepath = '../info/Carriers/carrier'
+	filepath = '../info/carriers/carrier'
 
 	for i in range(1,4):
 		path = filepath + str(i) + '.txt'
@@ -26,7 +26,7 @@ def createCarrierFiles():
 		f.close()
 
 def createHumanFiles():
-	filepath = '../info/Humans/human'
+	filepath = '../info/humans/human'
 
 	for i in range(1,3):
 		path = filepath + str(i) + '.txt'
@@ -35,7 +35,7 @@ def createHumanFiles():
 		f.close()
 
 def createAnimalFiles():
-	filepath = '../info/Animals/animal'
+	filepath = '../info/animals/animal'
 
 	for i in range(1,2):
 		path = filepath + str(i) + '.txt'
