@@ -55,6 +55,8 @@ dog( pose [ -4 -8 0 90 ] name "dog" )
 
 person1( pose [ 40.0 -5 0 90 ] name "person1" )
 
+carrier( pose [ -7 10 0 90 ] name "carrier1" )
+
 worker( pose [ 40.0 70.0 0 270 ] name "worker" )
 
 tractorWithWorker( pose [ -9 68.0 0 0 ] name "tractorWithWorker" )
