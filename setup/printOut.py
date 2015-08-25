@@ -210,7 +210,7 @@ def openPicker(num):
 
 	for i in range(1,8):
 		if(i == num):
-			filePath = 'info/picker' + str(num) +'.txt'
+			filePath = 'info/picker/picker' + str(num) +'.txt'
 			f = open(filePath, 'r')
 			
 			print("here")
@@ -229,7 +229,7 @@ def openCarrier(num):
 
 	for i in range(1,11):
 		if(i == num):
-			filePath = 'info/carrier' + str(num) +'.txt'
+			filePath = 'info/carrier/carrier' + str(num) +'.txt'
 			
 			#put wait to exit code here
 			waitToExit(filePath)
@@ -246,7 +246,7 @@ def openHuman(num):
 
 	for i in range(1,3):
 		if(i == num):
-			filePath = 'info/human' + str(num) +'.txt'
+			filePath = 'info/human/human' + str(num) +'.txt'
 			
 			#put wait to exit code here
 			waitToExit(filePath)
@@ -263,7 +263,7 @@ def openAnimal(num):
 
 	for i in range(1,2):
 		if(i == num):
-			filePath = 'info/animal' + str(num) +'.txt'
+			filePath = 'info/animal/animal' + str(num) +'.txt'
 			
 			#put wait to exit code here
 			waitToExit(filePath)
