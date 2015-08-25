@@ -82,10 +82,10 @@ def waitToExit(filePath):
 			#only print if something new
 			if pre_last != lastline:
 				l = lastline[-1];
-				print(l[:-2])
+				print(l)
 				pre_last = lastline
-			else:
-				print("nothing new")
+			
+				
 			
 
 			
@@ -213,7 +213,6 @@ def openPicker(num):
 			filePath = '../info/picker/picker' + str(num) +'.txt'
 			f = open(filePath, 'r')
 			
-			print("here")
 			#read and print continously till user enters x
 			waitToExit(filePath)
 				
