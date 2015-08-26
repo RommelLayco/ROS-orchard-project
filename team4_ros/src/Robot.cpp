@@ -357,9 +357,9 @@ void Robot::reachedCurrentGoal()
 	{
 		animalWrite();
 	}
-	else if(robotType == "Human")
+	else if(robotType == "human")
 	{
-	
+		humanWrite();
 	}
 	else
 	{
