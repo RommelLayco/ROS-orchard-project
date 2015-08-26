@@ -60,7 +60,12 @@ double Robot::getYPos()
 
 void Robot::addGoal(geometry_msgs::Point goal)
 {
+    ROS_INFO("X: %f", goal.x);
+    ROS_INFO("Y: %f", goal.y);
     goals.push_back(goal);
+    ROS_INFO("size: %lu", goals.size());
+
+
 }
 
 void Robot::addSpeedListener(SpeedListener* listener)

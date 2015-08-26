@@ -8,12 +8,16 @@ class Person: public Robot
         Person(int sensor_range, int sensor_angle, int number, std::string type) : Robot(sensor_range, sensor_angle,number,type) {
             generateRandomDesiredLocations();
         }
+        void changeMax(std::vector<geometry_msgs::Point> point);
     protected:
         /*virtual void leftCollisionDetected();
         virtual void rightCollisionDetected();
         virtual void centerCollisionDetected();*/
         void generateRandomDesiredLocations();
         virtual void reachedLastGoal();
+        int maxX = 28;
+        int maxY = 52;
+        
 };
 
 
@@ -48,13 +52,13 @@ void Person::generateRandomDesiredLocations()
 
     // Setup points on robot's path
     geometry_msgs::Point desiredLocation1;
-    desiredLocation1.x = rand() % 10 + 1;
-    desiredLocation1.y = rand() % 10 + 1;
+    desiredLocation1.x = rand() % maxX + 1;
+    desiredLocation1.y = rand() % maxY + 1;
     desiredLocation1.z = 0;
 
     geometry_msgs::Point desiredLocation2;
-    desiredLocation2.x = rand() % 10 + 1;
-    desiredLocation2.y = -1 * (rand() % 10 + 1);
+    desiredLocation2.x = rand() % maxX + 1;
+    desiredLocation2.y = rand() % maxY + 1;
     desiredLocation2.z = 0;
 
     addGoal(desiredLocation1);
@@ -66,3 +70,8 @@ void Person::reachedLastGoal()
     generateRandomDesiredLocations();
 }
 
+void Person::changeMax(std::vector<geometry_msgs::Point> point)
+{
+    maxX = int(point[0].x);
+    maxY = int(point[0].y);
+}
