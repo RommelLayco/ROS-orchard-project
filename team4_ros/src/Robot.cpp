@@ -60,10 +60,9 @@ double Robot::getYPos()
 
 void Robot::addGoal(geometry_msgs::Point goal)
 {
-    ROS_INFO("X: %f", goal.x);
-    ROS_INFO("Y: %f", goal.y);
+    
     goals.push_back(goal);
-    ROS_INFO("size: %lu", goals.size());
+    
 
 
 }
@@ -96,6 +95,14 @@ void Robot::sensorCallback(const sensor_msgs::LaserScan::ConstPtr& sensorMsg)
         // determine it's position relative to the entity
         if (sensorMsg->ranges[i] < sensorRange)
         {
+		
+			//write to debugger that it near an obstacle for picker
+			if(robotType == "picker")
+			{
+				writeToFile(unique_id,robotType,"Near an obstacle");
+			}
+	
+			
             isNear = true;
             mycounter=1;
             current_state = CollisionResolution; // Entity is now in CollisionResolution state
@@ -162,6 +169,7 @@ void Robot::leftCollisionDetected(CollisionType type)
         // Stop moving, wait for obstacle to move
         linear_velocity_x = 0;
         angular_velocity = 0;
+
     }
     else
     {
@@ -194,6 +202,7 @@ void Robot::centerCollisionDetected(CollisionType type)
         // Stop moving, wait for obstacle to move
         linear_velocity_x = 0;
         angular_velocity = 0;
+
     }
     else
     {
@@ -328,8 +337,34 @@ void Robot::notifySpeedListeners()
 void Robot::reachedCurrentGoal()
 {
     goalIndex++;
-    ROS_INFO("Reached destination");
-    writeToFile(unique_id,robotType,"Reached destination");
+    
+	
+	// write to file next destination
+	if(robotType == "picker") //if picker give co ordinates of next destination
+	{
+		if(goalIndex == 0)
+		{
+			writeToFile(unique_id,robotType,"Reached destination, now moving down the orchard, away from the orchard");
+		} else {
+			writeToFile(unique_id,robotType,"Reached destination, now moving up the orchard, towards the driveway");
+		}
+	} 
+	else if(robotType == "tractor")
+	{
+		tractorWrite();
+	}
+	else if(robotType == "animal")
+	{
+		animalWrite();
+	}
+	else if(robotType == "Human")
+	{
+	
+	}
+	else
+	{
+		//do nothing
+	}	
 }
 
 void Robot::reachedLastGoal()
@@ -366,4 +401,78 @@ void Robot::rotateToGoal(double desiredAngle)
     }
 }
 
+
 #endif
+
+void Robot::tractorWrite()
+{
+	//check goal index
+
+	if(goalIndex == 0)
+	{
+		writeToFile(unique_id,robotType,"Reach destination, Now going to the top left corner");
+	}
+	else if(goalIndex == 1)
+	{
+		writeToFile(unique_id,robotType,"Reach destination, Now goingto the bottom left corner");
+	}
+	else if(goalIndex == 2)
+	{
+		writeToFile(unique_id,robotType,"Reach destination, Now going to the bottom right corner");
+	}
+	else if(goalIndex == 3)
+	{
+		writeToFile(unique_id,robotType,"Reach destination, Now going to the top right corner near the driveway");
+	} 
+	else
+	{
+		//do nothing
+		writeToFile(unique_id,robotType,"Error");
+	}
+}
+
+void Robot::animalWrite()
+{
+	//check goal index
+
+	if(goalIndex % 4 == 0)
+	{
+			
+
+		//read in current goal
+		geometry_msgs::Point desiredLocation = goals[goalIndex];
+		double x = desiredLocation.x + 1.2;
+		double y = desiredLocation.y;
+	
+		std::string line = "Reached destination, now going to tree located at: ";
+		std::string result = line + std::to_string (x) + "," + std::to_string (y);
+				
+		writeToFile(unique_id,robotType,result);
+	}
+	
+}
+
+void Robot::pickerInitWrite()
+{
+	std::string line = "Picker moving up the orchard towards the driveway ";
+	writeToFile(unique_id,robotType,line);
+}
+
+void Robot::humanWrite()
+{
+	//read in current goal
+	geometry_msgs::Point desiredLocation = goals[goalIndex];
+	double x = desiredLocation.x;
+	double y = desiredLocation.y;	
+		
+	std::string line = "Reached destination, Checking area around: ";
+	std::string result = line + std::to_string (x) + "," + std::to_string (y);
+	
+	writeToFile(unique_id,robotType,result);
+	
+}
+
+
+
+
+

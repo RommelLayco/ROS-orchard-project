@@ -64,14 +64,14 @@ int main(int argc, char **argv)
         Picker *myRobot = new Picker(2, 100, id, "picker");
         entityList.push_back(myRobot);
         // Add some goals to robot
-        ROS_INFO("X: %f", picker_points[i].x);
-        ROS_INFO("Y: %f", picker_points[i].y);
         myRobot->addGoal(picker_points[i]);
         myRobot->addGoal(picker_points[i+1]);
         // Give picker a bin
         Bin* bin = new Bin(0, 0, 20);
         myRobot->pickupBin(bin);
-
+	
+	//write to logger that the picker is now moving up the orchard
+	myRobot->pickerInitWrite();
 
         id  = id + 1;
     }
@@ -91,12 +91,21 @@ int main(int argc, char **argv)
     for(int i = 0; i < trees.size(); i++)
     {
         myDog.addGoal(trees[i]);
+	
+		//print first location to debugger
+		if(i == 0)
+		{
+			myDog.animalWrite();
+		}
     }
 
 
     // Instantiate a person
     Person myPerson = Person(2, 110, 1, "human");
     entityList.push_back(&myPerson);
+	
+	//print first goal
+	myPerson.humanWrite();
 
 
     filename = GoalsLocation + "orchardArea";
@@ -117,7 +126,14 @@ int main(int argc, char **argv)
     //add tractor locations to goals
     for (int i = 0; i < points.size(); i++)
     {
-        myTractor.addGoal(points[i]);
+	   
+		myTractor.addGoal(points[i]);
+		
+		//print first location to debugger
+		if(i == 0)
+		{
+			myTractor.tractorWrite();
+		}
     
 
     }

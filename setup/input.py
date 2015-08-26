@@ -696,7 +696,7 @@ def tractorLocations(r_spacing, t_spacing):
 
 	#coordinates for bottom right
 	x = (7 * r_spacing) + 7
-	y = -3
+	y = -7
 	f.write(str(x) + " " + str(y) + "\n")
 
 	#coordinates for bottom left
@@ -840,8 +840,8 @@ add_Vistor(r_spacing, t_spacing)
 
 
 
-# add bin	
-add_bin(r_spacing,t_spacing)
+# add bin dont spawn bins	
+#add_bin(r_spacing,t_spacing)
 
 
 

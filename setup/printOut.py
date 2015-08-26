@@ -162,7 +162,7 @@ def chooseHuman():
 	#continue looping till a valid input is entered
 	while True:
 		try:
-			num =  int(input("worker = 1, vistor = 2, person = 3: "))
+			num =  int(input("person = 1, worker = 2, vistor = 3: "))
 		except ValueError:
 			#loop again invalid type
 			print("Input is not an intger")
