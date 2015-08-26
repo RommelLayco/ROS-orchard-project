@@ -247,7 +247,8 @@ def add_Instances_to_world():
 	f.write('include "worker.inc"\n') #add worker model
 	f.write('include "masterNode.inc"\n') #add master node model
 	f.write('include "bigBin.inc"\n') # add big bin
-	f.write('include "carrier.inc"\n') # add big bin
+	f.write('include "carrier.inc"\n') # add carrier
+	f.write('include "visitor.inc"\n') # add visitor
 	f.write('include "weedLocation.inc"\n\n')#weed model
 
 
@@ -561,6 +562,27 @@ def add_trainedPerson(r_spacing,t_spacing):
 
 	f.close()	
 
+def add_Vistor(r_spacing,t_spacing):
+
+	f = open('o1.world','a')
+
+	f.write("\n")
+
+	current_x = r_spacing * 7 + 3
+	current_y = t_spacing *13 + 5
+
+	name = "\"visitor\""
+
+	line = "visitor( pose [ " 
+	line = line + str(current_x) + " "
+	line = line + str(current_y) + " "
+	line = line + "0 270 ] name " + name + " )\n"
+
+	f.write(line)
+
+
+	f.close()
+
 def add_masterNode():
 
 	# just position master node at 0,0 and above 
@@ -789,6 +811,7 @@ add_person(r_spacing)
 
 # add trained person
 add_trainedPerson(r_spacing,t_spacing)
+add_Vistor(r_spacing, t_spacing)
 
 # add tractor
 add_tractor(t_spacing)
