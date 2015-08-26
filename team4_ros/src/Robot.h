@@ -194,6 +194,12 @@ public:
         virtual void centerCollisionDetected(CollisionType type);
 
        /**
+        * Called from updateVelocity() when entity reaches its current goal.
+        * Should be overridden in subclasses to provide more specific behavior.
+        */
+	virtual void reachedCurrentGoal();
+
+       /**
         * Called from updateVelocity() when entity reaches its final goal.
         * Should be overridden in subclasses to provide more specific behavior.
         */

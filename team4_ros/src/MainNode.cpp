@@ -68,6 +68,10 @@ int main(int argc, char **argv)
         ROS_INFO("Y: %f", picker_points[i].y);
         myRobot->addGoal(picker_points[i]);
         myRobot->addGoal(picker_points[i+1]);
+        // Give picker a bin
+        Bin* bin = new Bin(0, 0, 20);
+        myRobot->pickupBin(bin);
+
 
         id  = id + 1;
     }

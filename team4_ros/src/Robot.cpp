@@ -258,9 +258,7 @@ void Robot::updateVelocity()
         angular_velocity = 0.0;
         if (goalIndex < goals.size() - 1)
         {
-            goalIndex++;
-            ROS_INFO("Reached destination");
-            writeToFile(unique_id,robotType,"Reached destination");
+	        reachedCurrentGoal();
         }
         else
         {
@@ -325,6 +323,13 @@ void Robot::notifySpeedListeners()
         speedListeners[i]->speedUpdate(velocityMsg);
     }
     
+}
+
+void Robot::reachedCurrentGoal()
+{
+    goalIndex++;
+    ROS_INFO("Reached destination");
+    writeToFile(unique_id,robotType,"Reached destination");
 }
 
 void Robot::reachedLastGoal()
