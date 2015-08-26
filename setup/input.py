@@ -769,7 +769,7 @@ def orchardArea(r_spacing, t_spacing):
 
 	maxX = 8 * r_spacing
 	maxY = 13 * t_spacing
-	line = str(maxX) + "\n" + str(maxY)
+	line = str(maxX) + " " + str(maxY)
 	f.write(line)
 
 	f.close()
