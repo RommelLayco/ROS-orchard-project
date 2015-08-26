@@ -5,6 +5,7 @@
 PositionListener::PositionListener(std::vector<Robot*> entities)
 {
     entityList = entities;
+	// Subscribe to bin topic to find out when a picker's bin is full
     binFullSub = subscriberHandle.subscribe("bin_topic", 1000, &PositionListener::binFullCallback, this);
 }
 
