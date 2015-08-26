@@ -29,6 +29,7 @@ mv tractorLocations ../locations
 mv dogLocation ../locations
 mv binArea ../locations
 mv bigBinLocation ../locations
+mv orchardArea ../locations
 
 #-------------------------------------------------------------
 #reset info files

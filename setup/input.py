@@ -760,6 +760,17 @@ def bigBinLocation(t_spacing):
 
 	f.close()
 
+def orchardArea(r_spacing, t_spacing):
+	f = open('orchardArea', 'w')
+
+	maxX = 8 * r_spacing
+	maxY = 13 * t_spacing
+	line = str(maxX) + "\n" + str(maxY)
+	f.write(line)
+
+	f.close()
+
+
 
 
 
@@ -840,6 +851,7 @@ tractorLocations(r_spacing,t_spacing)
 pickerLocations(r_spacing, t_spacing)
 binArea(r_spacing, t_spacing)
 bigBinLocation(t_spacing)
+orchardArea(r_spacing,t_spacing)
 
 
 
