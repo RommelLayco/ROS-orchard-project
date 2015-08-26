@@ -98,7 +98,6 @@ int main(int argc, char **argv)
     Carrier myCarrier = Carrier(2, 120, 1, "carrier", binDropOff);
     entityList.push_back(&myCarrier);
 
-    // list of all positions
     PositionListener* posLis = new PositionListener(entityList);
     
     for (int i = 0; i < entityList.size(); i++)

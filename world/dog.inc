@@ -1,6 +1,6 @@
 define dogLaser ranger 
 ( 
-  sensor( range [ 0 3 ] fov 180 samples 180 )
+  sensor( range [ 0 3 ] fov 220 samples 220 )
     size [0.100 0.100 0.100] 
       color "black" 
         block( 

@@ -22,52 +22,7 @@ define carrier actor
 		pose [0 0 0 0.0]
 		color "orange"
 	)
-	#Carrier Logo "CA"
-	#C LETTER
-	model
-	(
-		size [0.01 0.1 0.05]
-		pose [0.5 -0.10 0.3 0.0]
-		color "black"
-	)
-	model
-	(
-		size [0.01 0.01 0.24]
-		pose [0.5 -0.15 0.06 0.0]
-		color "black"
-	)
-	model
-	(
-		size [0.01 0.1 0.05]
-		pose [0.5 -0.10 0.06 0.0]
-		color "black"
-	)
-	#A LETTER
-	model
-	(
-		size [0.01 0.1 0.05]
-		pose [0.5 0.12 0.3 0.0]
-		color "black"
-	)
-	model
-	(
-		size [0.01 0.1 0.05]
-		pose [0.5 0.12 0.15 0.0]
-		color "black"
-	)
-	model
-	(
-		size [0.01 0.01 0.3]
-		pose [0.5 0.07 0.06 0.0]
-		color "black"
-	)
-	model
-	(
-		size [0.01 0.01 0.3]
-		pose [0.5 0.17 0.06 0.0]
-		color "black"
-	)
-
+	
 	pickerLaser(pose [ 0.0 0.0 0.5 0.0 ])
 	
 	#right arm
@@ -172,10 +127,6 @@ define carrier actor
 		color "black"
 	)
 
-	
-	
-	
-	
 	
 	
 	

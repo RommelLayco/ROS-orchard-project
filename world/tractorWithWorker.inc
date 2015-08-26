@@ -146,21 +146,6 @@ define tractorWithWorker actor
 		pose [-0.2 0.0 2.05 0.0] 
 		color "PeachPuff1"
 	)
-	#cap
-	model
-	(
-		size [0.28 0.28 0.15] 
-		pose [-0.2 0.0 2.30 0.0] 
-		color "blue"
-	)
-
-	#cap mouth
-	model
-	(
-		size [0.4 0.27 0.1] 
-		pose [-0.13 0.0 2.30 0.0] 
-		color "blue"
-	)
 
 	# Left eye
 	model
@@ -175,7 +160,6 @@ define tractorWithWorker actor
 		pose [-0.0735 0.0625 2.178 0.0]
 		color "DodgerBlue"
 	)
-	
 
 	# Right eye
 	model
