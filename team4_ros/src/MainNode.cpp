@@ -95,8 +95,13 @@ int main(int argc, char **argv)
     entityList.push_back(&myPerson);
 
 
+    filename = GoalsLocation + "orchardArea";
+    std::vector<geometry_msgs::Point> size = Util::readFile(filename.c_str()); 
     FlyingCamera myCamera = FlyingCamera(2, 60, 1, "camera");
     entityList.push_back(&myCamera);
+
+    //specify orchard area
+    myCamera.changeMax(size);
 
     
     filename = GoalsLocation + "tractorLocations";
