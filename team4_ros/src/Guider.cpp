@@ -49,6 +49,70 @@ ros::Publisher pubToVisitor;
 
 geometry_msgs::Point desiredLocation;
 
+
+
+
+/*
+angle2Turn is the angle willing to turn in radians, for example, turn 90degrees will be 1.57 radians.
+angularSpd should set at 2 to reach max turning speed. positive 2 will be spinning anticlockwise, 
+negative 2 will be clockwise.
+Eg, turning right 90degrees--- angle2Turn= 1.57, angularSpd = 2
+turning left 180degrees --- angle2Turn = 3.14, angularSpd = -2
+*/
+
+bool rotateAngle(double angle2Turn, int angularSpd)
+{
+   //Calculate the angle to rotate
+    double destinationAngle = 0;
+    currentVelocity.linear.x = 0;
+    ros::Rate loop_rate(10);
+
+
+    if (angularSpd > 0) //spin anticlockwise
+    {
+        destinationAngle = currentAngle + angle2Turn;
+        /*
+        *   Eg: current Angle = 6, turn 1.57 anticlockwise.
+        *   6 + 1.57 = 7.57.  7.57 - 6.28 = 1.29
+        *   Stop spinning when current angle is closed to 1.29.
+        */
+        if (destinationAngle > 6.28)
+        {
+            destinationAngle = destinationAngle - 6.28;
+        }
+    }
+    else //spin clockwise
+    {
+        //vice versa from above
+        destinationAngle = currentAngle - angle2Turn;
+        if (destinationAngle < 0)
+        {
+            destinationAngle = destinationAngle + 6.28;
+        }
+    }
+
+    while(true)
+    {
+
+        if(fabs(currentAngle-destinationAngle)<0.1){break;}
+
+        ros::spinOnce();
+        ROS_INFO("Current Angle: %f",currentAngle);
+        //ROS_INFO("Desired Angle: %f",desiredAngle);
+        currentVelocity.angular.z = angularSpd;
+        mypub_object.publish(currentVelocity);
+        
+        loop_rate.sleep();
+        ROS_INFO("destinationAngle: %f",destinationAngle);
+    }
+
+
+    currentVelocity.angular.z = 0;
+    return true;
+
+}
+
+
 void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
 {
     int i = 0;
@@ -117,6 +181,7 @@ void publishMessageToVisitor(){
 
 void updateCurrentVelocity() {
 
+   //turn and go around obstacle if near something
     if (nearCollision == true)
     {
         if(sensorCounter>=0 && sensorCounter<=10){
@@ -128,74 +193,90 @@ void updateCurrentVelocity() {
                 return;
         }
         
-            ROS_INFO("It's a static obj,I will move");
-            
-            if(::sensorPoint>55){
-                ROS_INFO("It's on my left,turn right,clock(Z<0) first then anti"); 
+        //Once dancing finished, start going around
+        // Let collision resolution take place before we attempt to move towards the goal
+        if(::sensorPoint>55){
+               
+            ROS_INFO("It's on my left,turn right,clock(Z<0) first then anti"); 
                     
-				if (sensorPoint < 75)
-				{
-					ROS_INFO("ON LEFT MIDDLE");
-					 currentVelocity.linear.x = 0;
-                    currentVelocity.angular.z=-2;
-				}
-				else
-				{
-                    currentVelocity.linear.x = 0.6;
-                    currentVelocity.angular.z=-1;
-                 }   
-                   mypub_object.publish(currentVelocity); 
-                
-                
-            }else if(::sensorPoint<=60){
-             ROS_INFO("It's on my right,turn left,anti(Z>0) first then clock"); 
+            if (::sensorPoint < 75)
+            {
+                ROS_INFO("One Left middle");
+                currentVelocity.linear.x = 0;
+                currentVelocity.angular.z=-2;
+            }
+            else
+            {
+                currentVelocity.linear.x = 0.6;
+                currentVelocity.angular.z=-1;
+            }
 
-				if(::sensorPoint > 40){
-					ROS_INFO("ON RIGHT MIDDLE");
-					 currentVelocity.linear.x = 0;
-                    currentVelocity.angular.z=2;
-				}
-             else{
-               currentVelocity.linear.x = 0.5;
-               currentVelocity.angular.z=0.5;
-			}
-               mypub_object.publish(currentVelocity); 
-           
+            
+                    
+            mypub_object.publish(currentVelocity); 
                 
-       
+                
+        }else if(::sensorPoint<=55){
 
-   }
-    // Let collision resolution take place before we attempt to move towards the goal
-   mycounter++;
-   return;
+            ROS_INFO("It's on my right,turn left,anti(Z>0) first then clock"); 
+             
+             if (::sensorPoint > 40)
+            {
+                ROS_INFO("On right middle");
+                currentVelocity.linear.x = 0;
+                currentVelocity.angular.z= 2;
+            }
+            else
+            {
+                currentVelocity.linear.x = 0.6;
+                currentVelocity.angular.z= 1;
+            }
+
+            mypub_object.publish(currentVelocity); 
+        }
+        mycounter++;
+        return;
+        
     }
-// keep the speed for collision detection.
- if(mycounter>=1 && mycounter<8){
-    mycounter++;
-    return;
-   }else if(mycounter>=8 && mycounter<=16){
-    if(sensorPoint>30){
-        //if it first goes to the right,it should goes back to left.
-        //number 40,20 can be changed to get better performance
-        ROS_INFO("goes back,turn anti Z>0");
-        currentVelocity.linear.x = 0.5;
-        currentVelocity.angular.z=0.5;
-        mypub_object.publish(currentVelocity); 
 
-    }else{
-        ROS_INFO("goes back,turn clock Z<0");
-         currentVelocity.linear.x = 0.5;
-        currentVelocity.angular.z=-0.5;
-        mypub_object.publish(currentVelocity); 
+
+    // keep the speed for collision detection.
+    if(mycounter>=1 && mycounter<8){
+
+        mycounter++;
+        return;
+
     }
-    mycounter++;
-    return;
-   }else if(mycounter>16){
-    //stop collison detection,goes back to normal
-    mycounter=0;
-   }
+    //moving back to original direction
+    else if(mycounter>=8 && mycounter<=16)
+    {
+        if(sensorPoint>55)
+        {
+            //if it first goes to the right,it should goes back to left.
+            //number 40,20 can be changed to get better performance
+            ROS_INFO("goes back,turn anti Z>0");
+            currentVelocity.linear.x = 0.6;
+            currentVelocity.angular.z=1;
+            mypub_object.publish(currentVelocity); 
 
-    // Find the correct 
+        }
+        else
+        {
+            ROS_INFO("goes back,turn clock Z<0");
+            currentVelocity.linear.x = 0.6;
+            currentVelocity.angular.z=-1;
+            mypub_object.publish(currentVelocity); 
+        }
+        mycounter++;
+        return;
+       }
+       else if(mycounter>16)
+       {
+        //stop collison detection,goes back to normal
+        mycounter=0;
+       }
+
+    
 
 sensorCounter=0;
 
@@ -292,19 +373,19 @@ int main (int argc, char **argv)
 	ros::NodeHandle n; 
 
 	// master registry pub and sub
-    mypub_object = n.advertise<geometry_msgs::Twist>("robot_19/cmd_vel",1000);
+    mypub_object = n.advertise<geometry_msgs::Twist>("robot_18/cmd_vel",1000);
 
 	pubToVisitor =n.advertise<team4_ros::findVisitor>("findVisitorTopic",1000);
 	
 	// loop 25 
 	ros::Rate loop_rate(10);
 
-	ros::Subscriber mysub_object = n.subscribe<nav_msgs::Odometry>("robot_19/base_pose_ground_truth",1000, groundTruthCallback); 
-	ros::Subscriber visitorSub = n.subscribe<nav_msgs::Odometry>("robot_18/base_pose_ground_truth",1000, visitorGroundTruthCallback); 
+	ros::Subscriber mysub_object = n.subscribe<nav_msgs::Odometry>("robot_18/base_pose_ground_truth",1000, groundTruthCallback); 
+	ros::Subscriber visitorSub = n.subscribe<nav_msgs::Odometry>("robot_19/base_pose_ground_truth",1000, visitorGroundTruthCallback); 
 	
 	// ROS comms access point 
 
-    ros::Subscriber sub = n.subscribe("robot_19/base_scan", 1000, sensorCallback);
+    ros::Subscriber sub = n.subscribe("robot_18/base_scan", 1000, sensorCallback);
 	sensorCounter=0;
     mycounter=0;
 
