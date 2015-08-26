@@ -41,47 +41,36 @@ velocity_enable 1
 model
 (
 size [20.000 20.000 0.100 0]
-pose [ -20.000 59.0 0.000 0.000]
+pose [ -20.000 85.0 0.000 0.000]
 bitmap "driveway.png"
 )
 
-picker( pose [ 2.0 -2 0 90 ] name "picker1" )
-picker( pose [ 7.0 -2 0 90 ] name "picker2" )
-picker( pose [ 12.0 -2 0 90 ] name "picker3" )
-picker( pose [ 17.0 -2 0 90 ] name "picker4" )
-picker( pose [ 22.0 -2 0 90 ] name "picker5" )
-picker( pose [ 27.0 -2 0 90 ] name "picker6" )
-picker( pose [ 32.0 -2 0 90 ] name "picker7" )
+picker( pose [ 3.0 -2 0 90 ] name "picker1" )
+picker( pose [ 10.0 -2 0 90 ] name "picker2" )
+picker( pose [ 17.0 -2 0 90 ] name "picker3" )
+picker( pose [ 24.0 -2 0 90 ] name "picker4" )
+picker( pose [ 31.0 -2 0 90 ] name "picker5" )
+picker( pose [ 38.0 -2 0 90 ] name "picker6" )
+picker( pose [ 45.0 -2 0 90 ] name "picker7" )
 
 dog( pose [ -4 -8 0 90 ] name "dog" )
 
-person1( pose [ 40.0 -5 0 90 ] name "person1" )
+person1( pose [ 54.0 -5 0 90 ] name "person1" )
 
 masterNode( pose [ 6.328 1.278 2.800 0.000 ] name "master" )
 
-tractorWithWorker( pose [ -9 68.0 0 0 ] name "tractorWithWorker" )
+tractorWithWorker( pose [ -9 94.0 0 0 ] name "tractorWithWorker" )
 
-carrier( pose [ 5.0 71.0 0 -90 ] name "carrier1" )
-carrier( pose [ 9.0 71.0 0 -90 ] name "carrier2" )
-carrier( pose [ 13.0 71.0 0 -90 ] name "carrier3" )
-carrier( pose [ 17.0 71.0 0 -90 ] name "carrier4" )
-carrier( pose [ 21.0 71.0 0 -90 ] name "carrier5" )
-carrier( pose [ 25.0 71.0 0 -90 ] name "carrier6" )
-carrier( pose [ 29.0 71.0 0 -90 ] name "carrier7" )
+carrier( pose [ 7.0 97.0 0 -90 ] name "carrier1" )
+carrier( pose [ 11.0 97.0 0 -90 ] name "carrier2" )
+carrier( pose [ 15.0 97.0 0 -90 ] name "carrier3" )
+carrier( pose [ 19.0 97.0 0 -90 ] name "carrier4" )
+carrier( pose [ 23.0 97.0 0 -90 ] name "carrier5" )
+carrier( pose [ 27.0 97.0 0 -90 ] name "carrier6" )
+carrier( pose [ 31.0 97.0 0 -90 ] name "carrier7" )
 
-worker( pose [ 40.0 70.0 0 270 ] name "worker" )
+worker( pose [ 54.0 96.0 0 270 ] name "worker" )
 
-visitor( pose [ 38.0 70.0 0 270 ] name "visitor" )
+visitor( pose [ 52.0 96.0 0 270 ] name "visitor" )
 
-bin( pose [ 20.0 73.0 0 90 ] name "bin1" )
-bin( pose [ 21.0 73.0 0 90 ] name "bin2" )
-bin( pose [ 22.0 73.0 0 90 ] name "bin3" )
-bin( pose [ 23.0 73.0 0 90 ] name "bin4" )
-bin( pose [ 24.0 73.0 0 90 ] name "bin5" )
-bin( pose [ 25.0 73.0 0 90 ] name "bin6" )
-bin( pose [ 26.0 73.0 0 90 ] name "bin7" )
-bin( pose [ 27.0 73.0 0 90 ] name "bin8" )
-bin( pose [ 28.0 73.0 0 90 ] name "bin9" )
-bin( pose [ 29.0 73.0 0 90 ] name "bin10" )
-
-bigBin( pose [ -7.8 73.5 0 0 ] name "Big bin" )
+bigBin( pose [ -7.8 99.5 0 0 ] name "Big bin" )

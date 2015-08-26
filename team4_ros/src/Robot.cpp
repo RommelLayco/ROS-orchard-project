@@ -87,7 +87,7 @@ void Robot::sensorCallback(const sensor_msgs::LaserScan::ConstPtr& sensorMsg)
     int left_vals = sensorAngle / 2;
     int right_vals = sensorAngle - left_vals;
 
-    int i = 0;
+    int i = 10;
     bool isNear = false;
     // Loop through sensor data array
     for (i; i < sensorAngle; i++) {

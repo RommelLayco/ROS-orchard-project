@@ -23,6 +23,98 @@ define picker actor
 		color "pink"
 	)
 	
+	#Picker Logo "PI" at front
+	#P LETTER
+	model
+	(
+		size [0.01 0.1 0.01]
+		pose [0.5 -0.10 0.3 0.0]
+		color "black"
+	)
+	model
+	(
+		size [0.01 0.1 0.01]
+		pose [0.5 -0.10 0.2 0.0]
+		color "black"
+	)
+	model
+	(
+		size [0.01 0.01 0.2]
+		pose [0.5 -0.15 0.08 0.0]
+		color "black"
+	)
+	model
+	(
+		size [0.01 0.01 0.1]
+		pose [0.5 -0.05 0.2 0.0]
+		color "black"
+	)
+	#I LETTER
+	model
+	(
+		size [0.01 0.1 0.01]
+		pose [0.5 0.08 0.3 0.0]
+		color "black"
+	)
+	model
+	(
+		size [0.01 0.1 0.01]
+		pose [0.5 0.08 0.1 0.0]
+		color "black"
+	)
+	model
+	(
+		size [0.01 0.01 0.2]
+		pose [0.5 0.08 0.11 0.0]
+		color "black"
+	)
+
+	#PI Logo at back
+	#P LETTER
+	model
+	(
+		size [0.01 0.1 0.01]
+		pose [-0.5 0.10 0.3 0.0]
+		color "black"
+	)
+	model
+	(
+		size [0.01 0.1 0.01]
+		pose [-0.5 0.10 0.2 0.0]
+		color "black"
+	)
+	model
+	(
+		size [0.01 0.01 0.2]
+		pose [-0.5 0.15 0.08 0.0]
+		color "black"
+	)
+	model
+	(
+		size [0.01 0.01 0.1]
+		pose [-0.5 0.05 0.2 0.0]
+		color "black"
+	)
+	#I LETTER
+	model
+	(
+		size [0.01 0.1 0.01]
+		pose [-0.5 -0.12 0.3 0.0]
+		color "black"
+	)
+	model
+	(
+		size [0.01 0.1 0.01]
+		pose [-0.5 -0.12 0.1 0.0]
+		color "black"
+	)
+	model
+	(
+		size [0.01 0.01 0.2]
+		pose [-0.5 -0.12 0.11 0.0]
+		color "black"
+	)
+	
 	pickerLaser(pose [ 0.0 0.0 0.5 0.0 ])
 	
 	#right arm
@@ -40,40 +132,39 @@ define picker actor
 		color "white"
 	)
 	
-
-        #bin
-         model
+		#bin
+       model
         (
-            size [0.42 0.02 0.2 ]
-            pose [0 0.23 0.8 0.0]
+            size [0.42 0.02 0.4 ]
+            pose [0.0 0.2 0.8 0.0]
             color "burlywood"
         )
 
         model
         (
-            size [0.42 0.02 0.2 ]
-            pose [0 -0.25 0.8 0.0]
+            size [0.42 0.02 0.4 ]
+            pose [0.0 -0.2 0.8 0.0]
             color "burlywood"
         )
 
         model
         (
-            size [0.02 0.46 0.2 ]
-            pose [0.23 0 0.8 0.0]
+            size [0.02 0.36 0.4 ]
+            pose [0.2 0.0 0.8 0.0]
             color "burlywood"
         )
 
         model
         (
-            size [0.02 0.46 0.2 ]
-            pose [-0.23 0 0.8 0.0]
+            size [0.02 0.36 0.4 ]
+            pose [-0.2 0.0 0.8 0.0]
             color "burlywood"
         )
 
         model
         (
-            size [0.4 0.46 0.02 ]
-            pose [0 0 0.8 0.0]
+            size [0.4 0.4 0.02 ]
+            pose [0.0 0.0 0.8 0.0]
             color "burlywood"
         )
 

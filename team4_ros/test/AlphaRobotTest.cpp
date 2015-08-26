@@ -4,7 +4,7 @@
 #include "../src/Robot.h"
 #include "../src/Robot.cpp"
 #include "../src/Dog.cpp"
-#include "../src/Bin.h"
+#include "../src/Picker.cpp"
 #include "../src/Carrier.cpp"
 #include "../src/PositionListener.cpp"
 #include <iostream>
@@ -200,6 +200,10 @@ TEST(testBasicRobot, testSensorData){
     //testRobot->sensorCallback(sensorMsg);
 }
 
+/**
+The test method testDogBark checks that the value receives by the gui from the dog
+is what is expected
+*/
 string message;
 
 void barkCallback(const std_msgs::String barkmessage){
@@ -223,6 +227,60 @@ TEST(testDogRobot, testDogbark){
 
 }
 
+bool message2;
+
+void binCallback(const team4_ros::binIsFull::ConstPtr& msg){
+    message2 = msg->isFull;
+    cout << message2;
+}
+
+
+
+/**
+The test method bin is full checks that the bin is not full
+*/
+TEST(testPicker, testBinIsFull){
+    Picker *testRobot = new Picker(2, 120,1,"picker");
+    ros::Rate loop_rate(10);
+
+    ros::NodeHandle subscriberHandle;
+
+    ros::Subscriber binIsFullmessage;
+
+    binIsFullmessage = subscriberHandle.subscribe<team4_ros::binIsFull>("bin_topic", 1000, binCallback);
+    
+    Bin* bin = new Bin(0, 0, 20);
+
+    testRobot->bin = bin;
+
+    testRobot->binIsFull();
+
+    ros::spinOnce();
+
+    ASSERT_EQ(false,message2);
+
+}
+
+
+/* tests carrier methods*/
+TEST(testCarrier, testCarrierMethods){
+    
+    
+    geometry_msgs::Point desiredLocation;
+    desiredLocation.x = rand() % 10 + 1;
+    desiredLocation.y = rand() % 10 + 1;
+    desiredLocation.z = 0;
+
+    Carrier *testRobot = new Carrier(2, 120,1,"carrier",desiredLocation);
+
+    Bin* bin = new Bin(0, 0, 20);
+
+    testRobot->pickupBin(bin);
+
+    ASSERT_EQ(ShiftingBin,testRobot->state);
+
+
+}
 
 // Run all the tests that were declared with TEST()
 int main(int argc, char **argv)

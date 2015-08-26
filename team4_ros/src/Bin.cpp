@@ -23,3 +23,4 @@ bool Bin::isFull()
         return false;
     }
 }
+
