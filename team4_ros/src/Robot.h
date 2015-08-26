@@ -19,12 +19,13 @@
 /* Represents the three possible states an entity can be in */
 enum robotState {CollisionResolution, Moving, Orienting};
 
+enum collisionDirection {Left,Right};
 
 /* Base class that represents an entity in the simulation */
 class Robot
 {
-    public:
-        Robot(int sensor_range, int sensor_angle, int id, std::string type);
+public:
+    Robot(int sensor_range, int sensor_angle, int id, std::string type);
 
        /**
         * This method is invoked by MainNode in a loop to progress the simulation.
@@ -105,7 +106,7 @@ class Robot
         std::string robotType;
 
 
-   protected:
+    protected:
         std::vector<SpeedListener*> speedListeners; // Must be a pointer because SpeedListener is an abstract type
         std::vector<PositionListener*> positionListeners;
 
@@ -136,6 +137,12 @@ class Robot
 
         // The state lets us know what speed to give to the robot
         robotState current_state;
+
+        //counter for overrall collison avoid
+        int mycounter;
+
+        collisionDirection direction;
+
 
 
        /**
@@ -203,6 +210,6 @@ class Robot
         */
         geometry_msgs::Point getCollisionPosition(int index, int sampleSize, double distance);
 
-};
+    };
 
 #endif

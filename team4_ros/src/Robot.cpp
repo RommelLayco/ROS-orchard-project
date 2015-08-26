@@ -41,6 +41,10 @@ Robot::Robot(int sensor_range, int sensor_angle, int number, std::string type)
 
     ROS_INFO("Robot [%d] instantiated", id);
 
+
+    mycounter=0;
+    direction=Left;
+
 }
 
 double Robot::getXPos()
@@ -88,21 +92,25 @@ void Robot::sensorCallback(const sensor_msgs::LaserScan::ConstPtr& sensorMsg)
         if (sensorMsg->ranges[i] < sensorRange)
         {
             isNear = true;
+            mycounter=1;
             current_state = CollisionResolution; // Entity is now in CollisionResolution state
             CollisionType type = getCollisionType(i, sensorRange, sensorMsg->ranges[i]);
             if (i < left_vals)
             {
                 // Collision is on right
+                direction=Right;
                 rightCollisionDetected(type);
                 break;
             } else if (i >= left_vals && i < right_vals)
             {
                 // Collision is in front
+                direction=Left;
                 centerCollisionDetected(type);
                 break;
             } else
             {
                 // Collision is on left
+                direction=Left;
                 leftCollisionDetected(type);
                 break;
             }
@@ -198,6 +206,27 @@ void Robot::updateVelocity()
         // Let collision resolution take place before we attempt to move towards the goal
         return;
     }
+     if(mycounter>=1 && mycounter<=10){
+            mycounter++;
+            notifySpeedListeners();
+            return;
+        }else if(mycounter>10 && mycounter<=30){
+            if(direction==Left){
+                linear_velocity_x = 4 * top_linear_speed;
+                angular_velocity = 4 * top_angular_speed;
+                ROS_INFO("Left");
+            }else if(direction==Right){
+                linear_velocity_x = 4 * top_linear_speed;
+                 angular_velocity = -4 * top_angular_speed;
+                 ROS_INFO("Right");
+            }
+            notifySpeedListeners();
+            mycounter++;
+            return;
+
+        }else if(mycounter>30){
+            mycounter=0;
+        }
 
     // Check if robot has any goals defined. If not, do nothing.
     if (goals.empty())
