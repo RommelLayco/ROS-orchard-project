@@ -61,7 +61,7 @@ int main(int argc, char **argv)
     {
 
         // Create robot object
-        Picker *myRobot = new Picker(2, 120, id, "picker");
+        Picker *myRobot = new Picker(2, 100, id, "picker");
         entityList.push_back(myRobot);
         // Add some goals to robot
         myRobot->addGoal(picker_points[i]);
