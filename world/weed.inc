@@ -40,21 +40,6 @@ define weed model
 		color "green"
 	)
 
-	#extend leaves
-	model
-	(
-		size [0.01 0.3 0.01]
-		pose [0 0.08 0.5 0]
-		color "green"	
-	)
-	model
-	(
-		size [0.01 0.3 0.01]
-		pose [0.08 0 0.3 120]
-		color "green"	
-	)
-
-
 	
 
 )

@@ -89,6 +89,7 @@ int main(int argc, char **argv)
     entityList.push_back(&myPerson);
 
 
+    // list of all positions
     PositionListener* posLis = new PositionListener(entityList);
     
     for (int i = 0; i < entityList.size(); i++)

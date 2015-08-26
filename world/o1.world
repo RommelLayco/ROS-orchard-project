@@ -10,6 +10,7 @@ include "tractorWithWorker.inc"
 include "worker.inc"
 include "masterNode.inc"
 include "bigBin.inc"
+include "carrier.inc"
 include "weedLocation.inc"
 
 interval_sim 100
@@ -73,3 +74,14 @@ bin( pose [ 29.0 73.0 0 90 ] name "bin10" )
 masterNode( pose [ 6.328 1.278 2.800 0.000 ] name "master" )
 
 bigBin( pose [ -7.8 73.5 0 0 ] name "Big bin" )
+
+carrier( pose [ 20.0 71.0 0 90 ] name "carrier1" )
+carrier( pose [ 21.0 71.0 0 90 ] name "carrier2" )
+carrier( pose [ 22.0 71.0 0 90 ] name "carrier3" )
+carrier( pose [ 23.0 71.0 0 90 ] name "carrier4" )
+carrier( pose [ 24.0 71.0 0 90 ] name "carrier5" )
+carrier( pose [ 25.0 71.0 0 90 ] name "carrier6" )
+carrier( pose [ 26.0 71.0 0 90 ] name "carrier7" )
+carrier( pose [ 27.0 71.0 0 90 ] name "carrier8" )
+carrier( pose [ 28.0 71.0 0 90 ] name "carrier9" )
+carrier( pose [ 29.0 71.0 0 90 ] name "carrier10" )
