@@ -24,7 +24,7 @@ enum robotState {CollisionResolution, Moving, Orienting};
 class Robot
 {
     public:
-        Robot(int sensor_range, int sensor_angle);
+        Robot(int sensor_range, int sensor_angle, int id, std::string type);
 
        /**
         * This method is invoked by MainNode in a loop to progress the simulation.
@@ -92,7 +92,17 @@ class Robot
         * Write a string to a file. Used for debugging.
         * @param message  string that should be written out to a file
         */
-        void writeToFile(std::string message);
+        void writeToFile(int id,std::string type, std::string message);
+
+
+        /**
+        * this integer is unique for each robit
+        *
+        */  
+        int unique_id;
+
+        /* this string is set via the constructor. It is for making a  file*/
+        std::string robotType;
 
 
    protected:
@@ -122,7 +132,7 @@ class Robot
         double top_linear_speed = 1.0;
         double top_angular_speed = 0.5;
         int sensorAngle; // This must correspond to sensor value defined in the world file
-        double sensorRange; // This determines the range (in meters) at which the entity will detect and object
+        double sensorRange; // This determines the range (in meters) at which the entity will detect an object
 
         // The state lets us know what speed to give to the robot
         robotState current_state;
@@ -148,7 +158,7 @@ class Robot
        /**
         * Method that is called from updateVelocity() when entity wishes to rotate towards it's current goal.
         *
-        * @param the angle in radians that the entity should rotate through
+        * @param desiredAngle  the angle in radians that the entity should rotate through
         */
         void rotateToGoal(double desiredAngle);
 

@@ -3,10 +3,12 @@
 #include <vector>
 #include <string>
 #include "Robot.cpp"
+#include "Picker.cpp"
+#include "Carrier.cpp"
 #include "Person.cpp"
 #include "Dog.cpp"
 #include "Util.cpp"
-#include "PositionListener.h"
+#include "PositionListener.cpp"
 
 class myClass: public SpeedListener {
     private:
@@ -25,32 +27,6 @@ void myClass::speedUpdate(geometry_msgs::Twist speedMsg)
 {
     publisher.publish(speedMsg);
 }
-
-
-PositionListener::PositionListener(std::vector<Robot*> entities)
-{
-    entityList = entities;
-}
-
-CollisionType PositionListener::getCollisionType(geometry_msgs::Point objectLocation, Robot* entity)
-{
-    double tolerance = 1.5;
-
-    for (int i = 0; i < entityList.size(); i++)
-    {
-        double x = entityList[i]->getXPos();
-        double y = entityList[i]->getYPos();
-        
-        if (fabs(x - objectLocation.x) <= tolerance && fabs(y - objectLocation.y) <= tolerance && entityList[i] != entity)
-        {
-            // There is a dynamic entity near where the collision happened
-            return Dynamic;
-        }
-    }
-    
-    return Static;
-}
-
 
 
 
@@ -77,16 +53,20 @@ int main(int argc, char **argv)
     std::string name = GoalsLocation + "pickerLocations";
     std::vector<geometry_msgs::Point> picker_points = Util::readFile(name.c_str());
 
+    int id = 1;
     for (int i = 0; i < 13; i+=2)
     {
+
         // Create robot object
-        Robot *myRobot = new Robot(2, 120);
+        Picker *myRobot = new Picker(2, 120, id, "picker");
         entityList.push_back(myRobot);
         // Add some goals to robot
         ROS_INFO("X: %f", picker_points[i].x);
         ROS_INFO("Y: %f", picker_points[i].y);
         myRobot->addGoal(picker_points[i]);
         myRobot->addGoal(picker_points[i+1]);
+
+        id  = id + 1;
     }
 
     // Set loop rate to 10 Hz
@@ -97,7 +77,7 @@ int main(int argc, char **argv)
     std::vector<geometry_msgs::Point> trees = Util::readFile(filename.c_str());
 
     // Instantiate a dog
-    Dog myDog = Dog(1, 220);
+    Dog myDog = Dog(1, 220, 1, "animal");
     entityList.push_back(&myDog);
 
     // Add some goals to dog
@@ -108,9 +88,15 @@ int main(int argc, char **argv)
 
 
     // Instantiate a person
-    Person myPerson = Person(2, 110);
+    Person myPerson = Person(2, 110, 1, "human");
     entityList.push_back(&myPerson);
 
+    // TODO Instantiate a carrier
+    geometry_msgs::Point binDropOff;
+    binDropOff.x = -6.0;
+    binDropOff.y = 71.0;
+    Carrier myCarrier = Carrier(2, 120, 1, "carrier", binDropOff);
+    entityList.push_back(&myCarrier);
 
     PositionListener* posLis = new PositionListener(entityList);
     
