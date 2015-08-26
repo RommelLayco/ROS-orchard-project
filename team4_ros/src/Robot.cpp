@@ -80,7 +80,7 @@ robotState Robot::getState()
 
 void Robot::sensorCallback(const sensor_msgs::LaserScan::ConstPtr& sensorMsg)
 {// Handle sensor data
-    int left_vals = sensorAngle / 3;
+    int left_vals = sensorAngle / 2;
     int right_vals = sensorAngle - left_vals;
 
     int i = 0;
@@ -101,7 +101,7 @@ void Robot::sensorCallback(const sensor_msgs::LaserScan::ConstPtr& sensorMsg)
                 direction=Right;
                 rightCollisionDetected(type);
                 break;
-            } else if (i >= left_vals && i < right_vals)
+            } else if (i >= left_vals && i < sensorAngle)
             {
                 // Collision is in front
                 direction=Left;
