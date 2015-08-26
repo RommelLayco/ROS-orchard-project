@@ -69,7 +69,9 @@ int main(int argc, char **argv)
         // Give picker a bin
         Bin* bin = new Bin(0, 0, 20);
         myRobot->pickupBin(bin);
-
+	
+	//write to logger that the picker is now moving up the orchard
+	myRobot->pickerInitWrite();
 
         id  = id + 1;
     }

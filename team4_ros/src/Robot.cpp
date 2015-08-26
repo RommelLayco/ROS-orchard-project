@@ -334,9 +334,9 @@ void Robot::reachedCurrentGoal()
 	{
 		if(goalIndex == 0)
 		{
-			writeToFile(unique_id,robotType,"Reached destination, now moving down the orchard");
+			writeToFile(unique_id,robotType,"Reached destination, now moving down the orchard, away from the orchard");
 		} else {
-			writeToFile(unique_id,robotType,"Reached destination, now moving up the orchard");
+			writeToFile(unique_id,robotType,"Reached destination, now moving up the orchard, towards the driveway");
 		}
 	} 
 	else if(robotType == "tractor")
@@ -432,6 +432,12 @@ void Robot::animalWrite()
 		writeToFile(unique_id,robotType,result);
 	}
 	
+}
+
+void Robot::pickerInitWrite()
+{
+	std::string line = "Picker moving up the orchard towards the driveway ";
+	writeToFile(unique_id,robotType,line);
 }
 
 

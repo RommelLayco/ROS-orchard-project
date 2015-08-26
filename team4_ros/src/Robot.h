@@ -96,6 +96,12 @@ public:
         void writeToFile(int id,std::string type, std::string message);
 	
 	/**
+        * Write a string for inital direction of picker to a file. Used for debugging.
+        * @param message  string that should be written out to a file
+        */
+	void pickerInitWrite();
+	
+	/**
         * Write a string for tractor to a file. Used for debugging.
         * @param message  string that should be written out to a file
         */
