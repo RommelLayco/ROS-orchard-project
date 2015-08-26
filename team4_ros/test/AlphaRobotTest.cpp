@@ -3,9 +3,13 @@
 #define protected public
 #include "../src/Robot.h"
 #include "../src/Robot.cpp"
+#include "../src/Dog.cpp"
+#include "../src/Bin.h"
+#include "../src/Carrier.cpp"
 #include "../src/PositionListener.cpp"
 #include <iostream>
 #include <fstream>
+#include "std_msgs/String.h"
 
 
 using namespace std;
@@ -108,8 +112,8 @@ TEST(testBasicRobot, testLeftCollison)
     ros::Rate loop_rate(10);
 	testRobot->leftCollisionDetected(Static);
 
-	ASSERT_EQ(4, testRobot->linear_velocity_x);
-	ASSERT_EQ(-2, testRobot->angular_velocity);
+	ASSERT_EQ(1, testRobot->linear_velocity_x);
+	ASSERT_EQ(-0.5, testRobot->angular_velocity);
 }
 
 /**
@@ -124,8 +128,8 @@ TEST(testBasicRobot, testRightCollision)
     ros::Rate loop_rate(10);
 	testRobot->rightCollisionDetected(Static);
 
-	ASSERT_EQ(4, testRobot->linear_velocity_x);
-	ASSERT_EQ(2, testRobot->angular_velocity);
+	ASSERT_EQ(1, testRobot->linear_velocity_x);
+	ASSERT_EQ(0.5, testRobot->angular_velocity);
 }
 
 /**
@@ -140,8 +144,8 @@ TEST(testBasicRobot, testCenterCollision)
     ros::Rate loop_rate(10);
 	testRobot->centerCollisionDetected(Static);
 
-	ASSERT_EQ(4, testRobot->linear_velocity_x);
-	ASSERT_EQ(-2, testRobot->angular_velocity);
+	ASSERT_EQ(1, testRobot->linear_velocity_x);
+	ASSERT_EQ(-0.5, testRobot->angular_velocity);
 }
 
 /**
@@ -194,6 +198,29 @@ TEST(testBasicRobot, testSensorData){
     
     //const sensor_msgs::LaserScan::ConstPtr *sensorMsg = &scan;
     //testRobot->sensorCallback(sensorMsg);
+}
+
+string message;
+
+void barkCallback(const std_msgs::String barkmessage){
+    message = barkmessage.data;
+}
+
+TEST(testDogRobot, testDogbark){
+    Dog *testRobot = new Dog(2, 120,1,"Dog");
+    ros::Rate loop_rate(10);
+
+    ros::NodeHandle subscriberHandle;
+
+    ros::Subscriber barkmessage;
+
+    barkmessage = subscriberHandle.subscribe<std_msgs::String>("dog_topic", 1000, barkCallback);
+    testRobot->bark();
+
+    ros::spinOnce();
+
+    ASSERT_EQ("I AM BARKING!! Woof Woof!!",message);
+
 }
 
 
