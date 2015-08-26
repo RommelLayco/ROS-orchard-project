@@ -49,7 +49,7 @@ xterm -hold -e roscore&
 cd team4_ros
 #xterm -hold -e rosrun team4_ros PersonNode&
 #xterm -hold -e rosrun team4_ros DogNode&
-#xterm -hold -e rosrun team4_ros bin_node&
+xterm -hold -e rosrun team4_ros bin_node&
 xterm -hold -e rosrun team4_ros PickerNode&
 xterm -hold -e rosrun team4_ros CarrierNode&
 xterm -hold -e rosrun team4_ros CarrierNode1&
@@ -58,6 +58,8 @@ xterm -hold -e rosrun team4_ros bin_node_t&
 xterm -hold -e rosrun team4_ros master_node&
 xterm -hold -e rosrun team4_ros Visitor&
 xterm -hold -e rosrun team4_ros Guider&
+xterm -hold -e rosrun team4_ros dog_node_1&
+xterm -hold -e rosrun team4_ros dog_node_2&
 
 
 cd $DIR/world

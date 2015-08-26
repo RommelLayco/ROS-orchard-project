@@ -75,4 +75,6 @@ masterNode( pose [6.328 1.278 2.800 0.000] name "master")
 visitor(pose [2.000 4.000 0.000 90.000] name "visitor")
 worker( pose [-1.803 7.126 0.000 0.000] name "worker2")
 bigBin( pose [ -20 20 0 0 ] name "bigBin")
+dog( pose [0.000 4.000 0.000 90.000] name "dog1")
+dog( pose [0.000 6.200 0.000 270.000] name "dog2")
 

@@ -168,6 +168,14 @@ add_executable(TractorWithWorkerNode src/TractorWithWorker.cpp)
 target_link_libraries(TractorWithWorkerNode ${catkin_LIBRARIES})
 add_dependencies(TractorWithWorkerNode ${catkin_EXPORTED_TARGETS})
 
+add_executable(dog_node_1 src/dog1.cpp)
+target_link_libraries(dog_node_1 ${catkin_LIBRARIES})
+add_dependencies(dog_node_1 ${catkin_EXPORTED_TARGETS})
+
+add_executable(dog_node_2 src/dog2.cpp)
+target_link_libraries(dog_node_2 ${catkin_LIBRARIES})
+add_dependencies(dog_node_2 ${catkin_EXPORTED_TARGETS})
+
 add_executable(Visitor src/Visitor.cpp)
 target_link_libraries(Visitor ${catkin_LIBRARIES})
 add_dependencies(Visitor ${catkin_EXPORTED_TARGETS})
