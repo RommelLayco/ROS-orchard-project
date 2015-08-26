@@ -630,7 +630,7 @@ def add_carrier(r_spacing,t_spacing):
 
 	f = open('o1.world','a')
 
-	current_x = 4 * r_spacing
+	current_x = 1 * r_spacing
 	current_y = 13 *t_spacing + 6
 
 	count = 1
@@ -640,19 +640,19 @@ def add_carrier(r_spacing,t_spacing):
 
 
 
-	for v in range(0,10):
+	for v in range(0,7):
 
 		name = "\"carrier" + str(count) + "\""
 
 		line = "carrier( pose [ " 
 		line = line + str(current_x) + " "
 		line = line + str(current_y) + " "
-		line = line + "0 90 ] name " + name + " )\n"
+		line = line + "0 -90 ] name " + name + " )\n"
 		
 	
 		count = count + 1
 
-		current_x = current_x + 1
+		current_x = current_x + 4
 
 		f.write(line)
 
@@ -809,6 +809,9 @@ add_dog()
 # add person
 add_person(r_spacing)
 
+
+add_carrier(r_spacing,t_spacing)
+
 # add trained person
 add_trainedPerson(r_spacing,t_spacing)
 add_Vistor(r_spacing, t_spacing)
@@ -826,7 +829,7 @@ add_masterNode()
 # add big bin
 add_bigBin(t_spacing)
 
-add_carrier(r_spacing,t_spacing)
+
 
 '''------------------------------------ Destination locations for actors to read -----------------------------------'''
 dogLocation(r_spacing,t_spacing)
