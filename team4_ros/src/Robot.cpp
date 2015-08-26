@@ -95,6 +95,12 @@ void Robot::sensorCallback(const sensor_msgs::LaserScan::ConstPtr& sensorMsg)
         // determine it's position relative to the entity
         if (sensorMsg->ranges[i] < sensorRange)
         {
+		
+			//write to debugger that it near an obstacle
+			writeToFile(unique_id,robotType,"Near an obstacle");
+		
+	
+			
             isNear = true;
             mycounter=1;
             current_state = CollisionResolution; // Entity is now in CollisionResolution state
@@ -161,6 +167,7 @@ void Robot::leftCollisionDetected(CollisionType type)
         // Stop moving, wait for obstacle to move
         linear_velocity_x = 0;
         angular_velocity = 0;
+
     }
     else
     {
@@ -193,6 +200,7 @@ void Robot::centerCollisionDetected(CollisionType type)
         // Stop moving, wait for obstacle to move
         linear_velocity_x = 0;
         angular_velocity = 0;
+
     }
     else
     {
