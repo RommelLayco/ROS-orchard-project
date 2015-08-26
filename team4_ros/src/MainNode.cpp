@@ -64,8 +64,6 @@ int main(int argc, char **argv)
         Picker *myRobot = new Picker(2, 120, id, "picker");
         entityList.push_back(myRobot);
         // Add some goals to robot
-        ROS_INFO("X: %f", picker_points[i].x);
-        ROS_INFO("Y: %f", picker_points[i].y);
         myRobot->addGoal(picker_points[i]);
         myRobot->addGoal(picker_points[i+1]);
         // Give picker a bin
@@ -117,7 +115,9 @@ int main(int argc, char **argv)
     //add tractor locations to goals
     for (int i = 0; i < points.size(); i++)
     {
-        myTractor.addGoal(points[i]);
+	
+	        
+	myTractor.addGoal(points[i]);
     
 
     }

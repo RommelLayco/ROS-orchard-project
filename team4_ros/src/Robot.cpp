@@ -60,10 +60,9 @@ double Robot::getYPos()
 
 void Robot::addGoal(geometry_msgs::Point goal)
 {
-    ROS_INFO("X: %f", goal.x);
-    ROS_INFO("Y: %f", goal.y);
+    
     goals.push_back(goal);
-    ROS_INFO("size: %lu", goals.size());
+    
 
 
 }
@@ -328,8 +327,22 @@ void Robot::notifySpeedListeners()
 void Robot::reachedCurrentGoal()
 {
     goalIndex++;
-    ROS_INFO("Reached destination");
-    writeToFile(unique_id,robotType,"Reached destination");
+    
+	
+	// write to file next destination
+	if(robotType == "picker") //if picker give co ordinates of next destination
+	{
+		if(goalIndex == 0)
+		{
+			writeToFile(unique_id,robotType,"Reached destination, now moving down the orchard");
+		} else {
+			writeToFile(unique_id,robotType,"Reached destination, now moving up the orchard");
+		}
+	} 
+	else if(robotType == "tractor")
+	{
+		tractorWrite();
+	}	
 }
 
 void Robot::reachedLastGoal()
@@ -366,4 +379,36 @@ void Robot::rotateToGoal(double desiredAngle)
     }
 }
 
+
 #endif
+
+void Robot::tractorWrite()
+{
+	//check goal index
+
+	if(goalIndex == 0)
+	{
+		writeToFile(unique_id,robotType,"Reach destination, Now going to the top left corner");
+	}
+	else if(goalIndex == 1)
+	{
+		writeToFile(unique_id,robotType,"Reach destination, Now goingto the bottom left corner");
+	}
+	else if(goalIndex == 2)
+	{
+		writeToFile(unique_id,robotType,"Reach destination, Now going to the bottom right corner");
+	}
+	else if(goalIndex == 3)
+	{
+		writeToFile(unique_id,robotType,"Reach destination, Now going to the top right corner near the driveway");
+	} 
+	else
+	{
+		//do nothing
+		writeToFile(unique_id,robotType,"Error");
+	}
+}
+
+
+
+

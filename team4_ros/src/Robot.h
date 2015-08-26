@@ -94,6 +94,12 @@ public:
         * @param message  string that should be written out to a file
         */
         void writeToFile(int id,std::string type, std::string message);
+	
+	/**
+        * Write a string for tractor to a file. Used for debugging.
+        * @param message  string that should be written out to a file
+        */
+	void tractorWrite();
 
 
         /**
