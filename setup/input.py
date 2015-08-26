@@ -547,8 +547,8 @@ def add_trainedPerson(r_spacing,t_spacing):
 
 	f.write("\n")
 
-	current_x = r_spacing * 7 + 5
-	current_y = t_spacing *13 + 5
+	current_x = r_spacing * 4 
+	current_y = t_spacing * 6 + 2
 
 	name = "\"worker\""
 
@@ -568,8 +568,8 @@ def add_Vistor(r_spacing,t_spacing):
 
 	f.write("\n")
 
-	current_x = r_spacing * 7 + 3
-	current_y = t_spacing *13 + 5
+	current_x =  -5
+	current_y = t_spacing *6 + 2
 
 	name = "\"visitor\""
 
