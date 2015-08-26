@@ -1,4 +1,4 @@
-#include "Bin.h"
+/*#include "Bin.h"
 
 Bin::Bin(double xPos, double yPos, double cap = 100)
 {
@@ -22,4 +22,13 @@ bool Bin::isFull()
     {
         return false;
     }
-}
+} */
+
+
+class Bin
+{
+	public:
+		Bin(double x,double y);
+	protected:
+
+};

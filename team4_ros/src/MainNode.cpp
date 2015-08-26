@@ -103,6 +103,9 @@ int main(int argc, char **argv)
     // Instantiate a person
     Person myPerson = Person(2, 110, 1, "human");
     entityList.push_back(&myPerson);
+	
+	//print first goal
+	myPerson.humanWrite();
 
 
     filename = GoalsLocation + "orchardArea";
