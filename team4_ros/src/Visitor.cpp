@@ -69,7 +69,7 @@ void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
          if (msg->ranges[i] <1.5)
         {
             isNear = true;
-            isDynamic=false;
+            //isDynamic=false;
             nearCollision = true;
             ROS_INFO("I'm near something! [%f]", msg->ranges[i]);
             //start collison detection, init two counters to 1.
