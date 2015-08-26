@@ -1,4 +1,4 @@
-define myLaser ranger 
+define visitorLaser ranger 
 ( 
   sensor( range [ 0 3 ] fov 110 samples 110 ) 
     size [0.100 0.100 0.100] 
@@ -13,7 +13,7 @@ define myLaser ranger
                                     ) 
         ) 
 
-define worker actor
+define visitor actor
 (
 
 	# Left Leg
@@ -21,7 +21,7 @@ define worker actor
 	(
 		size [0.17 0.17 0.700]
 		pose [0.0 -0.13 0.0 0.0]
-		color "blue"
+		color "purple"
 	)
 
 	# Right leg
@@ -29,7 +29,7 @@ define worker actor
 	(
 		size [0.17 0.17 0.700]
 		pose [0.0 0.13 0.0 0.0]
-		color "blue"
+		color "purple"
 	)
 	
 	# Torso
@@ -37,7 +37,7 @@ define worker actor
 	(
 		size [0.25 0.4 0.55]
 		pose [0.0 0.0 0.648 0.0] 
-		color "white"
+		color "yellow"
 	)
 	#laser position under Torso
 	myLaser(pose [ 0.0 0.0 0.65 0.0 ])
@@ -48,7 +48,7 @@ define worker actor
 	(
 		size [0.01 0.01 0.2]
 		pose [0.15 0 1.0 0.0]
-		color "black"
+		color "red"
 	)
 
 	model
@@ -134,37 +134,34 @@ define worker actor
 	)
 
 
-	# Head
+	# neck
 	model
 	(
 		size [0.25 0.18 0.03] 
 		pose [0.0 0.0 1.198 0.0] 
 		color "ivory2"
 	)
-	
 	model
 	(
-		size [0.25 0.25 0.3] 
+		size [0.25 0.18 0.03] 
+		pose [0.0 0.0 1.198 0.0] 
+		color "ivory2"
+	)
+
+	#hair
+	model
+	(
+		size [0.26 0.26 0.1]
+		pose [0.0 0.0 1.45 0.0] 
+		color "brown"
+	)
+	#head #0.3 in z size for old value
+	model
+	(
+		size [0.25 0.25 0.2] 
 		pose [0.0 0.0 1.25 0.0] 
 		color "PeachPuff1"
 	)
-
-	#cap
-	model
-	(
-		size [0.28 0.28 0.15] 
-		pose [0.0 0.0 1.5 0.0] 
-		color "blue"
-	)
-
-	#cap mouth
-	model
-	(
-		size [0.4 0.27 0.1] 
-		pose [0.07 0.0 1.5 0.0] 
-		color "blue"
-	)
-
 
 	# Left eye
 	model
@@ -228,7 +225,7 @@ define worker actor
 
 	# Base
 	size [0.0 0.0 0.0]
-    drive "diff"
+        drive "diff"
 	color "ivory2"
 	stack_children 0
 	gui_nose 0

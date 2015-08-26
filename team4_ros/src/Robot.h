@@ -132,7 +132,7 @@ class Robot
         double top_linear_speed = 1.0;
         double top_angular_speed = 0.5;
         int sensorAngle; // This must correspond to sensor value defined in the world file
-        double sensorRange; // This determines the range (in meters) at which the entity will detect and object
+        double sensorRange; // This determines the range (in meters) at which the entity will detect an object
 
         // The state lets us know what speed to give to the robot
         robotState current_state;
@@ -158,7 +158,7 @@ class Robot
        /**
         * Method that is called from updateVelocity() when entity wishes to rotate towards it's current goal.
         *
-        * @param the angle in radians that the entity should rotate through
+        * @param desiredAngle  the angle in radians that the entity should rotate through
         */
         void rotateToGoal(double desiredAngle);
 

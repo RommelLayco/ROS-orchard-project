@@ -3,6 +3,8 @@
 #include <vector>
 #include <string>
 #include "Robot.cpp"
+#include "Picker.cpp"
+#include "Carrier.cpp"
 #include "Person.cpp"
 #include "Dog.cpp"
 #include "Util.cpp"
@@ -25,6 +27,7 @@ void myClass::speedUpdate(geometry_msgs::Twist speedMsg)
 {
     publisher.publish(speedMsg);
 }
+
 
 
 int main(int argc, char **argv)
@@ -55,7 +58,7 @@ int main(int argc, char **argv)
     {
 
         // Create robot object
-        Robot *myRobot = new Robot(2, 120,id,"picker");
+        Picker *myRobot = new Picker(2, 120, id, "picker");
         entityList.push_back(myRobot);
         // Add some goals to robot
         ROS_INFO("X: %f", picker_points[i].x);
@@ -74,7 +77,7 @@ int main(int argc, char **argv)
     std::vector<geometry_msgs::Point> trees = Util::readFile(filename.c_str());
 
     // Instantiate a dog
-    Dog myDog = Dog(1, 220,1,"animal");
+    Dog myDog = Dog(1, 220, 1, "animal");
     entityList.push_back(&myDog);
 
     // Add some goals to dog
@@ -85,9 +88,15 @@ int main(int argc, char **argv)
 
 
     // Instantiate a person
-    Person myPerson = Person(2, 110,1,"human");
+    Person myPerson = Person(2, 110, 1, "human");
     entityList.push_back(&myPerson);
 
+    // TODO Instantiate a carrier
+    geometry_msgs::Point binDropOff;
+    binDropOff.x = -6.0;
+    binDropOff.y = 71.0;
+    Carrier myCarrier = Carrier(2, 120, 1, "carrier", binDropOff);
+    entityList.push_back(&myCarrier);
 
     // list of all positions
     PositionListener* posLis = new PositionListener(entityList);
