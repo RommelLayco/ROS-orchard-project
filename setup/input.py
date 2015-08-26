@@ -647,7 +647,7 @@ def add_carrier(r_spacing,t_spacing):
 		line = "carrier( pose [ " 
 		line = line + str(current_x) + " "
 		line = line + str(current_y) + " "
-		line = line + "0 -90 ] name " + name + " )\n"
+		line = line + "0 90 ] name " + name + " )\n"
 		
 	
 		count = count + 1
