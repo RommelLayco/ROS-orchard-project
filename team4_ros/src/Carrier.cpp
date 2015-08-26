@@ -1,5 +1,4 @@
 #include "Robot.h"
-#include "Bin.cpp"
 #include <team4_ros/binIsFull.h>
 
 enum CarrierState {MovingToBin, ShiftingBin, MovingToInitial, Idle};
@@ -13,6 +12,7 @@ class Carrier: public Robot
         Bin* bin;
         CarrierState state;
         geometry_msgs::Point binDropOffLocation;
+        geometry_msgs::Point home;
         std::vector<geometry_msgs::Point> binGoals; // Locations of bins that carrier should move to drop off
         int binGoalIndex;
 
@@ -35,10 +35,13 @@ Carrier::Carrier(int sensor_range, int sensor_angle, int number, std::string typ
 bool Carrier::moveToBin(geometry_msgs::Point binLocation)
 {
     // Add bin location to list
-    //binGoals.push_back(binLocation);
-    goals.push_back(binLocation);
-    state = MovingToBin;
-    ROS_INFO("Moving to bin");
+    binGoals.push_back(binLocation);
+    if (state == Idle)
+    {
+        goals.push_back(binLocation);
+        state = MovingToBin;
+        ROS_INFO("Moving to bin");
+    }
 
 }
 
@@ -62,6 +65,7 @@ bool Carrier::pickupBin(Bin* b)
 /* If carrier has a bin, move it to dropoff point */
 void Carrier::deliverBin()
 {
+    goals.push_back(binDropOffLocation);
     // Check if carrier has bin
     if (bin != NULL)
     {
@@ -82,17 +86,46 @@ void Carrier::reachedCurrentGoal()
     if (state == MovingToBin)
     {
         // Has reached bin it was moving to, now pick it up
+        ROS_INFO("Carrier reached bin");
         deliverBin();
+        goalIndex++;
+        state = ShiftingBin;
     }
     else if (state == MovingToInitial)
     {
+        ROS_INFO("Carrier reached inital position");
         // Reached inital position
-        state == Idle;
+        state = Idle;
     }
     else if (state == ShiftingBin)
     {
+        ROS_INFO("Carrier reached dropoff point");
         // Reached drop off point.
         dropBin();
+        // Check if carrier has other bin goals
+        if (binGoals.size() > 0)
+        {
+            // Bins need picking up do in last come first served order
+            ROS_INFO("Carrier still has more bins to pick up");
+            goals.push_back(binGoals.back());
+            binGoals.pop_back();
+            state = MovingToBin;
+        }
+        else
+        {
+            // No bins need picking up, move back to home
+            ROS_INFO("Carrier moving to home");
+            if (goals.size() == 0)
+            {
+                goalIndex = 0;
+                goals.push_back(home);
+                state = MovingToInitial;
+            }
+            else
+            {
+                goalIndex++;
+            }
+        }
     }
 
 }
@@ -100,6 +133,8 @@ void Carrier::reachedCurrentGoal()
 
 void Carrier::reachedLastGoal()
 {
+    goalIndex = 0;
+    reachedCurrentGoal();
     // When carrier has no more goals, it should move back to it's start goal and wait
     // If carrier recieves new goal while it is heading back to home, it should switch
     // to this new goal.
