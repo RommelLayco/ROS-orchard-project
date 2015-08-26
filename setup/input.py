@@ -840,8 +840,8 @@ add_Vistor(r_spacing, t_spacing)
 
 
 
-# add bin	
-add_bin(r_spacing,t_spacing)
+# add bin dont spawn bins	
+#add_bin(r_spacing,t_spacing)
 
 
 
