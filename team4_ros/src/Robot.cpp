@@ -161,8 +161,8 @@ void Robot::leftCollisionDetected(CollisionType type)
     else
     {
         // Spin to the right
-        linear_velocity_x = 4 * top_linear_speed;
-        angular_velocity = -4 * top_angular_speed;
+        linear_velocity_x =  top_linear_speed;
+        angular_velocity = - top_angular_speed;
     }
 }
 
@@ -177,8 +177,8 @@ void Robot::rightCollisionDetected(CollisionType type)
     else
     {
         // Spin to the left
-        linear_velocity_x = 4 * top_linear_speed;
-        angular_velocity = 4 * top_angular_speed;
+        linear_velocity_x =  top_linear_speed;
+        angular_velocity =  top_angular_speed;
     }
 }
 
@@ -193,8 +193,8 @@ void Robot::centerCollisionDetected(CollisionType type)
     else
     {
         // Move backwards and spin right
-        linear_velocity_x = 4 * top_linear_speed;
-        angular_velocity = -4 * top_angular_speed;
+        linear_velocity_x =  top_linear_speed;
+        angular_velocity = - top_angular_speed;
     }
 }
 
@@ -206,25 +206,27 @@ void Robot::updateVelocity()
         // Let collision resolution take place before we attempt to move towards the goal
         return;
     }
-     if(mycounter>=1 && mycounter<=10){
+     if(mycounter>=1 && mycounter<=5){
             mycounter++;
             notifySpeedListeners();
             return;
-        }else if(mycounter>10 && mycounter<=30){
+        }
+		else if(mycounter>5 && mycounter<=15){
             if(direction==Left){
-                linear_velocity_x = 4 * top_linear_speed;
-                angular_velocity = 4 * top_angular_speed;
+                linear_velocity_x =   top_linear_speed;
+                angular_velocity =  top_angular_speed;
                 ROS_INFO("Left");
             }else if(direction==Right){
-                linear_velocity_x = 4 * top_linear_speed;
-                 angular_velocity = -4 * top_angular_speed;
+                linear_velocity_x =  top_linear_speed;
+                 angular_velocity = - top_angular_speed;
                  ROS_INFO("Right");
             }
             notifySpeedListeners();
             mycounter++;
             return;
 
-        }else if(mycounter>30){
+        }
+		else if(mycounter>15){
             mycounter=0;
         }
 
