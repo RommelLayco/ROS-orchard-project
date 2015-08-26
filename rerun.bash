@@ -44,6 +44,8 @@ xterm -hold -e roscore&
 
 
 xterm -hold -e rosrun team4_ros MainNode locations/&
+xterm -hold -e rosrun team4_ros Guider &
+xterm -hold -e rosrun team4_ros Visitor &
 
 cd $DIR/setup
 xterm -hold -e python3 printOut.py&

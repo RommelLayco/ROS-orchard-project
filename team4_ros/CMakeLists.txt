@@ -56,6 +56,7 @@ find_package(catkin REQUIRED COMPONENTS
 add_message_files(
     FILES
     binIsFull.msg
+	findVisitor.msg
 )
 
 ## Generate services in the 'srv' folder
@@ -113,6 +114,14 @@ include_directories(
 add_executable(MainNode src/MainNode.cpp)
 target_link_libraries(MainNode ${catkin_LIBRARIES})
 add_dependencies(MainNode ${catkin_EXPORTED_TARGETS})
+
+add_executable(Visitor src/Visitor.cpp)
+target_link_libraries(Visitor ${catkin_LIBRARIES})
+add_dependencies(Visitor ${catkin_EXPORTED_TARGETS})
+
+add_executable(Guider src/Guider.cpp)
+target_link_libraries(Guider ${catkin_LIBRARIES})
+add_dependencies(Guider ${catkin_EXPORTED_TARGETS})
 
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
