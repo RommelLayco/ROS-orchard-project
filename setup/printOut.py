@@ -43,7 +43,7 @@ def loadFunction(char):
 		openHuman(num)
 	elif char == 'a':
 		num = chooseAnimal()
-		openAnimal(num)
+		openAnimal(1)
 	elif char == 't':
 		num = chooseTractor()
 		openTractor(1)
@@ -85,7 +85,7 @@ def waitToExit(filePath):
 			#only print if something new
 			if pre_last != lastline:
 				l = lastline[-1];
-				print(l[:-2])
+				print(l[:-1])
 				pre_last = lastline
 			
 				
@@ -183,9 +183,9 @@ def chooseAnimal():
 	print("----------------------------------------------------------------")
 	print("			Animal Menu		")
 	print("----------------------------------------------------------------")
-	print("please enter the dog id number you want to check")
+	print("There is only one animal, a dog please wait for information")
 
-
+'''
 	#continue looping till a valid input is entered
 	while True:
 		try:
@@ -204,6 +204,7 @@ def chooseAnimal():
 				
 	
 	return num
+	'''
 
 
 def chooseTractor():
