@@ -59,6 +59,8 @@ person1( pose [ 40.0 -5 0 90 ] name "person1" )
 
 masterNode( pose [ 6.328 1.278 2.800 0.000 ] name "master" )
 
+tractorWithWorker( pose [ -9 68.0 0 0 ] name "tractorWithWorker" )
+
 carrier( pose [ 5.0 71.0 0 -90 ] name "carrier1" )
 carrier( pose [ 9.0 71.0 0 -90 ] name "carrier2" )
 carrier( pose [ 13.0 71.0 0 -90 ] name "carrier3" )
@@ -70,8 +72,6 @@ carrier( pose [ 29.0 71.0 0 -90 ] name "carrier7" )
 worker( pose [ 40.0 70.0 0 270 ] name "worker" )
 
 visitor( pose [ 38.0 70.0 0 270 ] name "visitor" )
-
-tractorWithWorker( pose [ -9 68.0 0 0 ] name "tractorWithWorker" )
 
 bin( pose [ 20.0 73.0 0 90 ] name "bin1" )
 bin( pose [ 21.0 73.0 0 90 ] name "bin2" )

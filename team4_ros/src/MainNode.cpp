@@ -44,6 +44,8 @@ int main(int argc, char **argv)
         return -1;
     }
 
+
+
     std::vector<Robot*> entityList;
 
     ros::init(argc, argv, "MainNode");
@@ -93,8 +95,24 @@ int main(int argc, char **argv)
     entityList.push_back(&myPerson);
 
 
-    FlyingCamera myCamera = FlyingCamera(2, 120, 1, "camera");
+    FlyingCamera myCamera = FlyingCamera(2, 60, 1, "camera");
     entityList.push_back(&myCamera);
+
+    
+    filename = GoalsLocation + "tractorLocations";
+    std::vector<geometry_msgs::Point> points = Util::readFile(filename.c_str()); 
+   
+
+    Robot myTractor = Robot(2.9, 60, 1, "tractor");
+    entityList.push_back(&myTractor);
+    //add tractor locations to goals
+    for (int i = 0; i < points.size(); i++)
+    {
+        myTractor.addGoal(points[i]);
+    
+
+    }
+
 
     // TODO Instantiate a carrier
     geometry_msgs::Point binDropOff;

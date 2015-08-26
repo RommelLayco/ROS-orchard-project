@@ -687,25 +687,29 @@ def dogLocation(r_spacing, t_spacing):
 def tractorLocations(r_spacing, t_spacing):
 	f = open('tractorLocations', 'w')
 
-	#coordinates for top left
-	x = -3
-	y = (13 * t_spacing) + 3
-	f.write(str(x) + " " + str(y) + "\n")
+	
 
 	#coordinates for top right
-	x = (7 * r_spacing) + 3
+	x = (7 * r_spacing) + 7
 	y = (13 * t_spacing) + 3
 	f.write(str(x) + " " + str(y) + "\n")
 
 	#coordinates for bottom right
-	x = (7 * r_spacing) + 3
+	x = (7 * r_spacing) + 7
 	y = -3
 	f.write(str(x) + " " + str(y) + "\n")
 
 	#coordinates for bottom left
-	x = -3
-	y = -3
+	x = -7
+	y = -7
 	f.write(str(x) + " " + str(y) + "\n")
+
+	#coordinates for top left
+	x = -7
+	y = (13 * t_spacing) + 3
+	f.write(str(x) + " " + str(y) + "\n")
+
+	f.close()
 
 def pickerLocations(r_spacing, t_spacing):
 	f = open('pickerLocations', 'w')
@@ -820,8 +824,11 @@ add_dog()
 # add person
 add_person(r_spacing)
 
-#add master node
+#add master node camera
 add_masterNode()
+
+# add tractor
+add_tractor(t_spacing)
 
 add_carrier(r_spacing,t_spacing)
 
@@ -831,8 +838,7 @@ add_carrier(r_spacing,t_spacing)
 add_trainedPerson(r_spacing,t_spacing)
 add_Vistor(r_spacing, t_spacing)
 
-# add tractor
-add_tractor(t_spacing)
+
 
 # add bin	
 add_bin(r_spacing,t_spacing)
