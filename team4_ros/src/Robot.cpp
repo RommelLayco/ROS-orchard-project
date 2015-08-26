@@ -342,6 +342,10 @@ void Robot::reachedCurrentGoal()
 	else if(robotType == "tractor")
 	{
 		tractorWrite();
+	}
+	else if(robotType == "animal")
+	{
+		animalWrite();
 	}	
 }
 
@@ -408,6 +412,28 @@ void Robot::tractorWrite()
 		writeToFile(unique_id,robotType,"Error");
 	}
 }
+
+void Robot::animalWrite()
+{
+	//check goal index
+
+	if(goalIndex % 4 == 0)
+	{
+			
+
+		//read in current goal
+		geometry_msgs::Point desiredLocation = goals[goalIndex];
+		double x = desiredLocation.x + 1.2;
+		double y = desiredLocation.y;
+	
+		std::string line = "Reached destination, now going to tree located at: ";
+		std::string result = line + std::to_string (x) + "," + std::to_string (y);
+				
+		writeToFile(unique_id,robotType,result);
+	}
+	
+}
+
 
 
 

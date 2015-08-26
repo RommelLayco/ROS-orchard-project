@@ -89,6 +89,12 @@ int main(int argc, char **argv)
     for(int i = 0; i < trees.size(); i++)
     {
         myDog.addGoal(trees[i]);
+	
+		//print first location to debugger
+		if(i == 0)
+		{
+			myDog.animalWrite();
+		}
     }
 
 
@@ -115,9 +121,14 @@ int main(int argc, char **argv)
     //add tractor locations to goals
     for (int i = 0; i < points.size(); i++)
     {
-	
-	        
-	myTractor.addGoal(points[i]);
+	   
+		myTractor.addGoal(points[i]);
+		
+		//print first location to debugger
+		if(i == 0)
+		{
+			myTractor.tractorWrite();
+		}
     
 
     }

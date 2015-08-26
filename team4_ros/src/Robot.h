@@ -100,7 +100,12 @@ public:
         * @param message  string that should be written out to a file
         */
 	void tractorWrite();
-
+	
+	/**
+        * Write a string for tractor to a file. Used for debugging.
+        * @param message  string that should be written out to a file
+        */
+	void animalWrite();
 
         /**
         * this integer is unique for each robit
