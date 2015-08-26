@@ -19,7 +19,7 @@ def createPickerFiles():
 def createCarrierFiles():
 	filepath = '../info/carrier/carrier'
 
-	for i in range(1,4):
+	for i in range(1,8):
 		path = filepath + str(i) + '.txt'
 		f = open(path, 'w')
 		f.write("No current information\n")
@@ -28,7 +28,7 @@ def createCarrierFiles():
 def createHumanFiles():
 	filepath = '../info/human/human'
 
-	for i in range(1,3):
+	for i in range(1,4):
 		path = filepath + str(i) + '.txt'
 		f = open(path, 'w')
 		f.write("No current information\n")
@@ -42,6 +42,16 @@ def createAnimalFiles():
 		f = open(path, 'w')
 		f.write("No current information\n")
 		f.close()
+
+def createTractorFiles():
+	filepath = '../info/tractor/tractor'
+
+	for i in range(1,2):
+		path = filepath + str(i) + '.txt'
+		f = open(path, 'w')
+		f.write("No current information\n")
+		f.close()
+
 
 
 ''' ------------------------- Generate Files ------------------------------------------'''

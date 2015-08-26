@@ -14,13 +14,13 @@ def Menu ():
 	#continue looping till a valid input is entered
 	while True:
 		try:
-			char =  input("p = picker, c = carrier, h = human, a = animal, q = quit: ")
+			char =  input("p = picker, c = carrier, h = human, a = animal, t = tractor, q = quit: ")
 		except ValueError:
 			#loop again invalid type
 			print("Input is not a char")
 			continue
 		else:
-			if char == 'p' or char == 'c' or char == 'h' or char == 'a' or char == 'q':
+			if char == 'p' or char == 'c' or char == 'h' or char == 'a' or char == 't' or char == 'q':
 				break
 			else :
 				print("You did not select a valid char")
@@ -37,13 +37,16 @@ def loadFunction(char):
 		openPicker(num)
 	elif char == 'c':
 		num  = chooseCarrier()
-		openCarrier()
+		openCarrier(num)
 	elif char == 'h':
 		num = chooseHuman()
-		openHuman()
+		openHuman(num)
 	elif char == 'a':
 		num = chooseAnimal()
-		openAnimal()
+		openAnimal(num)
+	elif char == 't':
+		num = chooseTractor()
+		openTractor(1)
 	else:
 		pass
 
@@ -69,7 +72,7 @@ def waitToExit(filePath):
 			if(stop == 'x\n'):
 				break
 
-			print(stop)	
+			
 		
 		else:
 			#read last line from file
@@ -132,7 +135,7 @@ def chooseCarrier():
 	#continue looping till a valid input is entered
 	while True:
 		try:
-			num =  int(input("Choose from carrier 1 - 10 inclusive: "))
+			num =  int(input("Choose from carrier 1 - 7 inclusive: "))
 		except ValueError:
 			#loop again invalid type
 			print("Input is not an intger")
@@ -159,7 +162,7 @@ def chooseHuman():
 	#continue looping till a valid input is entered
 	while True:
 		try:
-			num =  int(input("worker = 1, vistor = 2: "))
+			num =  int(input("worker = 1, vistor = 2, person = 3: "))
 		except ValueError:
 			#loop again invalid type
 			print("Input is not an intger")
@@ -168,7 +171,7 @@ def chooseHuman():
 			if num > 0  and num < 3:
 				break
 			else :
-				print("You did not select a valid human")
+				print("You did not select a valid human id")
 				print("Try again\n")
 				
 				
@@ -201,6 +204,35 @@ def chooseAnimal():
 				
 	
 	return num
+
+
+def chooseTractor():
+	print('\n')
+	print("----------------------------------------------------------------")
+	print("			Tractor Menu		")
+	print("----------------------------------------------------------------")
+	print("There is only 1 tractor please wait for information")
+
+	num = 1
+
+'''
+	#continue looping till a valid input is entered
+	while True:
+		try:
+			num =  int(input("Choose from carrier 1 - 10 inclusive: "))
+		except ValueError:
+			#loop again invalid type
+			print("Input is not an intger")
+			continue
+		else:
+			if num > 0  and num < 10:
+				break
+			else :
+				print("You did not select a valid picker number")
+				print("Try again\n")
+'''
+
+
 
 
 ''' --------------------------- Read File -------------------------------------------------------------'''
@@ -272,6 +304,24 @@ def openAnimal(num):
 			print("Could not find any info on animal with id " + str(num) )
 		else :
 			pass
+
+def openTractor(num):
+
+	print("Press x to return main orchard menu")
+
+	for i in range(1,2):
+		if(i == num):
+			filePath = '../info/tractor/tractor' + str(num) +'.txt'
+			
+			#put wait to exit code here
+			waitToExit(filePath)
+			
+
+		elif (i == 2 and i != num):
+			print("Could not find any info on tractor with id " + str(num) )
+		else :
+			pass
+
 
 
 
