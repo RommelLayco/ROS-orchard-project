@@ -9,6 +9,7 @@
 #include "Dog.cpp"
 #include "Util.cpp"
 #include "PositionListener.cpp"
+#include "FlyingCamera.cpp"
 
 class myClass: public SpeedListener {
     private:
@@ -91,12 +92,20 @@ int main(int argc, char **argv)
     Person myPerson = Person(2, 110, 1, "human");
     entityList.push_back(&myPerson);
 
+
+    FlyingCamera myCamera = FlyingCamera(2, 120, 1, "camera");
+    entityList.push_back(&myCamera);
+
     // TODO Instantiate a carrier
     geometry_msgs::Point binDropOff;
     binDropOff.x = -6.0;
     binDropOff.y = 71.0;
+
+
     Carrier myCarrier = Carrier(2, 120, 1, "carrier", binDropOff);
     entityList.push_back(&myCarrier);
+
+
 
     PositionListener* posLis = new PositionListener(entityList);
     

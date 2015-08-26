@@ -809,8 +809,12 @@ add_dog()
 # add person
 add_person(r_spacing)
 
+#add master node
+add_masterNode()
 
 add_carrier(r_spacing,t_spacing)
+
+
 
 # add trained person
 add_trainedPerson(r_spacing,t_spacing)
@@ -823,8 +827,7 @@ add_tractor(t_spacing)
 add_bin(r_spacing,t_spacing)
 
 
-#add master node
-add_masterNode()
+
 
 # add big bin
 add_bigBin(t_spacing)

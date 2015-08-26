@@ -5,7 +5,9 @@
 class Person: public Robot
 {
     public:
-        Person(int sensor_range, int sensor_angle, int number, std::string type) : Robot(sensor_range, sensor_angle,number,type) {}
+        Person(int sensor_range, int sensor_angle, int number, std::string type) : Robot(sensor_range, sensor_angle,number,type) {
+            generateRandomDesiredLocations();
+        }
     protected:
         /*virtual void leftCollisionDetected();
         virtual void rightCollisionDetected();
