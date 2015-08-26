@@ -73,15 +73,4 @@ worker( pose [ 40.0 70.0 0 270 ] name "worker" )
 
 visitor( pose [ 38.0 70.0 0 270 ] name "visitor" )
 
-bin( pose [ 20.0 73.0 0 90 ] name "bin1" )
-bin( pose [ 21.0 73.0 0 90 ] name "bin2" )
-bin( pose [ 22.0 73.0 0 90 ] name "bin3" )
-bin( pose [ 23.0 73.0 0 90 ] name "bin4" )
-bin( pose [ 24.0 73.0 0 90 ] name "bin5" )
-bin( pose [ 25.0 73.0 0 90 ] name "bin6" )
-bin( pose [ 26.0 73.0 0 90 ] name "bin7" )
-bin( pose [ 27.0 73.0 0 90 ] name "bin8" )
-bin( pose [ 28.0 73.0 0 90 ] name "bin9" )
-bin( pose [ 29.0 73.0 0 90 ] name "bin10" )
-
 bigBin( pose [ -7.8 73.5 0 0 ] name "Big bin" )

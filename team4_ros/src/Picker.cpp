@@ -43,6 +43,8 @@ void Picker::binIsFull()
     // Publish binIsFull message
     binFullPub.publish(binMsg);
 
+    ROS_INFO("publish is called");
+
     bin = NULL;
     ROS_INFO("Picker[%d] Dropped Bin", unique_id);
 
