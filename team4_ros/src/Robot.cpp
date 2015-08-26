@@ -96,9 +96,11 @@ void Robot::sensorCallback(const sensor_msgs::LaserScan::ConstPtr& sensorMsg)
         if (sensorMsg->ranges[i] < sensorRange)
         {
 		
-			//write to debugger that it near an obstacle
-			writeToFile(unique_id,robotType,"Near an obstacle");
-		
+			//write to debugger that it near an obstacle for picker
+			if(robotType == "picker")
+			{
+				writeToFile(unique_id,robotType,"Near an obstacle");
+			}
 	
 			
             isNear = true;
@@ -354,6 +356,14 @@ void Robot::reachedCurrentGoal()
 	else if(robotType == "animal")
 	{
 		animalWrite();
+	}
+	else if(robotType == "Human")
+	{
+	
+	}
+	else
+	{
+		//do nothing
 	}	
 }
 
@@ -446,6 +456,20 @@ void Robot::pickerInitWrite()
 {
 	std::string line = "Picker moving up the orchard towards the driveway ";
 	writeToFile(unique_id,robotType,line);
+}
+
+void Robot::humanWrite()
+{
+	//read in current goal
+	geometry_msgs::Point desiredLocation = goals[goalIndex];
+	double x = desiredLocation.x;
+	double y = desiredLocation.y;	
+		
+	std::string line = "Reached destination, Checking area around: ";
+	std::string result = line + std::to_string (x) + "," + std::to_string (y);
+	
+	writeToFile(unique_id,robotType,result);
+	
 }
 
 

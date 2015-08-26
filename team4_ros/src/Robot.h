@@ -112,6 +112,12 @@ public:
         * @param message  string that should be written out to a file
         */
 	void animalWrite();
+	
+	/**
+        * Write a string for person to a file. Used for debugging.
+        * @param message  string that should be written out to a file
+        */
+	void humanWrite();
 
         /**
         * this integer is unique for each robit
