@@ -53,6 +53,7 @@ add_message_files(
 readyToExchange.msg
 finishRotate.msg
 arrived.msg
+findVisitor.msg
 
 )
 #   FILES
@@ -167,9 +168,13 @@ add_executable(TractorWithWorkerNode src/TractorWithWorker.cpp)
 target_link_libraries(TractorWithWorkerNode ${catkin_LIBRARIES})
 add_dependencies(TractorWithWorkerNode ${catkin_EXPORTED_TARGETS})
 
-add_executable(VisitorNode src/Visitor.cpp)
-target_link_libraries(VisitorNode ${catkin_LIBRARIES})
-add_dependencies(VisitorNode ${catkin_EXPORTED_TARGETS})
+add_executable(Visitor src/Visitor.cpp)
+target_link_libraries(Visitor ${catkin_LIBRARIES})
+add_dependencies(Visitor ${catkin_EXPORTED_TARGETS})
+
+add_executable(Guider src/Guider.cpp)
+target_link_libraries(Guider ${catkin_LIBRARIES})
+add_dependencies(Guider ${catkin_EXPORTED_TARGETS})
 
 ## Declare a cpp executable
 # add_executable(team4_ros_node src/team4_ros_node.cpp)

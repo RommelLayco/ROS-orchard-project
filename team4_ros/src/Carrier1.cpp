@@ -89,7 +89,7 @@ void finishRotateCallback(const team4_ros::binIsFull::ConstPtr& msg){
 		if(msg->isFull){
 		ROS_INFO("Finish rotating");
    		desiredLocation.x = 10;
-   	 		desiredLocation.y = 10;
+   	 	desiredLocation.y = 10;
     		desiredLocation.z = 0; 
 			canMove=true;
 		}

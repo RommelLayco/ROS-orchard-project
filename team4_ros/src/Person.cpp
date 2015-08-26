@@ -25,13 +25,12 @@ double desiredAngle = 0;
 
 // counter
 int vibrateCount = 0; //for vibrate function
-int counter = 0;    // for sensor call back function
 int aroundCounter = 0; // for goARound function
 //counter for overrall collison avoid
 int mycounter;
 //a sub counter to let picker go back
 int sensorCounter;
-int updateCounter = 0;
+int stepCounter = 0;
 // Boolean for the direction of the 
 bool VibrateX=false;
 
@@ -86,7 +85,6 @@ bool rotateAngle(double angle2Turn, int angularSpd)
    //Calculate the angle to rotate
     double destinationAngle = 0;
     currentVelocity.linear.x = 0;
-    //int timeLimit = angle2Turn/6.28 * 20;
     ros::Rate loop_rate(10);
 
 
@@ -137,11 +135,11 @@ bool rotateAngle(double angle2Turn, int angularSpd)
 void Vibrate() 
 {     
 
-    if (vibrateCount > 30)
+ /*   if (vibrateCount >= 15)
     {
         vibrateCount = 0;
         return;
-    }
+    } */
     //Update Current Position
     
     if (VibrateX == false){
@@ -171,7 +169,7 @@ void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
             ::sensorPoint=i;
             mycounter=1;
             sensorCounter=1;
-            Vibrate();
+            //Vibrate();
             break;
         }
         if (isNear == false)
@@ -192,16 +190,20 @@ void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
 void updateCurrentVelocity() {
 
     
-
+    //turn and go around obstacle if near something
     if (nearCollision == true)
     {
-        if (vibrateCount < 30)
+        //Do dancing behavior
+        if (vibrateCount < 15)
         {
+            Vibrate();
             ROS_INFO("Vibrate");
             ROS_INFO("counter: [%i]", vibrateCount);
             return;
         }
-                // Let collision resolution take place before we attempt to move towards the goal
+        
+        //Once dancing finished, start going around
+        // Let collision resolution take place before we attempt to move towards the goal
         if(::sensorPoint>55){
                
             ROS_INFO("It's on my left,turn right,clock(Z<0) first then anti"); 
@@ -254,6 +256,7 @@ void updateCurrentVelocity() {
         return;
 
     }
+    //moving back to original direction
     else if(mycounter>=8 && mycounter<=16)
     {
         if(sensorPoint>55)
@@ -284,6 +287,8 @@ void updateCurrentVelocity() {
 
 
 
+
+
     // Find the correct angle
 
     geometry_msgs::Point desiredLocation = desiredLocations[pathIndex];
@@ -298,49 +303,32 @@ void updateCurrentVelocity() {
 
     ROS_INFO("X distance: [%f]", directionVector.x);
     ROS_INFO("Y distance: [%f]", directionVector.y);
-
-    if(updateCounter > 50){
+    
+    //Change destination randomly every 50 steps to siulate person wandering 
+    if(stepCounter > 50){
         generateRandomDesiredLocations();
         ROS_INFO("CHANGE DESTINATION");
-        updateCounter=0;
+        stepCounter=0;
     }
     else{
-        ROS_INFO("updateCounter: [%i]", updateCounter);
-        updateCounter++;
+        ROS_INFO("stepCounter: [%i]", stepCounter);
+        stepCounter++;
+        if ((stepCounter%10) == 0)
+        {
+         
+            ROS_INFO("Vibrate RESET");            
+            vibrateCount =0;
+        }
+        
     }
+
+    //If person arrive destination before 50steps, also change destination
     if (abs(directionVector.x) <= distanceThreshold && abs(directionVector.y) <= distanceThreshold)
     {
         generateRandomDesiredLocations();
         ROS_INFO("CHANGE DESTINATION");
     }
-    /*
-    // Check if we are at the desired location
-    if (abs(directionVector.x) <= distanceThreshold && abs(directionVector.y) <= distanceThreshold)
-    {
-        // Robot has reached it's desired location
-        // For now, make robot stop. In future, robot should now try to move
-        // to the next location on it's path.
-        ROS_INFO("I have reached my destination!");
-        currentVelocity.linear.x = 0;
-        currentVelocity.angular.z = 0.0;
-        if (pathIndex < sizeof(desiredLocations) / sizeof(*desiredLocations) - 1)
-        {
-            pathIndex++;
-        }
-        else
-        {
-            // Reset index
-            ROS_INFO("Reached final destination, going back to the start");
-            
-            // call to generate random values for destination
-            generateRandomDesiredLocations();
-
-            pathIndex = 0;
-        }
-        
-        return;
-    }
-    */
+    
     // Calculate the desired angle
     desiredAngle = atan2(directionVector.y, directionVector.x) + 3.14;
 
@@ -355,8 +343,6 @@ void updateCurrentVelocity() {
         currentVelocity.angular.z = 0;
         move = true; //Ok to move
     }
-    //rotateAngle(1.57, 2);
-
 
     if(!move) //NOT OK to move
     {
@@ -392,7 +378,6 @@ void groundTruthCallback(const nav_msgs::Odometry msg)
     double roll, pitch, yaw;
     tf::Matrix3x3(tf::Quaternion(x, y, z, w)).getRPY(roll, pitch, yaw);
     currentAngle = yaw + 3.14;
-    //ROS_INFO("Yaw is : %f",yaw); 
     
 }
 
@@ -416,9 +401,9 @@ int main (int argc, char **argv)
         ros::NodeHandle bark_handle;
 
     // master registry pub and sub
-    //ros::Publisher mypub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_0/cmd_vel",1000);
-        mypub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_2/cmd_vel",1000);
-        ros::Publisher mypub_bark = bark_handle.advertise<std_msgs::String>("person_topic",1000);
+ 
+    mypub_object = velPub_handle.advertise<geometry_msgs::Twist>("robot_2/cmd_vel",1000);
+    ros::Publisher mypub_bark = bark_handle.advertise<std_msgs::String>("person_topic",1000);
     ros::Subscriber mysub_object;
     
     // loop 10 
@@ -426,7 +411,7 @@ int main (int argc, char **argv)
 
     mysub_object = sub_handle.subscribe<nav_msgs::Odometry>("robot_2/base_pose_ground_truth",1000, groundTruthCallback);
 
-        // ROS comms access point 
+    // ROS comms access point 
     ros::NodeHandle n;
 
     ros::Subscriber sub = n.subscribe("robot_2/base_scan", 1000, sensorCallback);
