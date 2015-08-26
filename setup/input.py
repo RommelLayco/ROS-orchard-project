@@ -247,6 +247,7 @@ def add_Instances_to_world():
 	f.write('include "worker.inc"\n') #add worker model
 	f.write('include "masterNode.inc"\n') #add master node model
 	f.write('include "bigBin.inc"\n') # add big bin
+	f.write('include "carrier.inc"\n') # add big bin
 	f.write('include "weedLocation.inc"\n\n')#weed model
 
 
@@ -603,6 +604,39 @@ def add_bigBin(t_spacing):
 
 	f.close()
 
+def add_carrier(r_spacing,t_spacing):
+
+	f = open('o1.world','a')
+
+	current_x = 4 * r_spacing
+	current_y = 13 *t_spacing + 6
+
+	count = 1
+
+
+	f.write("\n")
+
+
+
+	for v in range(0,10):
+
+		name = "\"carrier" + str(count) + "\""
+
+		line = "carrier( pose [ " 
+		line = line + str(current_x) + " "
+		line = line + str(current_y) + " "
+		line = line + "0 90 ] name " + name + " )\n"
+		
+	
+		count = count + 1
+
+		current_x = current_x + 1
+
+		f.write(line)
+
+	
+	f.close()	
+
 
 
 
@@ -768,6 +802,8 @@ add_masterNode()
 
 # add big bin
 add_bigBin(t_spacing)
+
+add_carrier(r_spacing,t_spacing)
 
 '''------------------------------------ Destination locations for actors to read -----------------------------------'''
 dogLocation(r_spacing,t_spacing)
