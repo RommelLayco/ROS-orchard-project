@@ -8,6 +8,7 @@ class Carrier: public Robot
         Carrier(int sensor_range, int sensor_angle, int number, std::string type, geometry_msgs::Point binDropOffLocation);
         bool hasBin();
         bool moveToBin(geometry_msgs::Point binLocation);
+		bool isBusy();
     protected:
         Bin* bin;
         CarrierState state;
@@ -53,6 +54,18 @@ bool Carrier::moveToBin(geometry_msgs::Point binLocation)
 	writeToFile(unique_id,robotType,result);
     }
 
+}
+
+bool Carrier::isBusy()
+{
+	if (state == MovingToInitial || state == Idle)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
 /* If carrier already has bin, return false */
