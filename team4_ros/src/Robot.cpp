@@ -43,6 +43,7 @@ Robot::Robot(int sensor_range, int sensor_angle, int number, std::string type)
 
 
     mycounter=0;
+	stopCounter=0;
     direction=Left;
 
 }
@@ -84,10 +85,10 @@ robotState Robot::getState()
 
 void Robot::sensorCallback(const sensor_msgs::LaserScan::ConstPtr& sensorMsg)
 {// Handle sensor data
-    int left_vals = sensorAngle / 2;
-    int right_vals = sensorAngle - left_vals;
+    double left_vals = sensorAngle / 2;
+    double right_vals = sensorAngle - left_vals;
 
-    int i = 10;
+    double i = 0;
     bool isNear = false;
     // Loop through sensor data array
     for (i; i < sensorAngle; i++) {
@@ -95,6 +96,7 @@ void Robot::sensorCallback(const sensor_msgs::LaserScan::ConstPtr& sensorMsg)
         // determine it's position relative to the entity
         if (sensorMsg->ranges[i] < sensorRange)
         {
+			
 		
 			//write to debugger that it near an obstacle for picker
 			if(robotType == "picker")
@@ -107,24 +109,31 @@ void Robot::sensorCallback(const sensor_msgs::LaserScan::ConstPtr& sensorMsg)
             mycounter=1;
             current_state = CollisionResolution; // Entity is now in CollisionResolution state
             CollisionType type = getCollisionType(i, sensorRange, sensorMsg->ranges[i]);
+			if(i<5){
+				linear_velocity_x =  top_linear_speed;
+        		angular_velocity =  top_angular_speed;
+				notifySpeedListeners();
+				return;
+
+			}
             if (i < left_vals)
             {
                 // Collision is on right
                 direction=Right;
                 rightCollisionDetected(type);
-                break;
+                return;
             } else if (i >= left_vals && i < sensorAngle)
             {
                 // Collision is in front
                 direction=Left;
                 centerCollisionDetected(type);
-                break;
+                return;
             } else
             {
                 // Collision is on left
                 direction=Left;
                 leftCollisionDetected(type);
-                break;
+                return;
             }
 
         }
@@ -215,6 +224,21 @@ void Robot::centerCollisionDetected(CollisionType type)
 
 void Robot::updateVelocity()
 {
+	if(linear_velocity_x==0 && angular_velocity==0){
+		stopCounter++;
+
+	 
+}
+	if(stopCounter>=10 && stopCounter<15){
+		angular_velocity=0.1;
+		linear_velocity_x=0;
+		stopCounter++;
+		notifySpeedListeners();
+            return;
+
+}else if(stopCounter>=15){
+stopCounter=0;
+}
     if (current_state == CollisionResolution)
     {
         // Let collision resolution take place before we attempt to move towards the goal
