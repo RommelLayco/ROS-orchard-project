@@ -80,7 +80,8 @@ robotState Robot::getState()
 }
 
 void Robot::sensorCallback(const sensor_msgs::LaserScan::ConstPtr& sensorMsg)
-{// Handle sensor data
+{
+    // Handle sensor data
     double left_vals = sensorAngle / 2;
     double right_vals = sensorAngle - left_vals;
 
@@ -264,9 +265,9 @@ void Robot::updateVelocity()
             angular_velocity = -top_angular_speed;
         }
 
-         notifySpeedListeners();
-         mycounter++;
-         return;
+        notifySpeedListeners();
+        mycounter++;
+        return;
 
     }
     else if (mycounter > 15)
@@ -296,7 +297,7 @@ void Robot::updateVelocity()
         angular_velocity = 0.0;
         if (goalIndex < goals.size() - 1)
         {
-	        reachedCurrentGoal();
+            reachedCurrentGoal();
         }
         else
         {
@@ -315,7 +316,8 @@ void Robot::updateVelocity()
 }
 
 
-void Robot::writeToFile(int id, std::string type, std::string message){
+void Robot::writeToFile(int id, std::string type, std::string message)
+{
 
     std::string result = "info/" + type + "/" + type +  std::to_string(id) + ".txt";
 
@@ -327,7 +329,8 @@ void Robot::writeToFile(int id, std::string type, std::string message){
 }
 
 void Robot::positionCallback(const nav_msgs::Odometry positionMsg)
-{// Handle position data
+{
+    // Handle position data
 
     // Update Current Position
     geometry_msgs::Pose currentLocation = positionMsg.pose.pose;
@@ -345,7 +348,8 @@ void Robot::positionCallback(const nav_msgs::Odometry positionMsg)
 }
 
 void Robot::notifySpeedListeners()
-{// Send current speed to listeners
+{
+    // Send current speed to listeners
 
     // Construct new message
     geometry_msgs::Twist velocityMsg;

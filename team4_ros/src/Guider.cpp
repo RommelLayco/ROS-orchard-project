@@ -54,7 +54,7 @@ geometry_msgs::Point desiredLocation;
 
 /*
 angle2Turn is the angle willing to turn in radians, for example, turn 90degrees will be 1.57 radians.
-angularSpd should set at 2 to reach max turning speed. positive 2 will be spinning anticlockwise, 
+angularSpd should set at 2 to reach max turning speed. positive 2 will be spinning anticlockwise,
 negative 2 will be clockwise.
 Eg, turning right 90degrees--- angle2Turn= 1.57, angularSpd = 2
 turning left 180degrees --- angle2Turn = 3.14, angularSpd = -2
@@ -120,8 +120,9 @@ void sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
     int i = 0;
     bool isNear = false;
     ROS_INFO("I AM GUIDER:");
-    for (i; i < 110; i++) {
-       if (msg->ranges[i] < 1.5)
+    for (i; i < 110; i++)
+    {
+        if (msg->ranges[i] < 1.5)
         {
             isNear = true;
             nearCollision = true;
@@ -151,22 +152,22 @@ void Vibrate()
     if (VibrateX == false)
     {
         currentVelocity.angular.z = 0.95;
-	    VibrateX = true;
-	}
-	else
+        VibrateX = true;
+    }
+    else
     {
         currentVelocity.linear.x = 0;
         currentVelocity.angular.z = -1.0;
         VibrateX = false;
-	}
+    }
 
-	if (counter > 5)
+    if (counter > 5)
     {
-	    counter = 0;
+        counter = 0;
         needVibrate = false;
         return;
-	}
-	counter = counter + 1;
+    }
+    counter = counter + 1;
 }
 
 void publishMessageToVisitor()
@@ -177,9 +178,10 @@ void publishMessageToVisitor()
 }
 
 
-void updateCurrentVelocity() {
+void updateCurrentVelocity()
+{
 
-   // Turn and go around obstacle if near something
+    // Turn and go around obstacle if near something
     if (nearCollision == true)
     {
         if(sensorCounter >= 0 && sensorCounter <= 10)

@@ -29,7 +29,10 @@ std::vector<geometry_msgs::Point> readFile(const char filename[])
         {
             getline(myReadFile, astring1, ' ');
             getline(myReadFile, astring2, '\n');
-            if (astring1 == "") {break;}
+            if (astring1 == "")
+            {
+                break;
+            }
             geometry_msgs::Point tempPoint;
             tempPoint.x = std::stod(astring1);
             tempPoint.y = std::stod(astring2);

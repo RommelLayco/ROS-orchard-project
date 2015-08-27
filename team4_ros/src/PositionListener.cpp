@@ -1,12 +1,12 @@
 #include "PositionListener.h"
 #include <math.h>
 #include "Util.cpp"
-#include <time.h> 
+#include <time.h>
 
 PositionListener::PositionListener(std::vector<Robot*> entities)
 {
     entityList = entities;
-	// Subscribe to bin topic to find out when a picker's bin is full
+    // Subscribe to bin topic to find out when a picker's bin is full
     binFullSub = subscriberHandle.subscribe("bin_topic", 1000, &PositionListener::binFullCallback, this);
 }
 
@@ -18,14 +18,14 @@ CollisionType PositionListener::getCollisionType(geometry_msgs::Point objectLoca
     {
         double x = entityList[i]->getXPos();
         double y = entityList[i]->getYPos();
-        
+
         if (fabs(x - objectLocation.x) <= tolerance && fabs(y - objectLocation.y) <= tolerance && entityList[i] != entity)
         {
             // There is a dynamic entity near where the collision happened
             return Dynamic;
         }
     }
-    
+
     return Static;
 }
 
@@ -53,14 +53,14 @@ void PositionListener::binFullCallback(const team4_ros::binIsFull::ConstPtr& msg
     {
         if (Util::getDistance(binX, binY, carriers[i]->getXPos(), carriers[i]->getYPos()) > shortestDist)
         {
-			if (dynamic_cast<Carrier*>(carriers[i])->isBusy())
-			{
-            	index = -1;
-			}
-			else
-			{
-				index = i;
-			}
+            if (dynamic_cast<Carrier*>(carriers[i])->isBusy())
+            {
+                index = -1;
+            }
+            else
+            {
+                index = i;
+            }
         }
     }
 
@@ -69,14 +69,14 @@ void PositionListener::binFullCallback(const team4_ros::binIsFull::ConstPtr& msg
         geometry_msgs::Point point;
         point.x = binX;
         point.y = binY;
-		Carrier* carrier;
-		if (index == -1)
-		{
-			// Pick a carrier at random
-			srand (time(NULL));
-			index = rand() % carriers.size();
-		}
-		carrier = dynamic_cast<Carrier*>(carriers[index]);
+        Carrier* carrier;
+        if (index == -1)
+        {
+            // Pick a carrier at random
+            srand (time(NULL));
+            index = rand() % carriers.size();
+        }
+        carrier = dynamic_cast<Carrier*>(carriers[index]);
         carrier->moveToBin(point);
         ROS_INFO("Sent carrier to pick up bin");
     }

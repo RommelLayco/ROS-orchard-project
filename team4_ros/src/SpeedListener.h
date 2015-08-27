@@ -3,7 +3,7 @@
 
 class SpeedListener
 {
-    public:
-        virtual void speedUpdate(geometry_msgs::Twist speedMsg) = 0;
+public:
+    virtual void speedUpdate(geometry_msgs::Twist speedMsg) = 0;
 };
 

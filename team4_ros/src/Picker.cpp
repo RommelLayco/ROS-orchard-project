@@ -4,29 +4,29 @@
 
 class Picker: public Robot
 {
-    public:
-        Picker(int sensor_range, int sensor_angle, int number, std::string type);
-        void pickupBin(Bin* bBin);
-    protected:
-        Bin* bin;
-        ros::Timer timer;
-        // Publisher object for picker
-        ros::Publisher binFullPub;
-        ros::NodeHandle timerHandle;
-        virtual void reachedLastGoal();
-        void binIsFull();
-        void timerCallback(const ros::TimerEvent&);
+public:
+    Picker(int sensor_range, int sensor_angle, int number, std::string type);
+    void pickupBin(Bin* bBin);
+protected:
+    Bin* bin;
+    ros::Timer timer;
+    // Publisher object for picker
+    ros::Publisher binFullPub;
+    ros::NodeHandle timerHandle;
+    virtual void reachedLastGoal();
+    void binIsFull();
+    void timerCallback(const ros::TimerEvent&);
 };
 
 Picker::Picker(int sensor_range, int sensor_angle, int number, std::string type)
     : Robot(sensor_range, sensor_angle, number, type)
-    {
-        // Set up Bin full publisher
-        binFullPub = publisherHandle.advertise<team4_ros::binIsFull>("bin_topic", 1000);
-        bin = NULL;
-        timer = timerHandle.createTimer(ros::Duration(2.0), &Picker::timerCallback, this);
+{
+    // Set up Bin full publisher
+    binFullPub = publisherHandle.advertise<team4_ros::binIsFull>("bin_topic", 1000);
+    bin = NULL;
+    timer = timerHandle.createTimer(ros::Duration(2.0), &Picker::timerCallback, this);
 
-    }
+}
 
 /* Called by Picker when its bin is full */
 void Picker::binIsFull()
@@ -47,9 +47,9 @@ void Picker::binIsFull()
 
     bin = NULL;
     ROS_INFO("Picker[%d] Dropped Bin", unique_id);
-	// Create new bin
-	Bin* b = new Bin(0, 0, 20);
-	bin = b;
+    // Create new bin
+    Bin* b = new Bin(0, 0, 20);
+    bin = b;
 }
 
 void Picker::pickupBin(Bin* b)
@@ -82,9 +82,9 @@ void Picker::timerCallback(const ros::TimerEvent&)
         else
         {
             // Picker has no bin, do nothing
-			linear_velocity_x = 0;
-			angular_velocity = 0;
-			notifySpeedListeners();
+            linear_velocity_x = 0;
+            angular_velocity = 0;
+            notifySpeedListeners();
         }
     }
 }
