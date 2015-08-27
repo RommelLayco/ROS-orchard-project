@@ -17,6 +17,9 @@ class Person: public Robot
         virtual void reachedLastGoal();
         int maxX = 28;
         int maxY = 52;
+	virtual void leftCollisionDetected(CollisionType type);
+	virtual void rightCollisionDetected(CollisionType type);
+	virtual void centerCollisionDetected(CollisionType type);
         
 };
 
@@ -75,3 +78,54 @@ void Person::changeMax(std::vector<geometry_msgs::Point> point)
     maxX = int(point[0].x);
     maxY = int(point[0].y);
 }
+
+void Person::leftCollisionDetected(CollisionType type)
+{
+    if (type == Dynamic)
+    {
+        // Stop moving, wait for obstacle to move
+        linear_velocity_x = -2;
+        angular_velocity = -3;
+
+    }
+    else
+    {
+        // Spin to the right
+        linear_velocity_x =  0;
+        angular_velocity = -2;
+    }
+}
+
+void Person::rightCollisionDetected(CollisionType type)
+{
+	    if (type == Dynamic)
+    {
+        // Stop moving, wait for obstacle to move
+        linear_velocity_x = 2;
+        angular_velocity = 3;
+    }
+    else
+    {
+        // Spin to the left
+        linear_velocity_x =  0;
+        angular_velocity =  2;
+    }
+}
+
+void Person::centerCollisionDetected(CollisionType type)
+{
+    if (type == Dynamic)
+    {
+        // Stop moving, wait for obstacle to move
+        linear_velocity_x = -2;
+        angular_velocity = -3;
+
+    }
+    else
+    {
+        // Move backwards and spin right
+        linear_velocity_x =  0;
+        angular_velocity = 2;
+    }
+}
+
