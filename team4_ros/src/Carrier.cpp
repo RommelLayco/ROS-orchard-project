@@ -4,36 +4,36 @@
 enum CarrierState {MovingToBin, ShiftingBin, MovingToInitial, Idle};
 class Carrier: public Robot
 {
-    public:
-        Carrier(int sensor_range, int sensor_angle, int number, std::string type, geometry_msgs::Point binDropOffLocation);
-        bool hasBin();
-        bool moveToBin(geometry_msgs::Point binLocation);
-		bool isBusy();
-    protected:
-        Bin* bin;
-        CarrierState state;
-        geometry_msgs::Point binDropOffLocation;
-        geometry_msgs::Point home;
-        std::vector<geometry_msgs::Point> binGoals; // Locations of bins that carrier should move to drop off
-        int binGoalIndex;
+public:
+    Carrier(int sensor_range, int sensor_angle, int number, std::string type, geometry_msgs::Point binDropOffLocation);
+    bool hasBin();
+    bool moveToBin(geometry_msgs::Point binLocation);
+    bool isBusy();
+protected:
+    Bin* bin;
+    CarrierState state;
+    geometry_msgs::Point binDropOffLocation;
+    geometry_msgs::Point home;
+    std::vector<geometry_msgs::Point> binGoals; // Locations of bins that carrier should move to drop off
+    int binGoalIndex;
 
-        bool pickupBin(Bin* b);
-        void deliverBin();
-        void dropBin();
-        virtual void reachedCurrentGoal();
-        virtual void reachedLastGoal();
+    bool pickupBin(Bin* b);
+    void deliverBin();
+    void dropBin();
+    virtual void reachedCurrentGoal();
+    virtual void reachedLastGoal();
 };
 
 Carrier::Carrier(int sensor_range, int sensor_angle, int number, std::string type, geometry_msgs::Point binDropOff)
     : Robot(sensor_range, sensor_angle, number, type)
-    {
-        // Setup Bin full publisher
-        bin = NULL;
-        binDropOffLocation = binDropOff;
-        state = Idle;
-        // Write to debugger
-        writeToFile(unique_id,robotType,"Waiting for a full bin");
-    }
+{
+    // Setup Bin full publisher
+    bin = NULL;
+    binDropOffLocation = binDropOff;
+    state = Idle;
+    // Write to debugger
+    writeToFile(unique_id, robotType, "Waiting for a full bin");
+}
 
 bool Carrier::moveToBin(geometry_msgs::Point binLocation)
 {
@@ -49,7 +49,7 @@ bool Carrier::moveToBin(geometry_msgs::Point binLocation)
         double y = binLocation.y;
         std::string line = "Moving to a full bin at: ";
         std::string result = line + std::to_string (x) + "," + std::to_string (y);
-        writeToFile(unique_id,robotType,result);
+        writeToFile(unique_id, robotType, result);
     }
 
 }
@@ -76,7 +76,7 @@ bool Carrier::pickupBin(Bin* b)
         state = ShiftingBin;
 
         //write to file that it has bin
-        writeToFile(unique_id,robotType,"Picking up bin");
+        writeToFile(unique_id, robotType, "Picking up bin");
         return true;
 
     }
@@ -101,7 +101,7 @@ void Carrier::deliverBin()
         double y = binDropOffLocation.y;
         std::string line = "Moving full bin to: ";
         std::string result = line + std::to_string (x) + "," + std::to_string (y);
-        writeToFile(unique_id,robotType,result);
+        writeToFile(unique_id, robotType, result);
     }
 }
 

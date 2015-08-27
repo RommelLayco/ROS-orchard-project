@@ -11,12 +11,13 @@
 #include "PositionListener.cpp"
 #include "FlyingCamera.cpp"
 
-class myClass: public SpeedListener {
-    private:
-        ros::Publisher publisher;
-    public:
-        myClass(ros::Publisher pub);
-        void speedUpdate(geometry_msgs::Twist speedMsg);
+class myClass: public SpeedListener
+{
+private:
+    ros::Publisher publisher;
+public:
+    myClass(ros::Publisher pub);
+    void speedUpdate(geometry_msgs::Twist speedMsg);
 };
 
 myClass::myClass(ros::Publisher pub)
@@ -76,7 +77,7 @@ int main(int argc, char **argv)
     }
 
     // Set loop rate to 10 Hz
-	ros::Rate loop_rate(10);
+    ros::Rate loop_rate(10);
 
     // Read location of trees for dog
     std::string filename = GoalsLocation + "dogLocation";
@@ -142,13 +143,13 @@ int main(int argc, char **argv)
         Carrier* myCarrier = new Carrier(2, 120, id, "carrier", binDropOff);
         entityList.push_back(myCarrier);
         id++;
-     }
+    }
 
     PositionListener* posLis = new PositionListener(entityList);
 
     for (int i = 0; i < entityList.size(); i++)
     {
-       entityList[i]->addPositionListener(posLis);
+        entityList[i]->addPositionListener(posLis);
     }
 
     while (ros::ok())
