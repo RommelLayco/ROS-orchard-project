@@ -11,8 +11,10 @@
 Open terminal in the project directory
 
 
-1. Run the project  
+1. Run the project  if current directory is catkin workspace 
 `bash rerun.bash`
+
+else open user manual and follow instructions there
 
 
 ## Run tests
