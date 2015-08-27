@@ -43,11 +43,13 @@ void Picker::binIsFull()
     // Publish binIsFull message
     binFullPub.publish(binMsg);
 
-    ROS_INFO("publish is called");
+    ROS_INFO("Publish is called");
 
     bin = NULL;
     ROS_INFO("Picker[%d] Dropped Bin", unique_id);
-
+	// Create new bin
+	Bin* b = new Bin(0, 0, 20);
+	bin = b;
 }
 
 void Picker::pickupBin(Bin* b)
@@ -80,6 +82,9 @@ void Picker::timerCallback(const ros::TimerEvent&)
         else
         {
             // Picker has no bin, do nothing
+			linear_velocity_x = 0;
+			angular_velocity = 0;
+			notifySpeedListeners();
         }
     }
 }

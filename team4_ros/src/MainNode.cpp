@@ -138,16 +138,18 @@ int main(int argc, char **argv)
 
     }
 
-
-    // TODO Instantiate a carrier
-    geometry_msgs::Point binDropOff;
+	geometry_msgs::Point binDropOff;
     binDropOff.x = -6.0;
     binDropOff.y = 71.0;
 
+    id = 1;
+    for (int i = 0; i < 7; i+=1)
+    {
+		Carrier* myCarrier = new Carrier(2, 120, id, "carrier", binDropOff);
 
-    Carrier myCarrier = Carrier(2, 120, 1, "carrier", binDropOff);
-    entityList.push_back(&myCarrier);
-
+    	entityList.push_back(myCarrier);
+		id++;
+	}
 
 
     PositionListener* posLis = new PositionListener(entityList);

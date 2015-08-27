@@ -163,6 +163,7 @@ public:
 
         //counter for overrall collison avoid
         int mycounter;
+		int stopCounter;
 
         collisionDirection direction;
 
