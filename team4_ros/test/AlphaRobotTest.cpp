@@ -261,9 +261,44 @@ TEST(testPicker, testBinIsFull){
 
 }
 
+/**
+The test method checks that the value of the bin is set when it picks up a bin.
+*/
+TEST(testPicker, testPickerPickUpBin){
+    Picker *testRobot = new Picker(2, 120,1,"picker");
+
+    
+    Bin* bin = new Bin(0, 0, 20);
+
+    testRobot->pickupBin(bin);
+
+
+    ASSERT_EQ(bin,testRobot->bin);
+
+}
+
 
 /* tests carrier methods*/
-TEST(testCarrier, testCarrierMethods){
+TEST(testCarrier, testCarrierMoveToUpBin){
+    
+    
+    geometry_msgs::Point desiredLocation;
+    desiredLocation.x = rand() % 10 + 1;
+    desiredLocation.y = rand() % 10 + 1;
+    desiredLocation.z = 0;
+
+    Carrier *testRobot = new Carrier(2, 120,1,"carrier",desiredLocation);
+
+    Bin* bin = new Bin(0, 0, 20);
+
+    testRobot->moveToBin(desiredLocation);
+    ASSERT_EQ(MovingToBin,testRobot->state);
+
+
+}
+
+/* tests carrier methods*/
+TEST(testCarrier, testCarrierPickUpBin){
     
     
     geometry_msgs::Point desiredLocation;
@@ -276,11 +311,31 @@ TEST(testCarrier, testCarrierMethods){
     Bin* bin = new Bin(0, 0, 20);
 
     testRobot->pickupBin(bin);
-
     ASSERT_EQ(ShiftingBin,testRobot->state);
 
 
 }
+
+
+/* tests carrier methods*/
+TEST(testCarrier, testCarrierDropBin){
+    
+    
+    geometry_msgs::Point desiredLocation;
+    desiredLocation.x = rand() % 10 + 1;
+    desiredLocation.y = rand() % 10 + 1;
+    desiredLocation.z = 0;
+
+    Carrier *testRobot = new Carrier(2, 120,1,"carrier",desiredLocation);
+
+    Bin* bin = new Bin(0, 0, 20);
+
+    testRobot->dropBin();
+    ASSERT_EQ(MovingToInitial,testRobot->state);
+
+
+}
+
 
 // Run all the tests that were declared with TEST()
 int main(int argc, char **argv)
