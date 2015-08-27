@@ -9,11 +9,12 @@
 
 ## Run the program
 Open terminal in the project directory
+
+
 1. Run the project  
 `bash rerun.bash`
 
-See [Controls](https://github.com/drpotato/se306-project-1/wiki/Controls) for instructions for use
 
 ## Run tests
 1. Run the testing make file
-`make tests`
+If you run `make run_tests` on the command line in the build folder now, the test binary will get compiled and the rostest file 'test/mytest.test' will be launched by rostest.
