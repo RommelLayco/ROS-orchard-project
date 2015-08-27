@@ -1,0 +1,4 @@
+<map id="FlyingCamera" name="FlyingCamera">
+<area shape="rect" id="node2" href="$classPerson.html" title="Person" alt="" coords="25,80,87,107"/>
+<area shape="rect" id="node3" href="$classRobot.html" title="Robot" alt="" coords="27,5,84,32"/>
+</map>

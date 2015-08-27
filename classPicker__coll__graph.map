@@ -1,0 +1,4 @@
+<map id="Picker" name="Picker">
+<area shape="rect" id="node2" href="$classRobot.html" title="Robot" alt="" coords="5,5,61,32"/>
+<area shape="rect" id="node3" href="$classBin.html" title="Bin" alt="" coords="86,5,127,32"/>
+</map>
