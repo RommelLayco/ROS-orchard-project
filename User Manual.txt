@@ -1,0 +1,59 @@
+**Requirements**  
+* ROS
+* xterm
+* Linux
+
+## Downloading and Building the Orchard Simulation
+
+In any directory download the orchard simulation using:  
+`git clone https://github.com/arrayoutofbounds/se306-1.git`
+
+Ensure you are on the refactor branch with:  
+`git status ` 
+
+If you are not the refactor branch, change to the branch with:  
+`git checkout refactor`  
+
+Running the orchard simulation will require a catkin work space. The orchard_simulation.sh bash script will create a catkin workspace. The bash script will create the workspace in a folder in the home directory, if a folder with the name **rosWS **already exist the program will ask you to either override the existing folder or specify another directory.
+
+Run the program with:  
+`bash orchard_simulation.sh`
+
+The orchard simulation will now run. Once built you may run the simulation again by navigating to the newly created directory and in the se206-1 folder run:  
+`bash rerun.bash`
+
+
+## Orchard Debugger
+This program runs automatically when you execute either:  
+`bash orchard_simulation.sh  `  
+or  
+`bash rerun.bash`
+
+The orchard debugger runs in a  xterm , this may be hidden behind other terminals. Move the other terminals to locate the orchard debugger. Note that the debugger displays looks like this: 
+
+------------------------------------------------------------------------
+			Orchard Debuuger
+------------------------------------------------------------------------ 
+
+Select a type of node you want to check information of, by pressing the correct character. Either information on the type of the node will then be displayed on the terminal or prompt you to select the number of the node you want.The debugger only updates information when there is new information.
+
+## Nodes and the type of information they display
+**Picker**  
+* Direction the node is moving.
+* When it detect an obstacle.
+
+**Carrier**
+* If the carrier is waiting.
+* The location of a full bin.
+* When is at the bin.
+* When is at the bin drop off location.
+
+**Person**
+* An area it checking near a point **x,y**.
+* The visitor and guide do not print any information.
+
+**Animal**
+* The location of the tree, the dog is moving to.
+
+**Tractor**
+* The corner of the orchard the tractor is moving to.
