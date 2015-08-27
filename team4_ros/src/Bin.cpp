@@ -5,13 +5,13 @@ Bin::Bin(double xPos, double yPos, double cap = 100)
     x = xPos;
     y = yPos;
     maxCapacity = cap;
-	currentCapacity = 0;
+    currentCapacity = 0;
 }
 
 void Bin::addItem()
 {
     currentCapacity++;
-	ROS_INFO("CAPACITY %f/%f", currentCapacity, maxCapacity);
+    ROS_INFO("CAPACITY %f/%f", currentCapacity, maxCapacity);
 }
 
 bool Bin::isFull()

@@ -77,8 +77,6 @@ void PositionListener::binFullCallback(const team4_ros::binIsFull::ConstPtr& msg
 			index = rand() % carriers.size();
 		}
 		carrier = dynamic_cast<Carrier*>(carriers[index]);
-
-        // TODO handle case where closest carrier already has a bin
         carrier->moveToBin(point);
         ROS_INFO("Sent carrier to pick up bin");
     }

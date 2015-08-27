@@ -31,9 +31,8 @@ Carrier::Carrier(int sensor_range, int sensor_angle, int number, std::string typ
         bin = NULL;
         binDropOffLocation = binDropOff;
         state = Idle;
-	
-	//write to debugger
-	writeToFile(unique_id,robotType,"Waiting for a full bin");
+        // Write to debugger
+        writeToFile(unique_id,robotType,"Waiting for a full bin");
     }
 
 bool Carrier::moveToBin(geometry_msgs::Point binLocation)
@@ -45,27 +44,26 @@ bool Carrier::moveToBin(geometry_msgs::Point binLocation)
         goals.push_back(binLocation);
         state = MovingToBin;
 
-	//write bin location
-	double x = binLocation.x;
-	double y = binLocation.y;	
-
-	std::string line = "Moving to a full bin at: ";
-	std::string result = line + std::to_string (x) + "," + std::to_string (y);
-	writeToFile(unique_id,robotType,result);
+        // Write bin location
+        double x = binLocation.x;
+        double y = binLocation.y;
+        std::string line = "Moving to a full bin at: ";
+        std::string result = line + std::to_string (x) + "," + std::to_string (y);
+        writeToFile(unique_id,robotType,result);
     }
 
 }
 
 bool Carrier::isBusy()
 {
-	if (state == MovingToInitial || state == Idle)
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+    if (state == MovingToInitial || state == Idle)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 /* If carrier already has bin, return false */
@@ -77,10 +75,9 @@ bool Carrier::pickupBin(Bin* b)
         bin = b;
         state = ShiftingBin;
 
-	//write to file that it has bin
-	writeToFile(unique_id,robotType,"Picking up bin");
+        //write to file that it has bin
+        writeToFile(unique_id,robotType,"Picking up bin");
         return true;
-	
 
     }
     else
@@ -98,14 +95,13 @@ void Carrier::deliverBin()
     if (bin != NULL)
     {
         goals.push_back(binDropOffLocation);
-	
-	//write bin location
-	double x = binDropOffLocation.x;
-	double y = binDropOffLocation.y;	
 
-	std::string line = "Moving full bin to: ";
-	std::string result = line + std::to_string (x) + "," + std::to_string (y);
-	writeToFile(unique_id,robotType,result);
+        // Write bin location
+        double x = binDropOffLocation.x;
+        double y = binDropOffLocation.y;
+        std::string line = "Moving full bin to: ";
+        std::string result = line + std::to_string (x) + "," + std::to_string (y);
+        writeToFile(unique_id,robotType,result);
     }
 }
 
@@ -123,7 +119,7 @@ void Carrier::reachedCurrentGoal()
     {
         // Has reached bin it was moving to, now pick it up
         ROS_INFO("Carrier reached bin");
-	writeToFile(unique_id,robotType,"Carrier reached bin");
+        writeToFile(unique_id,robotType,"Carrier reached bin");
         deliverBin();
         goalIndex++;
         state = ShiftingBin;
@@ -131,14 +127,14 @@ void Carrier::reachedCurrentGoal()
     else if (state == MovingToInitial)
     {
         ROS_INFO("Carrier reached inital position");
-	writeToFile(unique_id,robotType,"Carrier reached inital position");
+        writeToFile(unique_id,robotType,"Carrier reached inital position");
         // Reached inital position
         state = Idle;
     }
     else if (state == ShiftingBin)
     {
         ROS_INFO("Carrier reached dropoff point");
-	writeToFile(unique_id,robotType,"Carrier reached inital position");
+        writeToFile(unique_id,robotType,"Carrier reached inital position");
         // Reached drop off point.
         dropBin();
         // Check if carrier has other bin goals
@@ -146,7 +142,7 @@ void Carrier::reachedCurrentGoal()
         {
             // Bins need picking up do in last come first served order
             ROS_INFO("Carrier still has more bins to pick up");
-			writeToFile(unique_id,robotType,"Carrier still has more bins to pick up");
+            writeToFile(unique_id,robotType,"Carrier still has more bins to pick up");
             goals.push_back(binGoals.back());
             binGoals.pop_back();
             state = MovingToBin;
@@ -155,7 +151,7 @@ void Carrier::reachedCurrentGoal()
         {
             // No bins need picking up, move back to home
             ROS_INFO("Carrier moving to home");
-			writeToFile(unique_id,robotType,"Carrier moving to home");
+            writeToFile(unique_id,robotType,"Carrier moving to home");
             if (goals.size() == 0)
             {
                 goalIndex = 0;
@@ -179,6 +175,5 @@ void Carrier::reachedLastGoal()
     // When carrier has no more goals, it should move back to it's start goal and wait
     // If carrier recieves new goal while it is heading back to home, it should switch
     // to this new goal.
-
 }
 

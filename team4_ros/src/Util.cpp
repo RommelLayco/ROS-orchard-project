@@ -2,7 +2,6 @@
 #define UTIL_H
 #include <fstream>
 
-//enum CollisionType {Static, Dynamic};
 
 namespace Util
 {

@@ -94,25 +94,25 @@ public:
         * @param message  string that should be written out to a file
         */
         void writeToFile(int id,std::string type, std::string message);
-	
+
 	/**
         * Write a string for inital direction of picker to a file. Used for debugging.
         * @param message  string that should be written out to a file
         */
 	void pickerInitWrite();
-	
+
 	/**
         * Write a string for tractor to a file. Used for debugging.
         * @param message  string that should be written out to a file
         */
 	void tractorWrite();
-	
+
 	/**
         * Write a string for tractor to a file. Used for debugging.
         * @param message  string that should be written out to a file
         */
 	void animalWrite();
-	
+
 	/**
         * Write a string for person to a file. Used for debugging.
         * @param message  string that should be written out to a file
@@ -122,7 +122,7 @@ public:
         /**
         * this integer is unique for each robit
         *
-        */  
+        */
         int unique_id;
 
         /* this string is set via the constructor. It is for making a  file*/
@@ -161,12 +161,11 @@ public:
         // The state lets us know what speed to give to the robot
         robotState current_state;
 
-        //counter for overrall collison avoid
+        // Counter for overrall collison avoid
         int mycounter;
-		int stopCounter;
+        int stopCounter;
 
         collisionDirection direction;
-
 
 
        /**
@@ -176,7 +175,7 @@ public:
 
        /**
         * Called when entity detects it is about to collide with something.
-        * This method asks the main node to determine whether the collision is 
+        * This method asks the main node to determine whether the collision is
         * with a static object e.g a tree or a dynamic object e.g a Person or picker.
         *
         * @param sensorIndex  the index in the sensor array where the collision was detected

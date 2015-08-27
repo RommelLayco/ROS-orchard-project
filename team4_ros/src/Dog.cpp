@@ -17,7 +17,6 @@ class Dog: public Robot
         virtual void rightCollisionDetected(CollisionType type);
         virtual void centerCollisionDetected(CollisionType type);
         void generateRandomDesiredLocations();
-        /*virtual void reachedLastGoal();*/
         void bark();
 };
 
@@ -28,7 +27,7 @@ void Dog::bark()
     barkMsg.data = "I AM BARKING!! Woof Woof!!";
     barkPub.publish(barkMsg);
 
-    writeToFile(unique_id,robotType,"I AM BARKING!! Woof Woof!!");
+    writeToFile(unique_id,robotType, "I AM BARKING!! Woof Woof!!");
 }
 
 void Dog::leftCollisionDetected(CollisionType type)
@@ -71,10 +70,4 @@ void Dog::generateRandomDesiredLocations()
     addGoal(desiredLocation1);
     addGoal(desiredLocation2);
 }
-
-/*void Dog::reachedLastGoal()
-{
-    //generateRandomDesiredLocations();
-
-}*/
 

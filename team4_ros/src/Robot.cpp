@@ -42,9 +42,9 @@ Robot::Robot(int sensor_range, int sensor_angle, int number, std::string type)
     ROS_INFO("Robot [%d] instantiated", id);
 
 
-    mycounter=0;
-	stopCounter=0;
-    direction=Left;
+    mycounter = 0;
+    stopCounter = 0;
+    direction = Left;
 
 }
 
@@ -61,11 +61,7 @@ double Robot::getYPos()
 
 void Robot::addGoal(geometry_msgs::Point goal)
 {
-    
     goals.push_back(goal);
-    
-
-
 }
 
 void Robot::addSpeedListener(SpeedListener* listener)
@@ -91,47 +87,48 @@ void Robot::sensorCallback(const sensor_msgs::LaserScan::ConstPtr& sensorMsg)
     double i = 0;
     bool isNear = false;
     // Loop through sensor data array
-    for (i; i < sensorAngle; i++) {
+    for (i; i < sensorAngle; i++)
+    {
         // If an object is detected within sensorRange,
         // determine it's position relative to the entity
         if (sensorMsg->ranges[i] < sensorRange)
         {
-			
-		
-			//write to debugger that it near an obstacle for picker
-			if(robotType == "picker")
-			{
-				writeToFile(unique_id,robotType,"Near an obstacle");
-			}
-	
-			
+            // Write to debugger that it near an obstacle for picker
+            if (robotType == "picker")
+            {
+                writeToFile(unique_id, robotType, "Near an obstacle");
+            }
+
             isNear = true;
             mycounter=1;
             current_state = CollisionResolution; // Entity is now in CollisionResolution state
             CollisionType type = getCollisionType(i, sensorRange, sensorMsg->ranges[i]);
-			if(i<5){
-				linear_velocity_x =  top_linear_speed;
-        		angular_velocity =  top_angular_speed;
-				notifySpeedListeners();
-				return;
+            if ( i < 5)
+            {
+                linear_velocity_x = top_linear_speed;
+                angular_velocity = top_angular_speed;
+                notifySpeedListeners();
+                return;
+            }
 
-			}
             if (i < left_vals)
             {
                 // Collision is on right
-                direction=Right;
+                direction = Right;
                 rightCollisionDetected(type);
                 return;
-            } else if (i >= left_vals && i < sensorAngle)
+            }
+            else if (i >= left_vals && i < sensorAngle)
             {
                 // Collision is in front
-                direction=Left;
+                direction = Left;
                 centerCollisionDetected(type);
                 return;
-            } else
+            }
+            else
             {
                 // Collision is on left
-                direction=Left;
+                direction = Left;
                 leftCollisionDetected(type);
                 return;
             }
@@ -142,7 +139,7 @@ void Robot::sensorCallback(const sensor_msgs::LaserScan::ConstPtr& sensorMsg)
         {
             current_state = Orienting; // No collision was detected, current state is Orienting
         }
-        
+
         notifySpeedListeners();
 
     }
@@ -183,8 +180,8 @@ void Robot::leftCollisionDetected(CollisionType type)
     else
     {
         // Spin to the right
-        linear_velocity_x =  top_linear_speed;
-        angular_velocity = - top_angular_speed;
+        linear_velocity_x = top_linear_speed;
+        angular_velocity = -top_angular_speed;
     }
 }
 
@@ -199,8 +196,8 @@ void Robot::rightCollisionDetected(CollisionType type)
     else
     {
         // Spin to the left
-        linear_velocity_x =  top_linear_speed;
-        angular_velocity =  top_angular_speed;
+        linear_velocity_x = top_linear_speed;
+        angular_velocity = top_angular_speed;
     }
 }
 
@@ -216,62 +213,70 @@ void Robot::centerCollisionDetected(CollisionType type)
     else
     {
         // Move backwards and spin right
-        linear_velocity_x =  top_linear_speed;
-        angular_velocity = - top_angular_speed;
+        linear_velocity_x = top_linear_speed;
+        angular_velocity = -top_angular_speed;
     }
 }
 
 
 void Robot::updateVelocity()
 {
-	if(linear_velocity_x==0 && angular_velocity==0){
-		stopCounter++;
+    if (linear_velocity_x == 0 && angular_velocity == 0)
+    {
+        stopCounter++;
+    }
 
-	 
-}
-	if(stopCounter>=10 && stopCounter<15){
-		angular_velocity=0.1;
-		linear_velocity_x=0;
-		stopCounter++;
-		notifySpeedListeners();
-            return;
+    if (stopCounter >= 10 && stopCounter < 15)
+    {
+        angular_velocity = 0.1;
+        linear_velocity_x = 0;
+        stopCounter++;
+        notifySpeedListeners();
+        return;
+    }
+    else if (stopCounter >= 15)
+    {
+        stopCounter = 0;
+    }
 
-}else if(stopCounter>=15){
-stopCounter=0;
-}
     if (current_state == CollisionResolution)
     {
         // Let collision resolution take place before we attempt to move towards the goal
         return;
     }
-     if(mycounter>=1 && mycounter<=5){
-            mycounter++;
-            notifySpeedListeners();
-            return;
-        }
-		else if(mycounter>5 && mycounter<=15){
-            if(direction==Left){
-                linear_velocity_x =   top_linear_speed;
-                angular_velocity =  top_angular_speed;
-                ROS_INFO("Left");
-            }else if(direction==Right){
-                linear_velocity_x =  top_linear_speed;
-                 angular_velocity = - top_angular_speed;
-                 ROS_INFO("Right");
-            }
-            notifySpeedListeners();
-            mycounter++;
-            return;
 
+    if (mycounter >= 1 && mycounter <= 5)
+    {
+        mycounter++;
+        notifySpeedListeners();
+        return;
+    }
+    else if (mycounter > 5 && mycounter <= 15)
+    {
+        if (direction == Left)
+        {
+            linear_velocity_x = top_linear_speed;
+            angular_velocity = top_angular_speed;
         }
-		else if(mycounter>15){
-            mycounter=0;
+        else if (direction == Right)
+        {
+            linear_velocity_x = top_linear_speed;
+            angular_velocity = -top_angular_speed;
         }
+
+         notifySpeedListeners();
+         mycounter++;
+         return;
+
+    }
+    else if (mycounter > 15)
+    {
+        mycounter = 0;
+    }
 
     // Check if robot has any goals defined. If not, do nothing.
     if (goals.empty())
     {
-        //ROS_INFO("No Goal, doing nothing");
         return;
     }
 
@@ -297,11 +302,11 @@ stopCounter=0;
         {
             reachedLastGoal();
         }
-        
+
         notifySpeedListeners();
         return;
     }
-    
+
     // Calculate the desired angle
     double desiredAngle = atan2(directionVector.y, directionVector.x);
     rotateToGoal(desiredAngle);
@@ -310,12 +315,12 @@ stopCounter=0;
 }
 
 
-void Robot::writeToFile(int id,std::string type,std::string message){
+void Robot::writeToFile(int id, std::string type, std::string message){
 
     std::string result = "info/" + type + "/" + type +  std::to_string(id) + ".txt";
 
     ofstream myfile;
-    myfile.open (result,std::ios_base::app);
+    myfile.open (result, std::ios_base::app);
     myfile << message << "\n";
     myfile.close();
 
@@ -332,7 +337,7 @@ void Robot::positionCallback(const nav_msgs::Odometry positionMsg)
     double y = currentLocation.orientation.y;
     double z = currentLocation.orientation.z;
     double w = currentLocation.orientation.w;
-    
+
     // Calculate orientation
     double yaw = tf::getYaw(tf::Quaternion(x, y, z, w));
     current_theta = yaw;
@@ -355,40 +360,41 @@ void Robot::notifySpeedListeners()
     {
         speedListeners[i]->speedUpdate(velocityMsg);
     }
-    
+
 }
 
 void Robot::reachedCurrentGoal()
 {
     goalIndex++;
-    
-	
-	// write to file next destination
-	if(robotType == "picker") //if picker give co ordinates of next destination
-	{
-		if(goalIndex == 0)
-		{
-			writeToFile(unique_id,robotType,"Reached destination, now moving down the orchard, away from the orchard");
-		} else {
-			writeToFile(unique_id,robotType,"Reached destination, now moving up the orchard, towards the driveway");
-		}
-	} 
-	else if(robotType == "tractor")
-	{
-		tractorWrite();
-	}
-	else if(robotType == "animal")
-	{
-		animalWrite();
-	}
-	else if(robotType == "human")
-	{
-		humanWrite();
-	}
-	else
-	{
-		//do nothing
-	}	
+
+    // Write to file next destination
+    if (robotType == "picker") // If picker, give coordinates of next destination
+    {
+        if (goalIndex == 0)
+        {
+            writeToFile(unique_id, robotType, "Reached destination, now moving down the orchard, away from the orchard");
+        }
+        else
+        {
+            writeToFile(unique_id, robotType, "Reached destination, now moving up the orchard, towards the driveway");
+        }
+    }
+    else if (robotType == "tractor")
+    {
+        tractorWrite();
+    }
+    else if (robotType == "animal")
+    {
+        animalWrite();
+    }
+    else if (robotType == "human")
+    {
+        humanWrite();
+    }
+    else
+    {
+        // Do nothing
+    }
 }
 
 void Robot::reachedLastGoal()
@@ -396,7 +402,6 @@ void Robot::reachedLastGoal()
     // Reset index
     ROS_INFO("Reached final destination, going back to the start");
     goalIndex = 0;
-    //goalIndex++;
 }
 
 void Robot::rotateToGoal(double desiredAngle)
@@ -430,73 +435,67 @@ void Robot::rotateToGoal(double desiredAngle)
 
 void Robot::tractorWrite()
 {
-	//check goal index
+    // Check goal index
 
-	if(goalIndex == 0)
-	{
-		writeToFile(unique_id,robotType,"Reach destination, Now going to the top left corner");
-	}
-	else if(goalIndex == 1)
-	{
-		writeToFile(unique_id,robotType,"Reach destination, Now goingto the bottom left corner");
-	}
-	else if(goalIndex == 2)
-	{
-		writeToFile(unique_id,robotType,"Reach destination, Now going to the bottom right corner");
-	}
-	else if(goalIndex == 3)
-	{
-		writeToFile(unique_id,robotType,"Reach destination, Now going to the top right corner near the driveway");
-	} 
-	else
-	{
-		//do nothing
-		writeToFile(unique_id,robotType,"Error");
-	}
+    if (goalIndex == 0)
+    {
+        writeToFile(unique_id, robotType, "Reach destination, Now going to the top left corner");
+    }
+    else if (goalIndex == 1)
+    {
+        writeToFile(unique_id, robotType, "Reach destination, Now going to the bottom left corner");
+    }
+    else if (goalIndex == 2)
+    {
+        writeToFile(unique_id, robotType, "Reach destination, Now going to the bottom right corner");
+    }
+    else if (goalIndex == 3)
+    {
+        writeToFile(unique_id, robotType, "Reach destination, Now going to the top right corner near the driveway");
+    }
+    else
+    {
+        // Do nothing
+        writeToFile(unique_id, robotType, "Error");
+    }
 }
 
 void Robot::animalWrite()
 {
-	//check goal index
+    // Check goal index
 
-	if(goalIndex % 4 == 0)
-	{
-			
+    if (goalIndex % 4 == 0)
+    {
+        // Read in current goal
+        geometry_msgs::Point desiredLocation = goals[goalIndex];
+        double x = desiredLocation.x + 1.2;
+        double y = desiredLocation.y;
 
-		//read in current goal
-		geometry_msgs::Point desiredLocation = goals[goalIndex];
-		double x = desiredLocation.x + 1.2;
-		double y = desiredLocation.y;
-	
-		std::string line = "Reached destination, now going to tree located at: ";
-		std::string result = line + std::to_string (x) + "," + std::to_string (y);
-				
-		writeToFile(unique_id,robotType,result);
-	}
-	
+        std::string line = "Reached destination, now going to tree located at: ";
+        std::string result = line + std::to_string (x) + "," + std::to_string (y);
+
+        writeToFile(unique_id, robotType, result);
+    }
+
 }
 
 void Robot::pickerInitWrite()
 {
-	std::string line = "Picker moving up the orchard towards the driveway ";
-	writeToFile(unique_id,robotType,line);
+    std::string line = "Picker moving up the orchard towards the driveway ";
+    writeToFile(unique_id, robotType, line);
 }
 
 void Robot::humanWrite()
 {
-	//read in current goal
-	geometry_msgs::Point desiredLocation = goals[goalIndex];
-	double x = desiredLocation.x;
-	double y = desiredLocation.y;	
-		
-	std::string line = "Reached destination, Checking area around: ";
-	std::string result = line + std::to_string (x) + "," + std::to_string (y);
-	
-	writeToFile(unique_id,robotType,result);
-	
+    // Read in current goal
+    geometry_msgs::Point desiredLocation = goals[goalIndex];
+    double x = desiredLocation.x;
+    double y = desiredLocation.y;
+
+    std::string line = "Reached destination, Checking area around: ";
+    std::string result = line + std::to_string (x) + "," + std::to_string (y);
+
+    writeToFile(unique_id, robotType, result);
+
 }
-
-
-
-
 
